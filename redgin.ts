@@ -1,14 +1,14 @@
 
-const clickArgs: any = []
-export const click = (event: any) => {
- 
-  let uniq = `id${ clickArgs.length }`
-  clickArgs.push([event, uniq])
-  return `id=${ uniq }`
+let eventArgs: any = []
 
+export const click = (event: any) => {
+  console.log('evt', event)
+  let uniq = `id${ eventArgs.length }`
+  eventArgs.push(['click', event, uniq])
+  return `id=${ uniq }`
 }
 
-export class Gin extends HTMLElement {
+export class RedGin extends HTMLElement {
   shadowRoot: any;
   constructor() {
     super();
@@ -25,11 +25,13 @@ export class Gin extends HTMLElement {
   }
 
   afterRender() {
-    clickArgs.forEach( (e: any) => {
+    eventArgs.forEach( (e: any) => {
       let [evt, fn, id] = e
       let btns = this.shadowRoot.getElementById(id)
       btns.addEventListener(evt, fn)
     })
+   
+    eventArgs = []// make sure clear after
    
     //const btns = this.shadowRoot.querySelectorAll('button')
     //btns.forEach( 

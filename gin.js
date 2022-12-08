@@ -18,23 +18,27 @@ export class Gin extends HTMLElement {
   }  
 
   connectedCallback() {    
-    this.shadowRoot.innerHTML = this.buildHTML()
-    this.buildEvents()
+    const { render, afterRender } = this
+    this.shadowRoot.innerHTML = render()
+    afterRender()
 
   }
 
-  buildEventListeners() {
+  afterRender() {
     clickArgs.forEach( (e: any) => {
-      let btns = this.shadowRoot.getElementById(`${e[1]}`)
-      btns.addEventListener('click', e[0])
+      let [evt, fn, id] = e
+      let btns = this.shadowRoot.getElementById(id)
+      btns.addEventListener(evt, fn)
     })
+   
     //const btns = this.shadowRoot.querySelectorAll('button')
     //btns.forEach( 
     //  (btn: any) => btn.addEventListener('click', (e: any) => this.clickMe(btn.dataset.evt1) ) 
     //)
+   
   }
 
-  buildHTML() {}
+  render() {}
 
 
 }

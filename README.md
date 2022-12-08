@@ -1,2 +1,2 @@
-# mysgtraffic
-SG traffic info from LTA
+# RedGin
+Lib for Web components

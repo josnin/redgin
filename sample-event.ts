@@ -10,7 +10,7 @@ class Event extends Gin {
     alert(e)
   }
 
-  buildHTML() {
+  render() {
     return h`
         ${ arr.map( (e: any) => {
           return `

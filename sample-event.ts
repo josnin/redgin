@@ -1,8 +1,8 @@
-import { Gin, click, h } from "./gin.js";
+import { RedGin, click, h } from "./red-gin.js";
 
 // can h remove `this` ?
 
-class Event extends Gin {
+class Event extends RedGin {
   shadowRoot: any;
   arr: any = [1, 2, 3]
 

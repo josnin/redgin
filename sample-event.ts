@@ -11,6 +11,8 @@ class Event extends Gin {
   }
 
   render() {
+    const { clickMe, arr } = this
+    
     return h`
         ${ arr.map( (e: any) => {
           return `

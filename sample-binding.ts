@@ -1,4 +1,4 @@
-import { RedGin, bindTo } from "./gin.js";
+import { RedGin, bindTo, input } from "./gin.js";
 
 
 class Binding extends RedGin {
@@ -6,9 +6,14 @@ class Binding extends RedGin {
 
   render() {
     return `
-          <input ${ bindTo('title') } type="text"/>
+          <input ${ input( (e) => changeHandler(e)) } type="text"/>
           <div id="title"> ${title} </div>` 
     `
+  }
+  
+  changeHandler(e) {
+    this.title = e.target.value
+    this.getElementById('title').textContent = this.title
   }
  
 }

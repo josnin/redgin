@@ -7,25 +7,29 @@ class LoopBinding extends RedGin {
 
   set arr(val) {
      this.#arr = val
-     this.shadowRoot.getElementById('withLoop').innerHTML = this.forLoop()
+     this.bind('forLoop1')
+     this.shadowRoot.getElementById('forLoop1').innerHTML = this.forLoop1()  // how to auto generate every setter?
   }
  
   render() {
-    //const { #arr, forLoop } = this
+    //const { #arr, forLoop1 } = this
     
     return `
-        <div id="withLoop">
-          ${ this.forLoop() }
+        <div id="forLoop1">
+          ${ this.forLoop1() }
         </div> ` 
   }
 
-  forLoop(){
+  forLoop1(){
+    // forLoop{n} function html
+    // how about forloop inside forloop ??
     return  `${ this.#arr.map( (e: any) => {
                   return `
                     <button>
                         first ${e} button
                         This is just a test??
                     </button>`
+                  
                 }) }
            `
   }

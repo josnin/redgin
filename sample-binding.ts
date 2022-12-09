@@ -7,7 +7,7 @@ class Binding extends RedGin {
   render() {
     return `
           <input ${ input( (e) => changeHandler(e)) } type="text"/>
-          <div> ${bind(this.title)} </div> <!--result: <div> <red-gin id="title"> Hello world</red-gin> </div>` --> 
+          <div id="title"> ${ this.title } </div> <!--result: <div> <red-gin id="title"> Hello world</red-gin> </div>` --> 
     `
   }
   

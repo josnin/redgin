@@ -7,15 +7,15 @@ class LoopBinding extends RedGin {
 
   set arr(val) {
      this.#arr = val
-     this.getElementById('withLoop').innerHTML = this.forLoop()
+     this.shadowRoot.getElementById('withLoop').innerHTML = this.forLoop()
   }
  
   render() {
-    const { #arr, forLoop } = this
+    //const { #arr, forLoop } = this
     
     return `
         <div id="withLoop">
-          ${ forLoop() }
+          ${ this.forLoop() }
         </div> ` 
   }
 

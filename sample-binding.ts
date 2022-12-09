@@ -1,8 +1,7 @@
-import { Gin, bindTo } from "./gin.js";
+import { RedGin, bindTo } from "./gin.js";
 
 
-class Binding extends Gin {
-  shadowRoot: any;
+class Binding extends RedGin {
   title: string = 'Hello world!'
 
   render() {

@@ -1,4 +1,4 @@
-import { RedGin, bindTo, input } from "./gin.js";
+import { RedGin, div, input } from "./gin.js";
 
 
 class Binding extends RedGin {

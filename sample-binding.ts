@@ -19,7 +19,7 @@ class Binding extends RedGin {
   
   changeHandler(e) {
     this.title = e.target.value
-    this.getElementById('title').textContent = this.title
+    //this.getElementById('title').textContent = this.title
   }
  
 }

@@ -3,7 +3,8 @@ import { RedGin, div } from "./red-gin.js";
 
 
 class LoopBinding extends RedGin {
-  _arr: any = [1, 2, 3]
+  _arr: any = []
+  arr: any = []
 
   //set arr(val) {
   //   this.#arr = val
@@ -20,6 +21,10 @@ class LoopBinding extends RedGin {
             ${ div({ ref: '_arr', exp: this.forLoop }) }
          </div>       
       `
+  }
+  
+  onMounted() {
+      this.arr = [1, 2, 3]
   }
 
   forLoop(){

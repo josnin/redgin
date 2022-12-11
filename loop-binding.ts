@@ -14,7 +14,11 @@ class LoopBinding extends RedGin {
   render() {
        
     return `
-        ${ div({ ref: 'title', exp: this.forLoop() }) }
+        <div>Test Loop Binding<div/>
+        <div>
+           This will loop thru the array
+            ${ div({ ref: 'title', exp: this.forLoop() }) }
+         </div>       
       `
   }
 

@@ -32,20 +32,21 @@ export class RedGin extends HTMLElement {
   }  
 
   connectedCallback() {    
-    const { render, afterRender } = this
-    this.shadowRoot.innerHTML = render()
-    afterRender()
+    //const { render, afterRender } = this
+    this.shadowRoot.innerHTML = this.render()
+    this.afterRender()
+    this.onMounted()
 
   }
 
   afterRender() {
     eventArgs.forEach( (e: any) => {
       let [evt, fn, id] = e
-      let btns = this.shadowRoot.getElementById(id)
-      btns.addEventListener(evt, fn)
+      let btn = this.shadowRoot.getElementById(id)
+      btn?.addEventListener(evt, fn)
     })
    
-    eventArgs = []// make sure clear after
+   
    
     //const btns = this.shadowRoot.querySelectorAll('button')
     //btns.forEach( 
@@ -66,11 +67,11 @@ export class RedGin extends HTMLElement {
         })  
     })
 
-    divBus = [];
    
   }
 
   render() {}
+  onMounted() {}
 
 
 }

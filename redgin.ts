@@ -62,6 +62,7 @@ export class RedGin extends HTMLElement {
             const el = this.shadowRoot.getElementById(id)
             el.innerHTML = exp ? exp.call(this) : value
           },
+          get () { return this[ref] }
         })  
     })
 

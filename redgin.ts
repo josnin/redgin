@@ -8,7 +8,7 @@ export const click = (event: any) => {
   return `id=${ uniq }`
 }
 
-nterface DivOptions {
+interface DivOptions {
   id?: string;
   cls?: string;
   ref?: string;

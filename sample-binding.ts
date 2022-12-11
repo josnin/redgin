@@ -10,9 +10,10 @@ class Binding extends RedGin {
           
           <!--
           This will also generate a setter
-          <div id="title">${this.title}</div>
+          <div id="title1">${this.title}</div>
           -->
-          ${ div('title') }
+          ${ div({ ref: 'title' }) } 
+               
         
     `
   }

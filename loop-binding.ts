@@ -3,7 +3,7 @@ import { RedGin, div } from "./red-gin.js";
 
 
 class LoopBinding extends RedGin {
-  #arr: any = [1, 2, 3]
+  _arr: any = [1, 2, 3]
 
   //set arr(val) {
   //   this.#arr = val
@@ -17,7 +17,7 @@ class LoopBinding extends RedGin {
         <div>Test Loop Binding<div/>
         <div>
            This will loop thru the array
-            ${ div({ ref: 'title', exp: this.forLoop() }) }
+            ${ div({ ref: '_arr', exp: this.forLoop }) }
          </div>       
       `
   }
@@ -25,7 +25,7 @@ class LoopBinding extends RedGin {
   forLoop(){
     // forLoop{n} function html
     // how about forloop inside forloop ??
-    return  `${ this.arr.map( (e: any) => {
+    return  `${ this._arr.map( (e: any) => {
                   return `
                     <button>
                         first ${e} button

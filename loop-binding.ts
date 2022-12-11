@@ -1,9 +1,9 @@
 import { RedGin, div } from "./red-gin.js";
 
-// can h remove `this` ?
+
 
 class LoopBinding extends RedGin {
-  //#arr: any = [1, 2, 3]
+  #arr: any = [1, 2, 3]
 
   //set arr(val) {
   //   this.#arr = val
@@ -12,10 +12,9 @@ class LoopBinding extends RedGin {
   //}
  
   render() {
-    //const { #arr, forLoop1 } = this
-    
+       
     return `
-       ${ div('arr', this.forLoop()) }
+        ${ div({ ref: 'title', exp: this.forLoop() }) }
       `
   }
 

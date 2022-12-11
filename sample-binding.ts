@@ -2,7 +2,7 @@ import { RedGin, div, input } from "./gin.js";
 
 
 class Binding extends RedGin {
-  #title: string = 'Hello world!'
+  _title: string = 'Hello world!'
 
   render() {
     return `
@@ -12,7 +12,7 @@ class Binding extends RedGin {
           This will also generate a setter
           <div id="title1">${this.#title}</div>
           -->
-          ${ div({ ref: '#title' }) } 
+          ${ div({ ref: '_title' }) } 
                
         
     `

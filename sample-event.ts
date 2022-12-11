@@ -14,10 +14,12 @@ class Event extends RedGin {
     //const { clickMe, arr } = this
     
     return h`
+        // ${ evt('click', () => this.clickMe(e) ) }  ???
         ${ this._arr.map( (e: any) => {
           return `
             <button 
               ${ click( () => this.clickMe(e) ) }
+              
               >
                 first ${e} button
                 This is just a test??

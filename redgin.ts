@@ -64,7 +64,7 @@ export class RedGin extends HTMLElement {
     const binds = this.shadowRoot.querySelectorAll(`[data-bind__=${prop}]`)
     let withUpdate = false
     binds.forEach( (el:any) => {
-      console.log('xxxx', divBus)
+      
       //  @ts-ignore
       el.innerHTML = Object.keys(divBus).length > 0 && el.dataset?.id__ ? divBus[el.dataset.id__].call(this) : this[prop]
       withUpdate = true
@@ -85,7 +85,7 @@ export class RedGin extends HTMLElement {
 
     //  @ts-ignore
     this[ prop ] = JSON.parse(newValue);
-    console.log(divBus)
+    
     this.updateContents(prop)
 
   }

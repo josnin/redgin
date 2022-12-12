@@ -17,14 +17,13 @@ class LoopBinding extends RedGin {
            <!-- re render when value change -->
             ${ div('arr', { exp: this.reRender }) }
             
-            ${ div('arr', 
-                   ${ this.arr.map( (e: any) => {
+            ${ div('arr', this.arr.map( (e: any) => {
                        return `
                               <button>
                                   first ${e} button
                                   This is just a test??
                               </button>`    
-                   }) }    
+                      })    
             }
             
          </div>       

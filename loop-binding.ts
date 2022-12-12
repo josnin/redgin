@@ -14,17 +14,13 @@ class LoopBinding extends RedGin {
     return `
         <div>Test Loop Binding<div/>
         <div>
-           This will loop thru the array
-            ${ div('arr', { exp: this.forLoop }) }
+           <!-- re render when value change -->
+            ${ div('arr', { exp: this.reRender }) }
          </div>       
       `
   }
-  
-  onMounted() {
-      this.arr = [1, 2, 3]
-  }
-
-  forLoop(){ 
+ 
+  reRender() { // when value change
     return  `${ this.arr.map( (e: any) => {
                   return `
                     <button>
@@ -35,6 +31,10 @@ class LoopBinding extends RedGin {
                 }) }
            `  
   }
+  
+  onMounted() {
+      this.arr = [1, 2, 3]
+  } 
  
 }
 

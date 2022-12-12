@@ -11,17 +11,20 @@ export const click = (event: any) => {
 interface DivOptions {
   id?: string;
   cls?: string;
-  ref?: string;
   exp?: any;
 }
 
-export const  div = (options: DivOptions) => {
-  let { id, cls, ref, exp } = options;
-  if (id == undefined) id = `${ref?.slice(1)}${ divBus.length }`
-  if (exp === undefined) exp = '';
-  divBus.push([id, ref, exp])
-  
-  return `<div id="${ id }"> ${exp}  </div>` 
+const getUniqID = () => {
+  return `${ (+new Date).toString(22) }`
+}
+
+export const  div = (ref: string, options?: DivOptions) => {
+  const uniqId = getUniqID()
+  if (options) {
+    const { exp } = options;
+    if (exp !== undefined) divBus[uniqId] = exp
+  }
+  return `<div data-id__="${uniqId}" data-bind__="${ref}"></div>` 
 }
 
 export class RedGin extends HTMLElement {
@@ -32,10 +35,58 @@ export class RedGin extends HTMLElement {
   }  
 
   connectedCallback() {    
-    //const { render, afterRender } = this
+   
     this.shadowRoot.innerHTML = this.render()
     this.afterRender()
+    
+    // @todo which life cycle
+    // @ts-ignore
+    this.processObserveAttributes(this.constructor.observedAttributes)
     this.onMounted()
+
+  }
+  
+  processObserveAttributes(observedAttributes: any) {
+    observedAttributes?.forEach( (e: any) => {
+      Object.defineProperty(this, e, {
+        configurable: true,
+        set (value) {
+          this.setAttribute(e, JSON.stringify(value) )
+        },
+        get () { return JSON.parse(this.getAttribute(e)) }
+      })  
+    })
+  }
+  
+  updateContents(prop: any) {
+    //element binding
+    //  @ts-ignore
+    const binds = this.shadowRoot.querySelectorAll(`[data-bind__=${prop}]`)
+    let withUpdate = false
+    binds.forEach( (el:any) => {
+      console.log('xxxx', divBus)
+      //  @ts-ignore
+      el.innerHTML = Object.keys(divBus).length > 0 && el.dataset?.id__ ? divBus[el.dataset.id__].call(this) : this[prop]
+      withUpdate = true
+    })
+    
+    if (withUpdate) this.onUpdated() //call when dom change
+
+  }
+
+  // attribute change
+  attributeChangedCallback(prop: any, oldValue: any, newValue: any) {
+
+    if (oldValue === newValue) return;
+
+    this.onBeforeUpdate()
+
+    console.log('newValue', newValue)
+
+    //  @ts-ignore
+    this[ prop ] = JSON.parse(newValue);
+    console.log(divBus)
+    this.updateContents(prop)
 
   }
 
@@ -51,27 +102,17 @@ export class RedGin extends HTMLElement {
     //const btns = this.shadowRoot.querySelectorAll('button')
     //btns.forEach( 
     //  (btn: any) => btn.addEventListener('click', (e: any) => this.clickMe(btn.dataset.evt1) ) 
-    //)
-    
-    
+    //) 
 
-    divBus.forEach( (e: any) => {
-        let [id, ref, exp] = e;
-        Object.defineProperty(this, ref.slice(1), {
-          set (value) {
-            this[ref] = value
-            const el = this.shadowRoot.getElementById(id)
-            el.innerHTML = exp ? exp.call(this) : value
-          },
-          get () { return this[ref] }
-        })  
-    })
 
    
   }
 
   render() {}
+  
   onMounted() {}
+  onBeforeUpdate() {}
+  onUpdated() {}
 
 
 }

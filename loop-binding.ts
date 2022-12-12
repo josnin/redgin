@@ -10,8 +10,7 @@ class LoopBinding extends RedGin {
     return ['arr'];
   }
   
-  render() {
-       
+  render() {       
     return `
         <div>Test Loop Binding<div/>
         <div>
@@ -25,10 +24,8 @@ class LoopBinding extends RedGin {
       this.arr = [1, 2, 3]
   }
 
-  forLoop(){
-    // forLoop{n} function html
-    // how about forloop inside forloop ??
-    return  `${ this._arr.map( (e: any) => {
+  forLoop(){ 
+    return  `${ this.arr.map( (e: any) => {
                   return `
                     <button>
                         first ${e} button
@@ -36,7 +33,7 @@ class LoopBinding extends RedGin {
                     </button>`
                   
                 }) }
-           `
+           `  
   }
  
 }

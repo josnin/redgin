@@ -1,4 +1,4 @@
-import { RedGin, div } from "./red-gin.js";
+import { RedGin, div, t } from "./red-gin.js";
 
 
 

@@ -15,10 +15,7 @@ class LoopBinding extends RedGin {
         <div>Test Loop Binding<div/>
         <div>
            <!-- re render when value change -->                   
-          ${ div('arr', () => this.arr.map( (e: any) => {
-                                  return t`<button>first ${e} button</button>` 
-                 })   
-            )}    
+          ${ div('arr', () => this.arr.map( (e: any) => t`<button>first ${e} button</button>` })  )}    
       `
   }
   

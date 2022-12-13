@@ -9,9 +9,10 @@ class Binding extends RedGin {
           <input ${ input( (e) => changeHandler(e)) } type="text"/>
           
           <!--
-          This will also generate a setter         
+          This will also generate a setter       
+          shorter: ${ div('title') }
           -->
-          ${ div('title') } 
+          ${ div('title', () => this.title ) } 
                
         
     `

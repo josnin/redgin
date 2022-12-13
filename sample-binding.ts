@@ -1,11 +1,11 @@
-import { RedGin, div, input } from "./gin.js";
+import { RedGin, div, input, t } from "./red-gin.js";
 
 
 class Binding extends RedGin {
   title: string = 'Hello world!'
 
   render() {
-    return `
+    return t`
           <input ${ input( (e) => changeHandler(e)) } type="text"/>
           
           <!--  This will also generate a setter  -->

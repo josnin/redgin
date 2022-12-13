@@ -15,7 +15,7 @@ interface DivOptions {
 }
 
 const getUniqID = () => {
-  return crypto.randomUUID()
+  return crypto.randomUUID().split('-')[0]
 }
 
 

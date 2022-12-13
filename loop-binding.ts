@@ -11,12 +11,12 @@ class LoopBinding extends RedGin {
   }
   
   render() {       
-    return `
+    return t`
         <div>Test Loop Binding<div/>
         <div>
            <!-- re render when value change -->                   
           ${ div('arr', () => this.arr.map( (e: any) => {
-                          return `
+                          return t`
                             <button>
                                 first ${e} button
                                 This is just a test??

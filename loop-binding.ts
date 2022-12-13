@@ -4,7 +4,7 @@ import { RedGin, div } from "./red-gin.js";
 
 class LoopBinding extends RedGin {
  
-  arr: any = []
+  arr = []
   
   static get observedAttributes() {
     return ['arr'];
@@ -15,7 +15,7 @@ class LoopBinding extends RedGin {
         <div>Test Loop Binding<div/>
         <div>
            <!-- re render when value change -->                   
-          ${ div('arr', () => this.arr.map( (e: any) => {
+          ${ div('arr', () => this.arr.map(e => {
                           return `
                             <button>
                                 first ${e} button

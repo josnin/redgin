@@ -1,4 +1,4 @@
-import { RedGin, div, input, t } from "./red-gin.js";
+import { RedGin, div, t } from "./red-gin.js";
 
 
 class Binding extends RedGin {
@@ -6,7 +6,6 @@ class Binding extends RedGin {
 
   render() {
     return t`
-          <input ${ input( (e) => changeHandler(e)) } type="text"/>
           
           <!--  This will also generate a setter  -->
           ${ div('title') } 
@@ -15,10 +14,6 @@ class Binding extends RedGin {
     `
   }
   
-  changeHandler(e) {
-    this.title = e.target.value
-    //this.getElementById('title').textContent = this.title
-  }
  
 }
 

@@ -1,4 +1,4 @@
-import { RedGin, click, h } from "./red-gin.js";
+import { RedGin, click, t } from "./red-gin.js";
 
 // can h remove `this` ?
 
@@ -13,8 +13,7 @@ class Event extends RedGin {
   render() {
     //const { clickMe, arr } = this
     
-    return h`
-        // ${ evt('click', () => this.clickMe(e) ) }  ???
+    return t`
         ${ this._arr.map( (e: any) => {
           return `
             <button 

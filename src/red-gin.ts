@@ -1,5 +1,6 @@
 
 let eventArgs: any = []
+let divBus: any = []
 
 export const click = (event: any) => {
   console.log('evt', event)
@@ -10,7 +11,8 @@ export const click = (event: any) => {
 
 interface DivOptions {
   id?: string;
-  cls?: string;
+  class?: string;
+  style?: string;
   exp?: any;
 }
 

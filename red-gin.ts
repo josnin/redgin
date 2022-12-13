@@ -15,14 +15,15 @@ interface DivOptions {
 }
 
 const getUniqID = () => {
-  return `${ (+new Date).toString(22) }`
+  return crypto.randomUUID()
 }
 
-export const  div = (ref: string, options?: DivOptions) => {
+
+export const  div = (ref: string, exp: any, options?: DivOptions) => {
   const uniqId = getUniqID()
+  divBus[uniqId] = exp
   if (options) {
-    const { exp } = options;
-    if (exp !== undefined) divBus[uniqId] = exp
+    //const { exp } = options;
   }
   return `<div data-id__="${uniqId}" data-bind__="${ref}"></div>` 
 }
@@ -66,7 +67,8 @@ export class RedGin extends HTMLElement {
     binds.forEach( (el:any) => {
       
       //  @ts-ignore
-      el.innerHTML = Object.keys(divBus).length > 0 && el.dataset?.id__ ? divBus[el.dataset.id__].call(this) : this[prop]
+      //el.innerHTML = Object.keys(divBus).length > 0 && el.dataset?.id__ ? divBus[el.dataset.id__].call(this) : this[prop]
+      el.innerHTML = divBus[el.dataset.id__].call(this)
       withUpdate = true
     })
     

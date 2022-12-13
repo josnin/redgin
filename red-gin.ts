@@ -19,9 +19,9 @@ const getUniqID = () => {
 }
 
 
-export const  div = (ref: string, exp: any, options?: DivOptions) => {
+export const  div = (ref: string, exp?: any, options?: DivOptions) => {
   const uniqId = getUniqID()
-  divBus[uniqId] = exp
+  divBus[uniqId] = exp ? exp : undefined
   if (options) {
     //const { exp } = options;
   }
@@ -66,9 +66,8 @@ export class RedGin extends HTMLElement {
     let withUpdate = false
     binds.forEach( (el:any) => {
       
-      //  @ts-ignore
-      //el.innerHTML = Object.keys(divBus).length > 0 && el.dataset?.id__ ? divBus[el.dataset.id__].call(this) : this[prop]
-      el.innerHTML = divBus[el.dataset.id__].call(this)
+      //  @ts-ignore      
+      el.innerHTML = divBus[el.dataset.id__] ? divBus[el.dataset.id__].call(this) : this[prop]
       withUpdate = true
     })
     

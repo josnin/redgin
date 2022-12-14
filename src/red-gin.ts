@@ -1,65 +1,7 @@
+export * from './directives.js'
+import { divBus, eventArgs } from './state.js'
 
-let eventArgs: any = []
-let divBus: any = []
 
-export const click = (event: any) => {
-  console.log('evt', event)
-  let uniq = `id${ eventArgs.length }`
-  eventArgs.push(['click', event, uniq])
-  return `id=${ uniq }`
-}
-
-interface DivOptions {
-  id?: string;
-  class?: string;
-  style?: string;
-  exp?: any;
-}
-
-const getUniqID = () => {
-  return crypto.randomUUID().split('-')[0]
-}
-
-const buildElement = (ref: string, type: any, exp: string, options?: DivOptions) => {
-  const el = document.createElement(type)
-  const uniqId = getUniqID()
-  divBus[uniqId] = exp ? exp : undefined
-
-  if (options) {
-    const { id, style, class: cls } = options;
-    if (id) el.setAttribute('id', id)
-    if (cls) el.setAttribute('class', cls)
-    if (style) el.setAttribute('style', style)
-  }
-
-  el.dataset.id__ = uniqId
-  el.dataset.bind__ = ref
-
-  return el;
-
-}
-
-export const  div = (ref: string, exp?: any, options?: DivOptions) => {
-  return buildElement(ref, 'div', exp, options).outerHTML
-}
-
-export const  span = (ref: string, exp?: any, options?: DivOptions) => {
-  return  buildElement(ref, 'span', exp, options).outerHTML
-}
-
-export const  select = (ref: string, exp?: any, options?: DivOptions) => {
-  return buildElement(ref, 'select', exp, options).outerHTML
-}
-
-export const t = (strings: TemplateStringsArray, ...keys: any)  => {
-  const res = [strings[0]]
-  keys.forEach( (key: any, idx: number) => {
-    // @todo how to join map??
-    //res.push(key.join(''), strings[idx + 1])
-    res.push(key, strings[idx + 1])
-  })
-  return res.join('');
-}
 export class RedGin extends HTMLElement {
   shadowRoot: any;
   constructor() {

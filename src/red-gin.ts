@@ -17,6 +17,7 @@ export class RedGin extends HTMLElement {
   }
   
   processObserveAttributes(observedAttributes: any) {
+    if (!observedAttributes) return
     for (const e of observedAttributes) {
       Object.defineProperty(this, e, {
         configurable: true,
@@ -79,6 +80,7 @@ export class RedGin extends HTMLElement {
     this.processObserveAttributes(this.constructor.observedAttributes)
 
   }
+
   onMounted() {}
   onBeforeUpdate() {}
   onUpdated() {

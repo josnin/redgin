@@ -10,13 +10,27 @@ export class RedGin extends HTMLElement {
   }  
 
   connectedCallback() {    
-    this.onBeforeMount()
-    this.onBeforeUpdate()
-    this.onMounted()
-    this.onUpdated()
+    this._onBeforeMount()
+    this._onBeforeUpdate()
+    this._onMounted()
+    this._onUpdated()
+  }
+
+  // attribute change
+  attributeChangedCallback(prop: any, oldValue: any, newValue: any) {
+
+    if (oldValue === newValue) return;
+
+    this._onBeforeUpdate()
+
+    //  @ts-ignore
+    //this[ prop ] = JSON.parse(newValue);
+    
+    this.updateContents(prop, JSON.parse(newValue))
+
   }
   
-  processObserveAttributes(observedAttributes: any) {
+  private processObserveAttributes(observedAttributes: any) {
     if (!observedAttributes) return
     for (const e of observedAttributes) {
       Object.defineProperty(this, e, {
@@ -29,7 +43,7 @@ export class RedGin extends HTMLElement {
     }
   }
   
-  updateContents(prop: any, newValue: any) {
+  private updateContents(prop: any, newValue: any) {
     //element binding
     //  @ts-ignore
     const binds = this.shadowRoot.querySelectorAll(`[data-bind__=${prop}]`)
@@ -41,27 +55,11 @@ export class RedGin extends HTMLElement {
 
     }
     
-    if (withUpdate) this.onUpdated() //call when dom change
+    if (withUpdate) this._onUpdated() //call when dom change
 
   }
 
-  // attribute change
-  attributeChangedCallback(prop: any, oldValue: any, newValue: any) {
-
-    if (oldValue === newValue) return;
-
-    this.onBeforeUpdate()
-
-    console.log('newValue', newValue)
-
-    //  @ts-ignore
-    //this[ prop ] = JSON.parse(newValue);
-    
-    this.updateContents(prop, JSON.parse(newValue))
-
-  }
-
-  buildEventListeners() {
+  private buildEventListeners() {
     // todo? update only with changes
     for (const e of eventBus) {
       let [evt, fn, id] = e
@@ -70,22 +68,30 @@ export class RedGin extends HTMLElement {
     }
   }
 
-  render() {}
-  
-  onBeforeMount() {
+  private _onBeforeMount() {
     this.shadowRoot.innerHTML = this.render()
     
     // @todo which life cycle
     // @ts-ignore
     this.processObserveAttributes(this.constructor.observedAttributes)
 
+    this.onBeforeMount()
   }
 
+  private _onMounted() { this.onMounted() }
+  private _onBeforeUpdate() { this.onBeforeUpdate() }
+  private _onUpdated() {
+    this.buildEventListeners()
+    this.onUpdated()
+  }
+  private _onError() { this.onError() }
+  
+  onBeforeMount() {}
   onMounted() {}
   onBeforeUpdate() {}
-  onUpdated() {
-    this.buildEventListeners()
-  }
+  onUpdated() {}
+  onError() {}
+  render() {}
 
 
 }

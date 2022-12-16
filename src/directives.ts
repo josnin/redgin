@@ -1,5 +1,5 @@
 import { getUniqID } from './utils.js'
-import { DivOptions } from './interface.js'
+import { IElOptions } from './interface.js'
 import { divBus, eventBus } from './state.js'
 
 
@@ -11,7 +11,7 @@ export const click = (event: any) => {
 }
 
 
-const buildElement = (ref: string, type: any, exp: string, options?: DivOptions) => {
+const buildElement = (ref: string, type: any, exp: string, options?: IElOptions) => {
   const el = document.createElement(type)
   const uniqId = getUniqID()
   divBus[uniqId] = exp ? exp : undefined

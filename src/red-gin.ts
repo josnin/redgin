@@ -1,6 +1,11 @@
 export * from './directives.js'
 import { divBus, eventBus } from './state.js'
 
+enum EventListenType {
+  ADD = 0,
+  REMOVE = 1,
+}
+
 
 export class RedGin extends HTMLElement {
   shadowRoot: any;
@@ -31,7 +36,7 @@ export class RedGin extends HTMLElement {
   }
 
   disconnectedCallback() {
-    this.clearEventListeners()
+    this.processEventListeners(EventListenType.REMOVE)
     this._onError()
   }
   
@@ -67,22 +72,16 @@ export class RedGin extends HTMLElement {
 
   }
 
-  private buildEventListeners() {
+  private processEventListeners(etype: EventListenType) {
     // todo? update only with changes
     for (const e of eventBus) {
       let [evt, fn, id] = e
       let el = this.shadowRoot.getElementById(id)
-      el?.addEventListener(evt, fn)
+      etype === EventListenType.ADD ? el?.addEventListener(evt, fn) : el?.removeEventListener(evt, fn)
     }
+
   }
 
-  private clearEventListeners() {
-    for (const e of eventBus) {
-      let [evt, fn, id] = e
-      let el = this.shadowRoot.getElementById(id)
-      el?.removeEventListener(evt, fn)
-    }
-  }
 
   private _onBeforeMount() {
     this.shadowRoot.innerHTML = this.render()
@@ -110,7 +109,7 @@ export class RedGin extends HTMLElement {
   }
   private _onBeforeUpdate() { this.onBeforeUpdate() }
   private _onUpdated() {
-    this.buildEventListeners()
+    this.processEventListeners(EventListenType.ADD)
     this.onUpdated()
   }
   private _onError() { this.onError() }

@@ -23,8 +23,68 @@ class LoopBinding extends RedGin {
           ${ div('arr', () => this.arr.map( 
                  (e: any) => t`<button ${ click(() => alert(e) ) } >first ${e} button</button>` )  
            ) }    
+        </div>
+        <div>
+           <!-- re render when value change -->                   
+          ${ div('arr', () => this.arr.map( 
+                 (e: any) => t`<button ${ click(() => alert(e) ) } >first ${e} button</button>` )  
+           ) }    
+        </div>
 
-           ${ div('arr') }
+        <div>
+           <!-- re render when value change -->                   
+          ${ div('arr', () => this.arr.map( 
+                 (e: any) => t`<button ${ click(() => alert(e) ) } >first ${e} button</button>` )  
+           ) }    
+        </div>
+        <div>
+           <!-- re render when value change -->                   
+          ${ div('arr', () => this.arr.map( 
+                 (e: any) => t`<button ${ click(() => alert(e) ) } >first ${e} button</button>` )  
+           ) }    
+        </div>
+        <div>
+           <!-- re render when value change -->                   
+          ${ div('arr', () => this.arr.map( 
+                 (e: any) => t`<button ${ click(() => alert(e) ) } >first ${e} button</button>` )  
+           ) }    
+        </div>
+        <div>
+           <!-- re render when value change -->                   
+          ${ div('arr', () => this.arr.map( 
+                 (e: any) => t`<button ${ click(() => alert(e) ) } >first ${e} button</button>` )  
+           ) }    
+        </div>
+        <div>
+           <!-- re render when value change -->                   
+          ${ div('arr', () => this.arr.map( 
+                 (e: any) => t`<button ${ click(() => alert(e) ) } >first ${e} button</button>` )  
+           ) }    
+        </div>
+        <div>
+           <!-- re render when value change -->                   
+          ${ div('arr', () => this.arr.map( 
+                 (e: any) => t`<button ${ click(() => alert(e) ) } >first ${e} button</button>` )  
+           ) }    
+        </div>
+        <div>
+           <!-- re render when value change -->                   
+          ${ div('arr', () => this.arr.map( 
+                 (e: any) => t`<button ${ click(() => alert(e) ) } >first ${e} button</button>` )  
+           ) }    
+        </div>
+        <div>
+           <!-- re render when value change -->                   
+          ${ div('arr', () => this.arr.map( 
+                 (e: any) => t`<button ${ click(() => alert(e) ) } >first ${e} button</button>` )  
+           ) }    
+        </div>
+        <div>
+           <!-- re render when value change -->                   
+          ${ div('arr', () => this.arr.map( 
+                 (e: any) => t`<button ${ click(() => alert(e) ) } >first ${e} button</button>` )  
+           ) }    
+        </div>
       `
   }
   

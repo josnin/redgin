@@ -30,15 +30,15 @@ const buildElement = (ref: string, type: any, exp: string, options?: IElOptions)
 
 }
 
-export const  div = (ref: string, exp?: any, options?: DivOptions) => {
+export const  div = (ref: string, exp?: any, options?: IElOptions) => {
   return buildElement(ref, 'div', exp, options).outerHTML
 }
 
-export const  span = (ref: string, exp?: any, options?: DivOptions) => {
+export const  span = (ref: string, exp?: any, options?: IElOptions) => {
   return  buildElement(ref, 'span', exp, options).outerHTML
 }
 
-export const  select = (ref: string, exp?: any, options?: DivOptions) => {
+export const  select = (ref: string, exp?: any, options?: IElOptions) => {
   return buildElement(ref, 'select', exp, options).outerHTML
 }
 

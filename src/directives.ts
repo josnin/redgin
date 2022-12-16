@@ -1,12 +1,12 @@
 import { getUniqID } from './utils.js'
 import { DivOptions } from './interface.js'
-import { divBus, eventArgs } from './state.js'
+import { divBus, eventBus } from './state.js'
 
 
 
 export const click = (event: any) => {
-  let uniq = `id${ eventArgs.length }`
-  eventArgs.push(['click', event, uniq])
+  const uniq = getUniqID()
+  eventBus.push(['click', event, uniq])
   return `id=${ uniq }`
 }
 
@@ -44,10 +44,9 @@ export const  select = (ref: string, exp?: any, options?: DivOptions) => {
 
 export const t = (strings: TemplateStringsArray, ...keys: any)  => {
   const res = [strings[0]]
-  keys.forEach( (key: any, idx: number) => {
+  for (const [idx, key] of keys.entries() ) {
     // @todo how to join map??
-    //res.push(key.join(''), strings[idx + 1])
     res.push(key, strings[idx + 1])
-  })
+  }
   return res.join('');
 }

@@ -1,5 +1,5 @@
 export * from './directives.js'
-import { divBus, eventArgs } from './state.js'
+import { divBus, eventBus } from './state.js'
 
 
 export class RedGin extends HTMLElement {
@@ -10,19 +10,14 @@ export class RedGin extends HTMLElement {
   }  
 
   connectedCallback() {    
-   
-    this.shadowRoot.innerHTML = this.render()
-    this.afterRender()
-    
-    // @todo which life cycle
-    // @ts-ignore
-    this.processObserveAttributes(this.constructor.observedAttributes)
+    this.onBeforeMount()
+    this.onBeforeUpdate()
     this.onMounted()
-
+    this.onUpdated()
   }
   
   processObserveAttributes(observedAttributes: any) {
-    observedAttributes?.forEach( (e: any) => {
+    for (const e of observedAttributes) {
       Object.defineProperty(this, e, {
         configurable: true,
         set (value) {
@@ -30,20 +25,20 @@ export class RedGin extends HTMLElement {
         },
         get () { return JSON.parse(this.getAttribute(e)) }
       })  
-    })
+    }
   }
   
-  updateContents(prop: any) {
+  updateContents(prop: any, newValue: any) {
     //element binding
     //  @ts-ignore
     const binds = this.shadowRoot.querySelectorAll(`[data-bind__=${prop}]`)
     let withUpdate = false
-    binds.forEach( (el:any) => {
-      
+    for (const el of binds) {
       //  @ts-ignore      
-      el.innerHTML = divBus[el.dataset.id__] ? divBus[el.dataset.id__].call(this) : this[prop]
+      el.innerHTML = divBus[el.dataset.id__] ? divBus[el.dataset.id__].call(this) : newValue
       withUpdate = true
-    })
+
+    }
     
     if (withUpdate) this.onUpdated() //call when dom change
 
@@ -59,35 +54,36 @@ export class RedGin extends HTMLElement {
     console.log('newValue', newValue)
 
     //  @ts-ignore
-    this[ prop ] = JSON.parse(newValue);
+    //this[ prop ] = JSON.parse(newValue);
     
-    this.updateContents(prop)
+    this.updateContents(prop, JSON.parse(newValue))
 
   }
 
-  afterRender() {
-    eventArgs.forEach( (e: any) => {
+  buildEventListeners() {
+    // todo? update only with changes
+    for (const e of eventBus) {
       let [evt, fn, id] = e
-      let btn = this.shadowRoot.getElementById(id)
-      btn?.addEventListener(evt, fn)
-    })
-   
-   
-   
-    //const btns = this.shadowRoot.querySelectorAll('button')
-    //btns.forEach( 
-    //  (btn: any) => btn.addEventListener('click', (e: any) => this.clickMe(btn.dataset.evt1) ) 
-    //) 
-
-
-   
+      let el = this.shadowRoot.getElementById(id)
+      el?.addEventListener(evt, fn)
+    }
   }
 
   render() {}
   
+  onBeforeMount() {
+    this.shadowRoot.innerHTML = this.render()
+    
+    // @todo which life cycle
+    // @ts-ignore
+    this.processObserveAttributes(this.constructor.observedAttributes)
+
+  }
   onMounted() {}
   onBeforeUpdate() {}
-  onUpdated() {}
+  onUpdated() {
+    this.buildEventListeners()
+  }
 
 
 }

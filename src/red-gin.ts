@@ -1,5 +1,5 @@
 export * from './directives.js'
-import { divBus, eventBus } from './state.js'
+import { divBus, eventBus, toClearEvents } from './state.js'
 
 
 export class RedGin extends HTMLElement {
@@ -29,8 +29,16 @@ export class RedGin extends HTMLElement {
     this.updateContents(prop, JSON.parse(newValue))
 
   }
+
+  disconnectedCallback() {
+    this.clearEventListeners()
+    this._onError()
+  }
   
   private processObserveAttributes(observedAttributes: any) {
+    //const a = Object.getOwnPropertyNames(this)
+//    console.log(Object.getOwnPropertyNames(this), this[a])
+// @ts-ignore
     if (!observedAttributes) return
     for (const e of observedAttributes) {
       Object.defineProperty(this, e, {
@@ -68,6 +76,14 @@ export class RedGin extends HTMLElement {
     }
   }
 
+  private clearEventListeners() {
+    for (const e of eventBus) {
+      let [evt, fn, id] = e
+      let el = this.shadowRoot.getElementById(id)
+      el?.removeEventListener(evt, fn)
+    }
+  }
+
   private _onBeforeMount() {
     this.shadowRoot.innerHTML = this.render()
     
@@ -78,7 +94,20 @@ export class RedGin extends HTMLElement {
     this.onBeforeMount()
   }
 
-  private _onMounted() { this.onMounted() }
+  private _onMounted() { 
+    // set default variable
+    //const subProps = Object.getOwnPropertyNames(this) // subclass properties
+    //console.log(subProps)
+    //// @ts-ignore
+    //for (const p of subProps) {
+    //  // @ts-ignore
+    //  const val = Object.getOwnPropertyDescriptor(this.constructor, p);
+
+    //  console.log(val)
+    //}
+    // @ts-ignore
+    this.onMounted() 
+  }
   private _onBeforeUpdate() { this.onBeforeUpdate() }
   private _onUpdated() {
     this.buildEventListeners()

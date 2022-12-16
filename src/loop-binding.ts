@@ -3,15 +3,16 @@ import { RedGin, div, t, click } from "./red-gin.js";
 
 
 class LoopBinding extends RedGin {
+  arr:any = [1, 2]
+
  
-  arr:any = []
   
   static get observedAttributes() {
     return ['arr'];
   }
 
-  clickMe(e: any) {
-    alert(e)
+  onMounted(): void {
+    this.arr = [1, 2]
   }
   
   render() {       
@@ -20,16 +21,13 @@ class LoopBinding extends RedGin {
         <div>
            <!-- re render when value change -->                   
           ${ div('arr', () => this.arr.map( 
-                 (e: any) => t`<button ${ click(() => this.clickMe(e) ) } >first ${e} button</button>` )  
+                 (e: any) => t`<button ${ click(() => alert(e) ) } >first ${e} button</button>` )  
            ) }    
 
            ${ div('arr') }
       `
   }
   
-  onMounted() {
-      this.arr = [1, 2, 3]
-  } 
  
 }
 

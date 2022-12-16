@@ -1,5 +1,5 @@
 export * from './directives.js'
-import { divBus, eventBus, toClearEvents } from './state.js'
+import { divBus, eventBus } from './state.js'
 
 
 export class RedGin extends HTMLElement {

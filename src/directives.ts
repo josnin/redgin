@@ -30,17 +30,20 @@ const buildElement = (ref: string, type: any, exp: string, options?: IElOptions)
 
 }
 
-export const  div = (ref: string, exp?: any, options?: IElOptions) => {
-  return buildElement(ref, 'div', exp, options).outerHTML
+const fnTags: any = {}
+
+// most used tags?
+const HTML_TAGS = ['a', 'b', 'strong', 'br', 'div', 'h1', 'i', 'img', 'ol', 
+'ul', 'li', 'p', 'span', 'select', 'option'];
+for (const tag of HTML_TAGS) {
+  fnTags[tag] = (ref: string, exp?: any, options?: IElOptions) => {
+    return buildElement(ref, tag, exp, options).outerHTML
+  }
 }
 
-export const  span = (ref: string, exp?: any, options?: IElOptions) => {
-  return  buildElement(ref, 'span', exp, options).outerHTML
-}
+export const { a, b, strong, br, div, h1, i, img, ol, 
+  ul, li, p, span, select, option } = fnTags
 
-export const  select = (ref: string, exp?: any, options?: IElOptions) => {
-  return buildElement(ref, 'select', exp, options).outerHTML
-}
 
 export const t = (strings: TemplateStringsArray, ...keys: any)  => {
   const res = [strings[0]]

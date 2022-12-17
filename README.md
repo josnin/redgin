@@ -45,6 +45,35 @@ customElements.define('sample-event', Event);
 
 ```
 
+## List Render
+### This creates getters/setters behind the scene to re-render
+```js
+import { RedGin, li } from 'red-gin.js';
+
+class Loop extends RedGin {
+  arr = [1, 2, 3]
+  
+  static get observedAttributes() { return ['arr'] }
+  
+  render() {
+    
+    return `<ul> ${ li('arr', this.arr.map( e => `Number: ${e}`) ).join('') } </ul>`
+    
+    <!-- results
+       <ul>
+         <li>Number: 1</li>
+         <li>Number: 2</li>
+         <li>Number: 3</li>
+       </ul>
+    -->
+  }
+ 
+}
+
+customElements.define('sample-event', Event);
+
+```
+
 ## Installation 
 ```
 npm install

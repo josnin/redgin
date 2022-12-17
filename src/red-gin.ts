@@ -1,11 +1,16 @@
-import { tags } from './directives.js';
+import { tags, events } from './directives.js';
 import { divBus, eventBus } from './state.js'
 
 export * from './directives.js'
 
 // export most used tags only else use tags.div?
+// both tags & events have 'select' directives, use tags.select or events.select instead
 export const { a, b, strong, br, div, h1, i, img, ol, 
-  ul, li, p, span, select, option } = tags
+  ul, li, p, span, option } = tags
+
+// export most used events only else use events.click?
+export const { click, input, focus, blur, change, 
+  submit } = events
 
 enum EventListenType {
   ADD = 0,

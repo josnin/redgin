@@ -4,11 +4,11 @@ import { divBus, eventBus } from './state.js'
 export * from './directives.js'
 
 // export most used tags only else use tags.div?
-// both tags & events have 'select' directives, use tags.select or events.select instead
 export const { a, b, strong, br, div, h1, i, img, ol, 
-  ul, li, p, span, option } = tags
+  ul, li, p, span, option, select } = tags
 
 // export most used events only else use events.click?
+// both tags also have 'select' directives, when importing use events.select instead
 export const { click, input, focus, blur, change, 
   submit } = events
 
@@ -27,9 +27,7 @@ export class RedGin extends HTMLElement {
 
   connectedCallback() {    
     this._onBeforeMount()
-    this._onBeforeUpdate()
     this._onMounted()
-    this._onUpdated()
   }
 
   // attribute change
@@ -39,22 +37,19 @@ export class RedGin extends HTMLElement {
 
     this._onBeforeUpdate()
 
-    //  @ts-ignore
-    //this[ prop ] = JSON.parse(newValue);
-    
-    this.updateContents(prop, JSON.parse(newValue))
+    const withUpdate = this.updateContents(prop, JSON.parse(newValue))
+    if (withUpdate) this._onUpdated() //call when dom change
 
   }
 
   disconnectedCallback() {
     this.processEventListeners(EventListenType.REMOVE)
-    this._onError()
+    //this._onError()
   }
   
   private processObserveAttributes(observedAttributes: any) {
     //const a = Object.getOwnPropertyNames(this)
 //    console.log(Object.getOwnPropertyNames(this), this[a])
-// @ts-ignore
     if (!observedAttributes) return
     for (const e of observedAttributes) {
       Object.defineProperty(this, e, {
@@ -70,16 +65,16 @@ export class RedGin extends HTMLElement {
   private updateContents(prop: any, newValue: any) {
     //element binding
     //  @ts-ignore
-    const binds = this.shadowRoot.querySelectorAll(`[data-bind__=${prop}]`)
+    const el = this.shadowRoot.querySelectorAll(`[data-bind__=${prop}]`)
     let withUpdate = false
-    for (const el of binds) {
+    for (const e of el) {
       //  @ts-ignore      
-      el.innerHTML = divBus[el.dataset.id__] ? divBus[el.dataset.id__].call(this) : newValue
+      e.innerHTML = divBus[e.dataset.id__] ? divBus[e.dataset.id__].call(this) : newValue
       withUpdate = true
 
     }
     
-    if (withUpdate) this._onUpdated() //call when dom change
+    return withUpdate
 
   }
 
@@ -95,11 +90,11 @@ export class RedGin extends HTMLElement {
 
 
   private _onBeforeMount() {
-    this.shadowRoot.innerHTML = this.render()
-    
     // @todo which life cycle
     // @ts-ignore
     this.processObserveAttributes(this.constructor.observedAttributes)
+
+    this.shadowRoot.innerHTML = this.render()
 
     this.onBeforeMount()
   }
@@ -117,6 +112,7 @@ export class RedGin extends HTMLElement {
     //}
     // @ts-ignore
     this.onMounted() 
+    this.processEventListeners(EventListenType.ADD)
   }
   private _onBeforeUpdate() { this.onBeforeUpdate() }
   private _onUpdated() {

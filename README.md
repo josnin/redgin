@@ -1,6 +1,11 @@
 # RedGin
 # Simplified library for building [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components)
 
+* Javascript Template literals for Template syntax
+* Introduced Reactive Tags (div, span, ...)
+* Getters/Setters is handled by RedGin
+* Inline Events 
+
 ## Use directly in browser
 
 ```html 

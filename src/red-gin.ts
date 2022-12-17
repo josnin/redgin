@@ -23,11 +23,13 @@ export class RedGin extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({mode: 'open'});
+    // @ts-ignore
+    this.processObserveAttributes(this.constructor.observedAttributes)
   }  
 
   connectedCallback() {    
-    this._onBeforeMount()
-    this._onMounted()
+    this._onRendered()
+    this._onBeforeUpdate()
   }
 
   // attribute change
@@ -48,8 +50,6 @@ export class RedGin extends HTMLElement {
   }
   
   private processObserveAttributes(observedAttributes: any) {
-    //const a = Object.getOwnPropertyNames(this)
-//    console.log(Object.getOwnPropertyNames(this), this[a])
     if (!observedAttributes) return
     for (const e of observedAttributes) {
       Object.defineProperty(this, e, {
@@ -57,7 +57,7 @@ export class RedGin extends HTMLElement {
         set (value) {
           this.setAttribute(e, JSON.stringify(value) )
         },
-        get () { return JSON.parse(this.getAttribute(e)) }
+        get () { return JSON.parse(this.getAttribute(e))  }
       })  
     }
   }
@@ -88,44 +88,36 @@ export class RedGin extends HTMLElement {
 
   }
 
-
-  private _onBeforeMount() {
-    // @todo which life cycle
-    // @ts-ignore
-    this.processObserveAttributes(this.constructor.observedAttributes)
-
+  private _onRendered() { 
     this.shadowRoot.innerHTML = this.render()
 
-    this.onBeforeMount()
+    this.onRendered()  // to change value after render?? reactive
+
+
   }
 
-  private _onMounted() { 
-    // set default variable
-    //const subProps = Object.getOwnPropertyNames(this) // subclass properties
-    //console.log(subProps)
-    //// @ts-ignore
-    //for (const p of subProps) {
-    //  // @ts-ignore
-    //  const val = Object.getOwnPropertyDescriptor(this.constructor, p);
+  private _onBeforeUpdate() { 
+    this.onBeforeUpdate() 
 
-    //  console.log(val)
-    //}
-    // @ts-ignore
-    this.onMounted() 
-    this.processEventListeners(EventListenType.ADD)
+    // do Change on the html
+    const props = Object.getOwnPropertyNames(this)
+    for (const prop of props) {
+      // @ts-ignore
+      const withUpdate = this.updateContents(prop, this[prop])
+      if (withUpdate) this._onUpdated() //call when dom change
+    }
+    // do Change on the html
+
   }
-  private _onBeforeUpdate() { this.onBeforeUpdate() }
+
   private _onUpdated() {
     this.processEventListeners(EventListenType.ADD)
     this.onUpdated()
   }
-  private _onError() { this.onError() }
-  
-  onBeforeMount() {}
-  onMounted() {}
+
+  onRendered() {}
   onBeforeUpdate() {}
   onUpdated() {}
-  onError() {}
   render() {}
 
 

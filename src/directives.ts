@@ -30,19 +30,26 @@ const buildElement = (ref: string, type: any, exp: string, options?: IElOptions)
 
 }
 
-const fnTags: any = {}
+export const tags: any = {}
 
-// most used tags?
-const HTML_TAGS = ['a', 'b', 'strong', 'br', 'div', 'h1', 'i', 'img', 'ol', 
-'ul', 'li', 'p', 'span', 'select', 'option'];
-for (const tag of HTML_TAGS) {
-  fnTags[tag] = (ref: string, exp?: any, options?: IElOptions) => {
-    return buildElement(ref, tag, exp, options).outerHTML
+// @todo any way to get all element tags?
+const HTML_TAGS = ['a', 'abbr', 'address', 'area', 'article', 'aside', 'audio', 'b',
+'base', 'bdi', 'bdo', 'blockquote', 'body', 'br', 'button', 'canvas', 'caption',
+'cite', 'code', 'col', 'colgroup', 'data', 'datalist', 'dd', 'del', 'details', 'dfn', 
+'dialog', 'div', 'dl', 'dt', 'em', 'embed', 'fieldset', 'figcaption', 'figure',
+'footer', 'form', 'h1', 'head', 'header', 'hgroup', 'hr', 'html', 'i', 'iframe', 'img',
+'input', 'ins', 'kbd', 'label', 'legend', 'li', 'link', 'main', 'map', 'mark', 'menu', 
+'meta', 'meter', 'nav', 'noscript', 'object', 'ol', 'optgroup', 'option', 'output', 
+'p', 'picture', 'pre', 'progress', 'q', 'rp', 'rt', 'ruby', 's', 'samp', 'script', 
+'section', 'select', 'slot', 'small', 'source', 'span', 'strong', 'style', 'sub', 
+'summary', 'sup', 'table', 'tbody', 'td', 'template', 'textarea', 'tfoot', 'th',
+'thead', 'time', 'title', 'tr', 'track', 'u', 'ul', 'var', 'video', 'wbr'];
+for (const t of HTML_TAGS) {
+  tags[t] = (ref: string, exp?: any, options?: IElOptions) => {
+    return buildElement(ref, t, exp, options).outerHTML
   }
 }
 
-export const { a, b, strong, br, div, h1, i, img, ol, 
-  ul, li, p, span, select, option } = fnTags
 
 
 export const t = (strings: TemplateStringsArray, ...keys: any)  => {

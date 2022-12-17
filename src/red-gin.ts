@@ -1,5 +1,11 @@
-export * from './directives.js'
+import { tags } from './directives.js';
 import { divBus, eventBus } from './state.js'
+
+export * from './directives.js'
+
+// export most used tags only else use tags.div?
+export const { a, b, strong, br, div, h1, i, img, ol, 
+  ul, li, p, span, select, option } = tags
 
 enum EventListenType {
   ADD = 0,

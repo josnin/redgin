@@ -57,7 +57,11 @@ class Loop extends RedGin {
   
   render() {
     
-    return `<ul> ${ li('arr', this.arr.map( e => `Number: ${e}`) ).join('') } </ul>`
+    return `<ul> ${ li('arr', () => 
+                        this.arr.map( e => `Number: ${e}`) 
+                       ).join('') 
+                  } 
+            </ul>`
     
     <!-- results
        <ul>

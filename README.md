@@ -78,6 +78,63 @@ customElements.define('sample-event', Event);
 
 ```
 
+## List Render
+### This creates getters/setters behind the scene to re-render
+```js
+import { RedGin, li } from 'red-gin.js';
+
+class Loop extends RedGin {
+  arr = [1, 2, 3]
+  
+  static get observedAttributes() { return ['arr'] }
+  
+  render() {
+    
+    return `<ul> ${ li('arr', () => 
+                        this.arr.map( e => `Number: ${e}`) 
+                       ).join('') 
+                  } 
+            </ul>`
+    
+    <!-- results
+       <ul>
+         <li>Number: 1</li>
+         <li>Number: 2</li>
+         <li>Number: 3</li>
+       </ul>
+    -->
+  }
+ 
+}
+
+customElements.define('sample-loop', Loop);
+
+```
+
+## IF condition
+### This creates getters/setters behind the scene to re-render
+```js
+import { RedGin, li } from 'red-gin.js';
+
+class If extends RedGin {
+  display = true
+  
+  static get observedAttributes() { return ['display'] }
+  
+  render() {
+    return `
+        <div>
+             ${ this.display 
+              ? `Boolean: ${this.display}` 
+              : `Boolean: ${this.display} `}   
+        </div>`      
+  } 
+}
+
+customElements.define('sample-if', If);
+
+```
+
 ## Installation 
 ```
 npm install
@@ -85,7 +142,7 @@ npm install
 
 ## How to run development server? 
 ```
-cd ~/Documents/libweb/
+cd ~/Documents/redgin/
 npm run build
 npm start
 ```

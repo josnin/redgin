@@ -60,9 +60,8 @@ customElements.define('sample-event', Event);
 import { RedGin, li } from 'red-gin.js';
 
 class Loop extends RedGin {
-  arr = [1, 2, 3]
-  
-  static get observedAttributes() { return ['arr'] }
+
+  static get observedAttributes() { return ['arr'] } // dynamically create props this.arr
   
   render() {
     
@@ -118,9 +117,8 @@ customElements.define('sample-if', If);
 import { RedGin, span } from "./red-gin.js";
 
 class If extends RedGin {
-  display: boolean = true
 
-  static get observedAttributes() { return ['display']; }
+  static get observedAttributes() { return ['is-display']; } // dynamically create camelCase props. ie. this.isDisplay
 
   render() {
     return `

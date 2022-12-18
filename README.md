@@ -92,14 +92,14 @@ customElements.define('sample-loop', Loop);
 import { RedGin } from 'red-gin.js';
 
 class If extends RedGin {
-  display = true
+  isDisplay = true
   
   render() {
     return `
         <div>
-             ${ this.display 
-              ? `Display: ${this.display}` 
-              : `Display: ${this.display} `}   
+             ${ this.isDisplay 
+              ? `Display: ${this.isDisplay}` 
+              : `Display: ${this.isDisplay} `}   
         </div>`      
   } 
 }
@@ -109,9 +109,8 @@ customElements.define('sample-if', If);
 ```
 
 ## IF condition (Reactive)
-* its uses reactive tag ( span ) and the variable is required to add in the observedAttributes()
-* auto generate element tag ```<span></span>``` that can react to value change
-* getters/setters are created automatically. 
+* dynamically create reactive props define in observedAttributes()
+* its uses reactive tag ( span ) to rerender element tag ```<span></span>``` when value change
 ```js
 import { RedGin, span } from "./red-gin.js";
 
@@ -121,10 +120,10 @@ class If extends RedGin {
 
   render() {
     return `
-        ${ span('display', () => 
-            this.display ? 
-                `Display: ${ this.display }` : 
-                `Display: ${ this.display }`
+        ${ span('isDisplay', () => 
+            this.isDisplay ? 
+                `Display: ${ this.isDisplay }` : 
+                `Display: ${ this.isDisplay }`
             ) 
         }
     `

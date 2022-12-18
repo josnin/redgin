@@ -37,7 +37,8 @@
 
 
 ## Inline Events
-### This creates event listeners behind the scene
+### it uses events tag ( click ) to create event listener behind the scene
+### and clear it once remove @ DOM
 ```js
 import { RedGin, click } from 'red-gin.js';
 
@@ -52,8 +53,9 @@ customElements.define('sample-event', Event);
 
 ```
 
-## List Render
-### This creates getters/setters behind the scene to re-render
+## List Render (Reactive)
+### This creates getters/setters behind the scene to re-render 
+### its uses reactive tag ( li ) and the variable is required to observedAttributes list
 ```js
 import { RedGin, li } from 'red-gin.js';
 
@@ -87,28 +89,52 @@ customElements.define('sample-event', Event);
 
 
 
-## IF condition
-### This creates getters/setters behind the scene to re-render
+## IF condition (Static)
 ```js
-import { RedGin, li } from 'red-gin.js';
+import { RedGin } from 'red-gin.js';
 
 class If extends RedGin {
   display = true
-  
-  static get observedAttributes() { return ['display'] }
   
   render() {
     return `
         <div>
              ${ this.display 
-              ? `Boolean: ${this.display}` 
-              : `Boolean: ${this.display} `}   
+              ? `Display: ${this.display}` 
+              : `Display: ${this.display} `}   
         </div>`      
   } 
 }
 
 customElements.define('sample-if', If);
 
+```
+
+## IF condition (Reactive)
+### This creates getters/setters behind the scene to re-render 
+### its uses reactive tag ( span ) and the variable is required to observedAttributes list
+```js
+import { RedGin, span } from "./red-gin.js";
+
+class If extends RedGin {
+  display: boolean = true
+
+  static get observedAttributes() { return ['display']; }
+
+  render() {
+    return `
+        ${ span('display', () => 
+            this.display ? 
+                `Display: ${ this.display }` : 
+                `Display: ${ this.display }`
+            ) 
+        }
+    `
+  }
+ 
+}
+
+customElements.define('sample-if', If);
 ```
 
 ## Installation 

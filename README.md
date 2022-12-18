@@ -55,7 +55,7 @@ customElements.define('sample-event', Event);
 
 ## List Render (Reactive)
 ### This creates getters/setters behind the scene to re-render 
-### its uses reactive tag ( li ) and the variable is required to observedAttributes list
+### its uses reactive tag ( li ) and the variable is required to add in the observedAttributes()
 ```js
 import { RedGin, li } from 'red-gin.js';
 
@@ -112,7 +112,7 @@ customElements.define('sample-if', If);
 
 ## IF condition (Reactive)
 ### This creates getters/setters behind the scene to re-render 
-### its uses reactive tag ( span ) and the variable is required to observedAttributes list
+### its uses reactive tag ( span ) and the variable is required to add in the observedAttributes()
 ```js
 import { RedGin, span } from "./red-gin.js";
 

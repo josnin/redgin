@@ -5,7 +5,7 @@
 * Introduced Reactive Tags (div, span, ...)
 * Getters/Setters is handled by RedGin
 * Inline Events 
-* Vanilla JS, Work on all JS framework
+* Vanilla JS, Works on all JS framework
 
 
 ## Use directly in browser

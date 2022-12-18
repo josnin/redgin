@@ -1,4 +1,4 @@
-import { snakeToCamel } from './utils.js'
+import { kebabToCamel } from './utils.js'
 import { tags, events } from './directives.js';
 import { divBus, eventBus } from './state.js'
 
@@ -53,7 +53,7 @@ export class RedGin extends HTMLElement {
   private processObserveAttributes(observedAttributes: any) {
     if (!observedAttributes) return
     for (const e of observedAttributes) {
-      Object.defineProperty(this, snakeToCamel(e), {
+      Object.defineProperty(this, kebabToCamel(e), {
         configurable: true,
         set (value) {
           this.setAttribute(e, JSON.stringify(value) )

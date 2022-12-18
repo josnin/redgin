@@ -149,3 +149,12 @@ cd ~/Documents/redgin/
 npm run build
 npm start
 ```
+
+## Help
+
+Need help? Open an issue in: [ISSUES](https://github.com/josnin/redgin/issues)
+
+
+## Contributing
+Want to improve and add feature? Fork the repo, add your changes and send a pull request.
+

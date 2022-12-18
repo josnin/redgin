@@ -37,7 +37,7 @@
 
 
 ## Inline Events
-it uses events tag ( click ) to create event listener behind the scene and clear it once remove @ DOM
+it uses events tag ( click ) to create event listener behind the scene and automatically clear once the component is remove from DOM
 ```js
 import { RedGin, click } from 'red-gin.js';
 

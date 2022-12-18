@@ -53,36 +53,35 @@ customElements.define('sample-event', Event);
 ```
 
 ## List Render (Reactive) 
-* its uses reactive tag ( li ) and the variable is required to add in the observedAttributes()
-* auto generate element tag ```<li></li>``` that can react to value change
-* getters/setters are created automatically.
+* dynamically create reactive props define in observedAttributes()
+* its uses reactive tag ( li ) to rerender element tag ```<li></li>``` when value change
 ```js
 import { RedGin, li } from 'red-gin.js';
 
 class Loop extends RedGin {
 
-  static get observedAttributes() { return ['arr'] } // dynamically create props this.arr
+  static get observedAttributes() { return ['arr'] } // dynamically create reactive props this.arr
   
-  render() {
-    
+  render() {    
     return `<ul> ${ li('arr', () => 
                         this.arr.map( e => `Number: ${e}`) 
                        ).join('') 
                   } 
             </ul>`
-    
-    <!-- results
+    } 
+}
+
+customElements.define('sample-loop', Loop);
+
+```
+#### results
+```html
+
        <ul>
          <li>Number: 1</li>
          <li>Number: 2</li>
          <li>Number: 3</li>
        </ul>
-    -->
-  }
- 
-}
-
-customElements.define('sample-event', Event);
 
 ```
 

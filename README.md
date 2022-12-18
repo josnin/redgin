@@ -53,7 +53,9 @@ customElements.define('sample-event', Event);
 ```
 
 ## List Render (Reactive) 
-its uses reactive tag ( li ) and the variable is required to add in the observedAttributes(), auto generate element tag ```<li></li>``` that can react to value change, and getters/setters are created automatically.
+* its uses reactive tag ( li ) and the variable is required to add in the observedAttributes()
+* auto generate element tag ```<li></li>``` that can react to value change
+* getters/setters are created automatically.
 ```js
 import { RedGin, li } from 'red-gin.js';
 
@@ -109,7 +111,9 @@ customElements.define('sample-if', If);
 ```
 
 ## IF condition (Reactive)
-its uses reactive tag ( span ) and the variable is required to add in the observedAttributes(), auto generate element tag ```<span></span>``` that can react to value change, and getters/setters are created automatically. 
+* its uses reactive tag ( span ) and the variable is required to add in the observedAttributes()
+* auto generate element tag ```<span></span>``` that can react to value change
+* getters/setters are created automatically. 
 ```js
 import { RedGin, span } from "./red-gin.js";
 

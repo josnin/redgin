@@ -116,7 +116,8 @@ import { RedGin, span } from "./red-gin.js";
 
 class If extends RedGin {
 
-  static get observedAttributes() { return ['is-display']; } // dynamically create camelCase props. ie. this.isDisplay
+  static get observedAttributes() { return ['is-display']; } 
+  // dynamically create camelCase props. ie. this.isDisplay
 
   render() {
     return `

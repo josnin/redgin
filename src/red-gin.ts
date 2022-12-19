@@ -24,21 +24,18 @@ export class RedGin extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({mode: 'open'});
-    // @ts-ignore
-    this.processObserveAttributes(this.constructor.observedAttributes)
+    this.shadowRoot.innerHTML = this.render()
   }  
 
   connectedCallback() {    
-    this._onRendered()
-    this._onBeforeUpdate()
+    this._onInit()
+    this._onDoUpdate()
   }
 
   // attribute change
   attributeChangedCallback(prop: any, oldValue: any, newValue: any) {
 
     if (oldValue === newValue) return;
-
-    this._onBeforeUpdate()
 
     const withUpdate = this.updateContents(prop, JSON.parse(newValue))
     if (withUpdate) this._onUpdated() //call when dom change
@@ -58,7 +55,7 @@ export class RedGin extends HTMLElement {
         set (value) {
           this.setAttribute(e, JSON.stringify(value) )
         },
-        get () { return JSON.parse(this.getAttribute(e))  }
+        get () { return JSON.parse(this.getAttribute(e)) }
       })  
     }
   }
@@ -89,16 +86,20 @@ export class RedGin extends HTMLElement {
 
   }
 
-  private _onRendered() { 
-    this.shadowRoot.innerHTML = this.render()
+  private _onInit() { 
 
-    this.onRendered()  // to change value after render?? reactive
+    // @ts-ignore
+    this.processObserveAttributes(this.constructor.observedAttributes)
+
+    // initialze here
+    // will create attr value 
+    // @todo how to initialize value with out defining here?
+    this.onInit() 
 
 
   }
 
-  private _onBeforeUpdate() { 
-    this.onBeforeUpdate() 
+  private _onDoUpdate() {  //apply DOM change based on init 
 
     // do Change on the html
     const props = Object.getOwnPropertyNames(this)
@@ -109,6 +110,9 @@ export class RedGin extends HTMLElement {
     }
     // do Change on the html
 
+    this.onDoUpdate() 
+
+
   }
 
   private _onUpdated() {
@@ -116,8 +120,8 @@ export class RedGin extends HTMLElement {
     this.onUpdated()
   }
 
-  onRendered() {}
-  onBeforeUpdate() {}
+  onInit() {}
+  onDoUpdate() {}
   onUpdated() {}
   render() {}
 

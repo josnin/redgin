@@ -37,6 +37,9 @@ export class RedGin extends HTMLElement {
 
     if (oldValue === newValue) return;
 
+    // @ts-ignore
+    //this[prop] = JSON.parse(newValue) // only need in createElement??
+
     const withUpdate = this.updateContents(prop, JSON.parse(newValue))
     if (withUpdate) this._onUpdated() //call when dom change
 
@@ -53,7 +56,12 @@ export class RedGin extends HTMLElement {
       Object.defineProperty(this, kebabToCamel(e), {
         configurable: true,
         set (value) {
-          this.setAttribute(e, JSON.stringify(value) )
+          this.setAttribute(e, JSON.stringify(value) ) // not a good idea to pass big obj in attrs??
+
+          // if big data no need to set Attribute????
+
+          //create a private variable? 
+          // this.#arr ??
         },
         get () { return JSON.parse(this.getAttribute(e)) }
       })  
@@ -88,8 +96,6 @@ export class RedGin extends HTMLElement {
 
   private _onInit() { 
 
-    // @ts-ignore
-    this.processObserveAttributes(this.constructor.observedAttributes)
 
     // initialze here
     // will create attr value 
@@ -111,6 +117,10 @@ export class RedGin extends HTMLElement {
     // do Change on the html
 
     this.onDoUpdate() 
+
+    // moved @ last so wont interfer w. props initial value
+    // @ts-ignore
+    this.processObserveAttributes(this.constructor.observedAttributes)
 
 
   }

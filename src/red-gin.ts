@@ -71,13 +71,19 @@ export class RedGin extends HTMLElement {
   private updateContents(prop: any, newValue: any) {
     //element binding
     //  @ts-ignore
-    const el = this.shadowRoot.querySelectorAll(`[data-bind__=${prop}]`)
-    let withUpdate = false
-    for (const e of el) {
-      //  @ts-ignore      
-      e.innerHTML = divBus[e.dataset.id__] ? divBus[e.dataset.id__].call(this) : newValue
-      withUpdate = true
+    //const el = this.shadowRoot.querySelectorAll(`[data-bind__=${prop}]`)
+    //let withUpdate = false
+    //for (const e of el) {
+    //  //  @ts-ignore      
+    //  e.innerHTML = divBus[e.dataset.id__] ? divBus[e.dataset.id__].call(this) : newValue
+    //  withUpdate = true
 
+    //}
+    let withUpdate = false
+    for (const id of Object.keys(divBus)) {
+      let el = this.shadowRoot.getElementById(id) // @todo: to use querySelector???
+      el.innerHTML = divBus[id] ? divBus[id].call(this) : newValue
+      withUpdate = true
     }
     
     return withUpdate

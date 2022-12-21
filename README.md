@@ -35,8 +35,8 @@
 ```
 
 
-
-## Inline Events
+## How to?
+### Inline Events
 it uses events tag ( click ) to create event listener behind the scene and automatically clear once the component is remove from DOM
 ```js
 import { RedGin, click } from 'red-gin.js';
@@ -52,7 +52,7 @@ customElements.define('sample-event', Event);
 
 ```
 
-## List Render (Reactive) 
+### List Render (Reactive) 
 * dynamically create reactive props define in observedAttributes()
 * its uses reactive tag ( li ) to rerender element tag ```<li></li>``` when value change
 ```js
@@ -87,7 +87,7 @@ customElements.define('sample-loop', Loop);
 
 
 
-## IF condition (Static)
+### IF condition (Static)
 ```js
 import { RedGin } from 'red-gin.js';
 
@@ -108,7 +108,7 @@ customElements.define('sample-if', If);
 
 ```
 
-## IF condition (Reactive)
+### IF condition (Reactive)
 * dynamically create reactive props define in observedAttributes()
 * its uses reactive tag ( span ) to rerender element tag ```<span></span>``` when value change
 ```js
@@ -134,6 +134,9 @@ class If extends RedGin {
 
 customElements.define('sample-if', If);
 ```
+
+## Best Practice Reference
+https://web.dev/custom-elements-best-practices/
 
 ## Installation 
 ```

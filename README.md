@@ -63,7 +63,7 @@ class Loop extends RedGin {
   static get observedAttributes() { return ['arr'] } // dynamically create reactive props this.arr
   
   render() {    
-    return `<ul> ${ li('arr', () => 
+    return `<ul> ${ li( () => 
                         this.arr.map( e => `Number: ${e}`) 
                        ).join('') 
                   } 
@@ -121,7 +121,7 @@ class If extends RedGin {
 
   render() {
     return `
-        ${ span('isDisplay', () => 
+        ${ span( () => 
             this.isDisplay ? 
                 `Display: ${ this.isDisplay }` : 
                 `Display: ${ this.isDisplay }`

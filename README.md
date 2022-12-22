@@ -54,16 +54,16 @@ customElements.define('sample-event', Event);
 
 ### List Render (Reactive) 
 * dynamically create reactive props define in observedAttributes()
-* its uses reactive tag ( li ) to rerender element tag ```<li></li>``` when value change
+* its uses watch directives to rerender inside html when value change
 ```js
-import { RedGin, li } from 'red-gin.js';
+import { RedGin, watch } from 'red-gin.js';
 
 class Loop extends RedGin {
 
   static get observedAttributes() { return ['arr'] } // dynamically create reactive props this.arr
   
   render() {    
-    return `<ul> ${ li( () => 
+    return `<ul> ${ watch(['arr'], () => 
                         this.arr.map( e => `Number: ${e}`) 
                        ).join('') 
                   } 
@@ -110,22 +110,23 @@ customElements.define('sample-if', If);
 
 ### IF condition (Reactive)
 * dynamically create reactive props define in observedAttributes()
-* its uses reactive tag ( span ) to rerender element tag ```<span></span>``` when value change
+* its uses directive watch to rerender inside html when value change
 ```js
-import { RedGin, span } from "./red-gin.js";
+import { RedGin, watch } from "./red-gin.js";
 
 class If extends RedGin {
 
-  static get observedAttributes() { return ['is-display']; } 
-  // dynamically create camelCase props. ie. this.isDisplay
+  static get observedAttributes() { return ['is-disable']; } 
+  // dynamically create camelCase props. ie. this.isDisable
 
   render() {
     return `
-        ${ span( () => 
-            this.isDisplay ? 
-                `Display: ${ this.isDisplay }` : 
-                `Display: ${ this.isDisplay }`
-            ) 
+        ${ watch(['isDisable'], () => 
+            <button
+                ${ this.isDisable ? `disable`: ``}
+            > Submit
+            </button>
+         )
         }
     `
   }

@@ -92,15 +92,13 @@ customElements.define('sample-loop', Loop);
 import { RedGin } from 'red-gin.js';
 
 class If extends RedGin {
-  isDisplay = true
+  isDisabled = true
   
   render() {
-    return `
-        <div>
-             ${ this.isDisplay 
-              ? `Display: ${this.isDisplay}` 
-              : `Display: ${this.isDisplay} `}   
-        </div>`      
+    return `<button 
+                ${ this.isDisabled ? `disabled` : ``}
+              > Submit
+             </button>    
   } 
 }
 

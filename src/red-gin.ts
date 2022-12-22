@@ -1,5 +1,6 @@
-import { kebabToCamel } from './utils.js'
-import { tags, events } from './directives.js';
+
+import { kebabToCamel,  } from './utils.js'
+import { tags, events,  } from './directives.js';
 import { divBus, eventBus } from './state.js'
 
 export * from './directives.js'
@@ -13,6 +14,7 @@ export const { a, b, strong, br, div, h1, i, img, ol,
 export const { click, input, focus, blur, change, 
   submit } = events
 
+
 enum EventListenType {
   ADD = 0,
   REMOVE = 1,
@@ -20,11 +22,9 @@ enum EventListenType {
 
 
 export class RedGin extends HTMLElement {
-  shadowRoot: any;
   constructor() {
     super();
     this.attachShadow({mode: 'open'});
-    this.shadowRoot.innerHTML = this.render()
   }  
 
   connectedCallback() {    
@@ -56,12 +56,7 @@ export class RedGin extends HTMLElement {
       Object.defineProperty(this, kebabToCamel(e), {
         configurable: true,
         set (value) {
-          this.setAttribute(e, JSON.stringify(value) ) // not a good idea to pass big obj in attrs??
-
-          // if big data no need to set Attribute????
-
-          //create a private variable? 
-          // this.#arr ??
+          this.setAttribute(e, JSON.stringify(value)) 
         },
         get () { return JSON.parse(this.getAttribute(e)) }
       })  
@@ -70,7 +65,6 @@ export class RedGin extends HTMLElement {
   
   private updateContents(prop: any, newValue: any) {
     //element binding
-    //  @ts-ignore
     //const el = this.shadowRoot.querySelectorAll(`[data-bind__=${prop}]`)
     //let withUpdate = false
     //for (const e of el) {
@@ -79,11 +73,24 @@ export class RedGin extends HTMLElement {
     //  withUpdate = true
 
     //}
+    //let withUpdate = false
+    //for (const id of Object.keys(divBus)) {
+    //  let el = this.shadowRoot.getElementById(id) // @todo: to use querySelector???
+    //  el.innerHTML = divBus[id] ? divBus[id].call(this) : newValue
+    //  withUpdate = true
+    //}
+    
     let withUpdate = false
-    for (const id of Object.keys(divBus)) {
-      let el = this.shadowRoot.getElementById(id) // @todo: to use querySelector???
-      el.innerHTML = divBus[id] ? divBus[id].call(this) : newValue
-      withUpdate = true
+    if (Object.hasOwn(divBus, prop)) {
+        for (const uniqId of Object.keys(divBus[prop])) {
+          if (this.shadowRoot) {
+            let el = this.shadowRoot.querySelector(`[data-id__="${uniqId}"]`) 
+            if (el) {
+              el.innerHTML = divBus[prop] ? divBus[prop][uniqId].call(this) : newValue
+              withUpdate = true
+            }  
+          }
+      }
     }
     
     return withUpdate
@@ -94,18 +101,22 @@ export class RedGin extends HTMLElement {
     // todo? update only with changes
     for (const e of eventBus) {
       let [evt, fn, id] = e
-      let el = this.shadowRoot.getElementById(id)
-      etype === EventListenType.ADD ? el?.addEventListener(evt, fn) : el?.removeEventListener(evt, fn)
+      if (this.shadowRoot) {
+        let el = this.shadowRoot.getElementById(id)
+        etype === EventListenType.ADD ? el?.addEventListener(evt, fn) : el?.removeEventListener(evt, fn)
+      }
     }
 
   }
 
   private _onInit() { 
 
+    // moved here instead of constructor, 
+    // so class props default value can also cover in rendering
+    if (this.shadowRoot) this.shadowRoot.innerHTML = this.render()
 
-    // initialze here
-    // will create attr value 
-    // @todo how to initialize value with out defining here?
+    // place where u can override value defined in class props
+    // fetch api
     this.onInit() 
 
 
@@ -124,7 +135,8 @@ export class RedGin extends HTMLElement {
 
     this.onDoUpdate() 
 
-    // moved @ last so wont interfer w. props initial value
+    // moved @ last so it will only trigger when no more actions
+    // so wont interfer w. props default or onInit value
     // @ts-ignore
     this.processObserveAttributes(this.constructor.observedAttributes)
 
@@ -139,7 +151,7 @@ export class RedGin extends HTMLElement {
   onInit() {}
   onDoUpdate() {}
   onUpdated() {}
-  render() {}
+  render(): string { return `` }
 
 
 }

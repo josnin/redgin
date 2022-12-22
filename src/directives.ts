@@ -2,6 +2,9 @@ import { getUniqID } from './utils.js'
 import { IElOptions } from './interface.js'
 import { divBus, eventBus } from './state.js'
 
+class InWatch extends HTMLElement { }
+customElements.define('in-watch', InWatch);
+
 
 export const events: any = {}
 // @todo any way to get all event attributes?
@@ -23,10 +26,14 @@ for (const e of EVENT_ATTRS) {
 }
 
 
-const buildElement = (ref: string, type: any, exp: string, options?: IElOptions) => {
+const buildElement = (ref: string[], type: any, exp: string, options?: IElOptions) => {
   const el = document.createElement(type)
   const uniqId = getUniqID()
-  divBus[uniqId] = exp ? exp : undefined
+  //divBus[uniqId] = exp ? exp : undefined
+  for (const prop of ref) {
+    if (!Object.hasOwn(divBus, prop))  divBus[prop] = {}
+    divBus[prop][uniqId] = exp
+  }
 
   if (options) {
     const { id, style, class: cls } = options;
@@ -35,8 +42,9 @@ const buildElement = (ref: string, type: any, exp: string, options?: IElOptions)
     if (style) el.setAttribute('style', style)
   }
 
+  //el.id = uniqId
+  //el.dataset.bind__ = ref
   el.dataset.id__ = uniqId
-  el.dataset.bind__ = ref
 
   return el;
 
@@ -55,20 +63,15 @@ const HTML_TAGS = ['a', 'abbr', 'address', 'area', 'article', 'aside', 'audio', 
 'p', 'picture', 'pre', 'progress', 'q', 'rp', 'rt', 'ruby', 's', 'samp', 'script', 
 'section', 'select', 'slot', 'small', 'source', 'span', 'strong', 'style', 'sub', 
 'summary', 'sup', 'table', 'tbody', 'td', 'template', 'textarea', 'tfoot', 'th',
-'thead', 'time', 'title', 'tr', 'track', 'u', 'ul', 'var', 'video', 'wbr'];
+'thead', 'time', 'title', 'tr', 'track', 'u', 'ul', 'var', 'video', 'wbr' ];
 for (const t of HTML_TAGS) {
-  tags[t] = (ref: string, exp?: any, options?: IElOptions) => {
+  tags[t] = (ref: string[], exp: any, options?: IElOptions) => {
     return buildElement(ref, t, exp, options).outerHTML
   }
 }
 
-
-
-export const t = (strings: TemplateStringsArray, ...keys: any)  => {
-  const res = [strings[0]]
-  for (const [idx, key] of keys.entries() ) {
-    // @todo how to join map??
-    res.push(key, strings[idx + 1])
-  }
-  return res.join('');
+export const watch = (ref: string[], exp: any, options?: IElOptions) => {
+  return buildElement(ref, 'in-watch', exp, options).outerHTML
 }
+
+

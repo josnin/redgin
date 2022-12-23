@@ -149,6 +149,19 @@ render() {
 }
 ```
 
+### Render List of Obj (Reactive)
+```js
+onInit(): void {
+  this.obj = [{id:1, name:'John Doe'}]
+}
+  
+render() {       
+  return `${ watch(['obj'], () => this.obj.map( (e: any) => 
+               `<span>ID:${e.id} Name:${e.name}</span>`)
+            ) }`
+}
+```
+
 ### Render with Simplified tag (Reactive)
 * recommend to use div (span, etc.) directives for simple display of value
 ```js

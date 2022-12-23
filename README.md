@@ -164,8 +164,10 @@ render() {
   }
 ```
 
-## Best Practice Reference
+## Reference
 https://web.dev/custom-elements-best-practices/
+
+https://web.dev/shadowdom-v1/
 
 ## Installation 
 ```

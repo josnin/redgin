@@ -135,6 +135,7 @@ customElements.define('sample-if', If);
 ```
 
 ### Render Obj (Reactive)
+* recommend to use watch directive when rendering obj
 ```js
 onInit(): void {
     this.obj = {id:1, name:'John Doe'}
@@ -149,6 +150,7 @@ render() {
 ```
 
 ### Render with Simplified tag (Reactive)
+* recommend to use div (span, etc.) directives for simple display of value
 ```js
 onInit(): void {
   this.id = 1;

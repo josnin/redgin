@@ -134,6 +134,34 @@ class If extends RedGin {
 customElements.define('sample-if', If);
 ```
 
+### Render Obj (Reactive)
+```js
+onInit(): void {
+    this.obj = {id:1, name:'John Doe'}
+}
+  
+render() {       
+  return `${ watch(['obj'], () => 
+              `<div>${ this.obj.id }</div>
+               <div>${ this.obj.name }</div>` 
+           ) }`
+}
+```
+
+### Render with Simplified tag (Reactive)
+```js
+onInit(): void {
+  this.id = 1;
+  this.name = 'Joh Doe'
+}
+  
+render() {       
+  return `
+    ${ div('id') }
+    ${ div('name') }`
+  }
+```
+
 ## Best Practice Reference
 https://web.dev/custom-elements-best-practices/
 

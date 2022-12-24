@@ -180,6 +180,16 @@ render() {
   }
 ```
 
+### PropReflect Custom
+Can only define single variable to each attr
+IF define , auto creation of attr props is not executed
+```js
+const foo = propReflect(false, { 
+                            attr: 'is-display', 
+                            type: Boolean }
+                       )
+```
+
 ## Reference
 https://web.dev/custom-elements-best-practices/
 

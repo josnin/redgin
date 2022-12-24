@@ -138,7 +138,7 @@ customElements.define('sample-if', If);
 * recommend to use watch directive when rendering obj
 ```js
 
-obj = setget({
+obj = setterGetter({
     id:1, 
     name:'John Doe'
  })
@@ -184,10 +184,11 @@ render() {
 Can only define single variable to each attr
 IF define , auto creation of attr props is not executed
 ```js
-const foo = propReflect(false, { 
-                            attr: 'is-display', 
-                            type: Boolean }
-                       )
+autoPropReflect = false
+foo = propReflect(false, { 
+                       attr: 'is-display', 
+                       type: Boolean }
+                    )
 ```
 
 ## Reference

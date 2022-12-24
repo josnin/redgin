@@ -137,9 +137,12 @@ customElements.define('sample-if', If);
 ### Render Obj (Reactive)
 * recommend to use watch directive when rendering obj
 ```js
-onInit(): void {
-    this.obj = {id:1, name:'John Doe'}
-}
+
+obj = setget({
+    id:1, 
+    name:'John Doe'
+ })
+
   
 render() {       
   return `${ watch(['obj'], () => 

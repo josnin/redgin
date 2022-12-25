@@ -23,12 +23,12 @@ enum EventListenType {
 
 export class RedGin extends HTMLElement {
 
-  /* accepts list of regex
-   * all aria attributes have a corresponding props (aria-*)
-   * equivalent of class attribute in properties are className & classList, 
-   * adding in observedAttributes can overwrite the existing props.
-   * same with id, dataset attr
-   * anything else?
+  /* - accepts list of regex
+     - all "aria" attributes have a corresponding props (aria-*)
+     - equivalent of "class" attribute in properties are "className" & "classList", 
+       adding in observedAttributes can overwrite the existing props.
+     - same with id, dataset attr
+     - anything else?
   */
   ignorePropReflection = ['class', 'style', 'className', 
   'classList', 'id', 'dataset', '^data-', '^aria-']
@@ -63,8 +63,8 @@ export class RedGin extends HTMLElement {
       const regex = new RegExp(regexPattern, 'g')
       if (attr.match(regex)) {
         isValid = false
-        console.warn(`Unable to apply auto propReflection of ${attr} defined in observedAttributes
-        ( use propReflect() to customize its name )`)
+        console.warn(`Unable to apply auto propReflection of ${attr} 
+        defined in observedAttributes`)
         break 
       }
     }

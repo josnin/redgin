@@ -138,10 +138,10 @@ customElements.define('sample-if', If);
 * recommend to use watch directive when rendering obj
 ```js
 
-obj = setterGetter({
+obj = setget({
     id:1, 
     name:'John Doe'
- })
+ }, { forWatch: false }) // forWatch default is true
 
   
 render() {       

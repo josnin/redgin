@@ -22,6 +22,17 @@ enum EventListenType {
 
 
 export class RedGin extends HTMLElement {
+
+  /* accepts list of regex
+   * all aria attributes have a corresponding props (aria-*)
+   * equivalent of class attribute in properties are className & classList, 
+   * adding in observedAttributes can overwrite the existing props.
+   * same with id, dataset attr
+   * anything else?
+  */
+  ignoredPropReflection = ['class', 'style', 'className', 
+  'classList', 'id', 'dataset', '^data-', '^aria-']
+
   constructor() {
     super();
     this.attachShadow({mode: 'open'});
@@ -37,9 +48,6 @@ export class RedGin extends HTMLElement {
 
     if (oldValue === newValue) return;
 
-    // @ts-ignore
-    //this[prop] = JSON.parse(newValue) // only need in createElement??
-
     const withUpdate = this.updateContents(prop, JSON.parse(newValue))
     if (withUpdate) this._onUpdated() //call when dom change
 
@@ -47,12 +55,28 @@ export class RedGin extends HTMLElement {
 
   disconnectedCallback() {
     this.processEventListeners(EventListenType.REMOVE)
-    //this._onError()
+  }
+
+  private isValidAttr(attr: string) {
+    let isValid = false
+    for (const regexPattern of this.ignoredPropReflection) {
+      const regex = new RegExp(regexPattern, 'g')
+      if (attr.match(regex)) {
+        isValid = false
+        console.warn(`Unable to apply auto propReflection of ${attr} defined in observedAttributes
+        ( use propReflect() to customize its name )`)
+        break 
+      }
+    }
+    return isValid
   }
   
   private processObserveAttributes(observedAttributes: any) {
     if (!observedAttributes) return
     for (const e of observedAttributes) {
+
+      if (!this.isValidAttr(e) === true) continue
+
       Object.defineProperty(this, kebabToCamel(e), {
         configurable: true,
         set (value) {

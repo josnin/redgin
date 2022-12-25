@@ -182,9 +182,8 @@ render() {
 
 ### PropReflect Custom
 Can only define single variable to each attr
-IF define , auto creation of attr props is not executed
+IF define , auto creation of attr props is ignored
 ```js
-autoPropReflect = false
 foo = propReflect(false, { 
                        attr: 'is-display', 
                        type: Boolean }

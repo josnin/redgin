@@ -1,7 +1,7 @@
 
 import { kebabToCamel,  } from './utils.js'
 import { tags, events,  } from './directives.js';
-import { divBus, eventBus } from './state.js'
+import { divBus, eventBus, watchRef } from './state.js'
 
 export * from './directives.js'
 
@@ -30,7 +30,7 @@ export class RedGin extends HTMLElement {
    * same with id, dataset attr
    * anything else?
   */
-  ignoredPropReflection = ['class', 'style', 'className', 
+  ignorePropReflection = ['class', 'style', 'className', 
   'classList', 'id', 'dataset', '^data-', '^aria-']
 
   constructor() {
@@ -58,8 +58,8 @@ export class RedGin extends HTMLElement {
   }
 
   private isValidAttr(attr: string) {
-    let isValid = false
-    for (const regexPattern of this.ignoredPropReflection) {
+    let isValid = true
+    for (const regexPattern of this.ignorePropReflection) {
       const regex = new RegExp(regexPattern, 'g')
       if (attr.match(regex)) {
         isValid = false
@@ -105,12 +105,12 @@ export class RedGin extends HTMLElement {
     //}
     
     let withUpdate = false
-    if (Object.hasOwn(divBus, prop)) {
-        for (const uniqId of Object.keys(divBus[prop])) {
+    if (Object.hasOwn(watchRef, prop)) {
+        for (const uniqId of Object.keys(watchRef[prop])) {
           if (this.shadowRoot) {
             let el = this.shadowRoot.querySelector(`[data-id__="${uniqId}"]`) 
             if (el) {
-              el.innerHTML = divBus[prop] ? divBus[prop][uniqId].call(this) : newValue
+              el.innerHTML = watchRef[prop][uniqId] ? watchRef[prop][uniqId].call(this) : newValue
               withUpdate = true
             }  
           }

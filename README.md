@@ -141,7 +141,7 @@ customElements.define('sample-if', If);
 obj = setget({
     id:1, 
     name:'John Doe'
- }, { forWatch: false }) // forWatch default is true
+ }, { forWatch: false } ) // forWatch default is true, for complex just define a setter/getter manually?
 
   
 render() {       

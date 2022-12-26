@@ -66,6 +66,7 @@ export class RedGin extends HTMLElement {
 
   }
 
+
   disconnectedCallback() {
     this.processEventListeners(EventListenType.REMOVE)
   }
@@ -84,7 +85,7 @@ export class RedGin extends HTMLElement {
     return isValid
   }
   
-  private processObserveAttributes(observedAttributes: any) {
+  private propReflect(observedAttributes: any) {
     if (!observedAttributes) return
     for (const e of observedAttributes) {
 
@@ -160,7 +161,7 @@ export class RedGin extends HTMLElement {
      so wont interfer w. props default or onInit value
     */
     // @ts-ignore
-    this.processObserveAttributes(this.constructor.observedAttributes)
+    this.propReflect(this.constructor.observedAttributes)
 
 
   }

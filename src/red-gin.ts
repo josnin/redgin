@@ -48,7 +48,13 @@ export class RedGin extends HTMLElement {
 
     if (oldValue === newValue) return;
 
-    const withUpdate = this.updateContents(prop, JSON.parse(newValue))
+    /* - if (oldValue === newValue) return; will help to handle infinite call 
+       - initializing value from attributes 
+    */
+    this[prop as keyof typeof this] = JSON.parse(newValue); 
+
+
+    const withUpdate = this.updateContents(prop)
     if (withUpdate) this._onUpdated() //call when dom change
 
   }
@@ -87,22 +93,7 @@ export class RedGin extends HTMLElement {
     }
   }
   
-  private updateContents(prop: any, newValue: any) {
-    //element binding
-    //const el = this.shadowRoot.querySelectorAll(`[data-bind__=${prop}]`)
-    //let withUpdate = false
-    //for (const e of el) {
-    //  //  @ts-ignore      
-    //  e.innerHTML = divBus[e.dataset.id__] ? divBus[e.dataset.id__].call(this) : newValue
-    //  withUpdate = true
-
-    //}
-    //let withUpdate = false
-    //for (const id of Object.keys(divBus)) {
-    //  let el = this.shadowRoot.getElementById(id) // @todo: to use querySelector???
-    //  el.innerHTML = divBus[id] ? divBus[id].call(this) : newValue
-    //  withUpdate = true
-    //}
+  private updateContents(prop: any) {
     
     let withUpdate = false
     if (Object.hasOwn(watchRef, prop)) {
@@ -110,7 +101,7 @@ export class RedGin extends HTMLElement {
           if (this.shadowRoot) {
             let el = this.shadowRoot.querySelector(`[data-id__="${uniqId}"]`) 
             if (el) {
-              el.innerHTML = watchRef[prop][uniqId] ? watchRef[prop][uniqId].call(this) : newValue
+              el.innerHTML = watchRef[prop][uniqId] ? watchRef[prop][uniqId].call(this) : this[prop as keyof typeof this]
               withUpdate = true
             }  
           }
@@ -151,16 +142,16 @@ export class RedGin extends HTMLElement {
     // do Change on the html
     const props = Object.getOwnPropertyNames(this)
     for (const prop of props) {
-      // @ts-ignore
-      const withUpdate = this.updateContents(prop, this[prop])
+      const withUpdate = this.updateContents(prop)
       if (withUpdate) this._onUpdated() //call when dom change
     }
     // do Change on the html
 
     this.onDoUpdate() 
 
-    // moved @ last so it will only trigger when no more actions
-    // so wont interfer w. props default or onInit value
+    /* - moved @ last so it will only trigger when no more actions
+     so wont interfer w. props default or onInit value
+    */
     // @ts-ignore
     this.processObserveAttributes(this.constructor.observedAttributes)
 

@@ -30,8 +30,15 @@ export class RedGin extends HTMLElement {
      - same with id, dataset attr
      - anything else?
   */
-  ignorePropReflection = ['class', 'style', 'className', 
+  IGNORE_PROP_REFLECTION = ['class', 'style', 'className', 
   'classList', 'id', 'dataset', '^data-', '^aria-']
+
+  /* 
+    - treat as a HTML standard boolean attrs
+    - presence of attr is true
+    - absence of attr is false
+  */
+  BOOLEAN_ATTRIBUTES = []
 
   constructor() {
     super();
@@ -65,7 +72,7 @@ export class RedGin extends HTMLElement {
 
   private isValidAttr(attr: string) {
     let isValid = true
-    for (const regexPattern of this.ignorePropReflection) {
+    for (const regexPattern of this.IGNORE_PROP_REFLECTION) {
       const regex = new RegExp(regexPattern, 'g')
       if (attr.match(regex)) {
         isValid = false

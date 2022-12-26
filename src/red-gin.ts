@@ -38,7 +38,7 @@ export class RedGin extends HTMLElement {
     - presence of attr is true
     - absence of attr is false
   */
-  BOOLEAN_ATTRIBUTES = []
+  BOOLEAN_ATTRIBUTES = ['disabled']
 
   constructor() {
     super();
@@ -94,6 +94,7 @@ export class RedGin extends HTMLElement {
       Object.defineProperty(this, kebabToCamel(e), {
         configurable: true,
         set (value) {
+          // @todo check if value change?
           this.setAttribute(e, JSON.stringify(value)) 
         },
         get () { return JSON.parse(this.getAttribute(e)) }
@@ -147,8 +148,12 @@ export class RedGin extends HTMLElement {
 
   private _onDoUpdate() {  //apply DOM change based on init 
 
+
     // do Change on the html
-    const props = Object.getOwnPropertyNames(this)
+
+    // dont include built in props
+    const propsToExclude = ['BOOLEAN_ATTRIBUTES', 'IGNORE_PROP_REFLECTION'] 
+    let props = Object.getOwnPropertyNames(this).filter( (e: any) => !propsToExclude.includes(e))
     for (const prop of props) {
       const withUpdate = this.updateContents(prop)
       if (withUpdate) this._onUpdated() //call when dom change

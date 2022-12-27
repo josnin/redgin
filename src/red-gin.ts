@@ -23,21 +23,22 @@ enum EventListenType {
 
 export class RedGin extends HTMLElement {
 
-  /* - accepts list of regex
-     - all "aria" attributes have a corresponding props (aria-*)
-     - equivalent of "class" attribute in properties are "className" & "classList", 
-       adding in observedAttributes can overwrite the existing props.
-     - same with id, dataset attr
-     - anything else?
-  */
+  /*
+   * accepts list of regex
+   * all "aria" attributes have a corresponding props (aria-*)
+   * equivalent of "class" attribute in properties are "className" & "classList", 
+   * adding in observedAttributes can overwrite the existing props.
+   * same with id, dataset attr
+   * anything else?
+   */
   IGNORE_PROP_REFLECTION = ['class', 'style', 'className', 
   'classList', 'id', 'dataset', '^data-', '^aria-']
 
   /* 
-    - treat as a HTML standard boolean attrs
-    - presence of attr is true
-    - absence of attr is false
-  */
+   * treat as a HTML standard boolean attrs
+   * presence of attr is true
+   * absence of attr is false
+   */
   BOOLEAN_ATTRIBUTES = ['disabled']
 
   constructor() {
@@ -50,16 +51,11 @@ export class RedGin extends HTMLElement {
     this._onDoUpdate()
   }
 
+
   // attribute change
   attributeChangedCallback(prop: any, oldValue: any, newValue: any) {
 
     if (oldValue === newValue) return;
-
-    /* - if (oldValue === newValue) return; will help to handle infinite call 
-       - initializing value from attributes 
-    */
-    this[prop as keyof typeof this] = JSON.parse(newValue); 
-
 
     const withUpdate = this.updateContents(prop)
     if (withUpdate) this._onUpdated() //call when dom change
@@ -94,10 +90,24 @@ export class RedGin extends HTMLElement {
       Object.defineProperty(this, kebabToCamel(e), {
         configurable: true,
         set (value) {
-          // @todo check if value change?
-          this.setAttribute(e, JSON.stringify(value)) 
+          // @todo to proceed check first if value change 
+          if (this.BOOLEAN_ATTRIBUTES.includes(e) && Boolean(value) === true) {
+            this.setAttribute(e, '') 
+          } else if (this.BOOLEAN_ATTRIBUTES.includes(e) && Boolean(value) === false) {
+            this.removeAttribute(e)
+          } else {
+            this.setAttribute(e, value)
+          }
         },
-        get () { return JSON.parse(this.getAttribute(e)) }
+        get () { 
+          if (e in this.BOOLEAN_ATTRIBUTES) {
+            return this.hasAttribute(e)
+          } else {
+            // @todo defining variable at the top most will always overwrite by this
+            // ex. arr:any = [1] 
+            return JSON.parse(this.getAttribute(e)) 
+          }
+        }
       })  
     }
   }
@@ -134,9 +144,12 @@ export class RedGin extends HTMLElement {
   }
 
   private _onInit() { 
+    // @ts-ignore
+    this.propReflect(this.constructor.observedAttributes)
 
-    // moved here instead of constructor, 
-    // so class props default value can also cover in rendering
+    /* moved here instead of constructor, 
+     * so class props default value can also cover in rendering
+     */
     if (this.shadowRoot) this.shadowRoot.innerHTML = this.render()
 
     // place where u can override value defined in class props
@@ -161,12 +174,6 @@ export class RedGin extends HTMLElement {
     // do Change on the html
 
     this.onDoUpdate() 
-
-    /* - moved @ last so it will only trigger when no more actions
-     so wont interfer w. props default or onInit value
-    */
-    // @ts-ignore
-    this.propReflect(this.constructor.observedAttributes)
 
 
   }

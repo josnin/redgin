@@ -184,10 +184,7 @@ render() {
 Can only define single variable to each attr
 IF define , auto creation of attr props is ignored
 ```js
-foo = propReflect(false, { 
-                       attr: 'is-display', 
-                       type: Boolean }
-                    )
+msg = propReflect('Hello?', {  type: String } ) 
 ```
 
 ## Reference

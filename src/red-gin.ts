@@ -1,8 +1,11 @@
 
 import { kebabToCamel,  } from './utils.js'
-import { tags, events, watchFn  } from './directives.js';
-import { divBus, eventBus, watchRef } from './state.js'
+import { tags, events  } from './directives.js';
+import { divBus, eventBus } from './state.js'
 
+import { Directives } from './directives/directives.js';
+
+export * from './directives/index.js'
 export * from './directives.js'
 
 // export most used tags only else use tags.div?
@@ -148,7 +151,9 @@ export class RedGin extends HTMLElement {
   
   private updateContents(prop: any) {
 
-    let withUpdate = watchFn(prop, this) // @todo list of plugin directives function
+    const directives = new Directives(prop, this);
+    let withUpdate = directives.apply();
+    //let withUpdate = watchFn(prop, this) // @todo list of plugin directives function
     
     return withUpdate
 

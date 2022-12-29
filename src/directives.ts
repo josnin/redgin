@@ -1,6 +1,6 @@
 import { getUniqID } from './utils.js'
-import { IElOptions } from './interface.js'
-import { divBus, eventBus } from './state.js'
+import { IElOptions, IPropReflect } from './interface.js'
+import { profReflectRef, eventBus, watchRef } from './state.js'
 
 class InWatch extends HTMLElement { }
 customElements.define('in-watch', InWatch);
@@ -26,13 +26,13 @@ for (const e of EVENT_ATTRS) {
 }
 
 
-const buildElement = (ref: string[], type: any, exp: string, options?: IElOptions) => {
+const buildElement = (ref: string[], type: any, exp: any, options?: IElOptions) => {
   const el = document.createElement(type)
   const uniqId = getUniqID()
   //divBus[uniqId] = exp ? exp : undefined
   for (const prop of ref) {
-    if (!Object.hasOwn(divBus, prop))  divBus[prop] = {}
-    divBus[prop][uniqId] = exp
+    if (!Object.hasOwn(watchRef, prop))  watchRef[prop] = {}
+    watchRef[prop][uniqId] = exp
   }
 
   if (options) {
@@ -72,6 +72,28 @@ for (const t of HTML_TAGS) {
 
 export const watch = (ref: string[], exp: any, options?: IElOptions) => {
   return buildElement(ref, 'in-watch', exp, options).outerHTML
+}
+
+export const watchFn = (prop: string, shadow: any) {
+    let withUpdate = false
+    if (Object.hasOwn(watchRef, prop)) {
+        for (const uniqId of Object.keys(watchRef[prop])) {
+          if (shadow.shadowRoot) {
+            let el = shadow.shadowRoot.querySelector(`[data-id__="${uniqId}"]`) 
+            if (el) {
+              el.innerHTML = watchRef[prop][uniqId] ? watchRef[prop][uniqId].call(shadow) : shadow[prop as keyof typeof shadow]
+              withUpdate = true
+            }  
+          }
+      }
+    }
+    return withUpdate
+}
+
+export const propReflect = (value: any, options?: IPropReflect) => {
+  // propReflectRef
+  return { value, ...options, what: 'propReflect' }
+
 }
 
 

@@ -6,3 +6,7 @@ export interface IElOptions {
   exp?: any;
 }
 
+export interface IPropReflect {
+  type?: any;
+}
+

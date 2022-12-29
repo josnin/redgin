@@ -1,6 +1,6 @@
 
 import { kebabToCamel,  } from './utils.js'
-import { tags, events,  } from './directives.js';
+import { tags, events, watchFn  } from './directives.js';
 import { divBus, eventBus, watchRef } from './state.js'
 
 export * from './directives.js'
@@ -80,52 +80,75 @@ export class RedGin extends HTMLElement {
     }
     return isValid
   }
-  
-  private propReflect(observedAttributes: any) {
-    if (!observedAttributes) return
-    for (const e of observedAttributes) {
 
-      if (!this.isValidAttr(e) === true) continue
+  private propReflect(prop: string, type: any, val: any) {
 
-      Object.defineProperty(this, kebabToCamel(e), {
+      if (!this.isValidAttr(prop) === true) return
+
+      Object.defineProperty(this, kebabToCamel(prop), {
         configurable: true,
         set (value) {
           // @todo to proceed check first if value change 
-          if (this.BOOLEAN_ATTRIBUTES.includes(e) && Boolean(value) === true) {
-            this.setAttribute(e, '') 
-          } else if (this.BOOLEAN_ATTRIBUTES.includes(e) && Boolean(value) === false) {
-            this.removeAttribute(e)
+          if (this.BOOLEAN_ATTRIBUTES.includes(prop) && Boolean(value) === true) {
+            this.setAttribute(prop, '') 
+          } else if (this.BOOLEAN_ATTRIBUTES.includes(prop) && Boolean(value) === false) {
+            this.removeAttribute(prop)
           } else {
-            this.setAttribute(e, value)
+            this.setAttribute(prop, value)
           }
         },
         get () { 
-          if (e in this.BOOLEAN_ATTRIBUTES) {
-            return this.hasAttribute(e)
+          if (prop in this.BOOLEAN_ATTRIBUTES) {
+            return this.hasAttribute(prop)
           } else {
             // @todo defining variable at the top most will always overwrite by this
             // ex. arr:any = [1] 
-            return JSON.parse(this.getAttribute(e)) 
+            if ([Boolean, String].includes(type) && !this.hasAttribute(prop)) {
+              return val
+            } else if ([Boolean, String].includes(type) && this.hasAttribute(prop)) {
+              return this.getAttribute(prop)
+            } else {
+              return JSON.parse(this.getAttribute(prop)) 
+            }
           }
         }
       })  
-    }
   }
   
+  //private propReflect(observedAttributes: any) {
+  //  if (!observedAttributes) return
+  //  for (const e of observedAttributes) {
+
+  //    if (!this.isValidAttr(e) === true) continue
+
+  //    Object.defineProperty(this, kebabToCamel(e), {
+  //      configurable: true,
+  //      set (value) {
+  //        // @todo to proceed check first if value change 
+  //        if (this.BOOLEAN_ATTRIBUTES.includes(e) && Boolean(value) === true) {
+  //          this.setAttribute(e, '') 
+  //        } else if (this.BOOLEAN_ATTRIBUTES.includes(e) && Boolean(value) === false) {
+  //          this.removeAttribute(e)
+  //        } else {
+  //          this.setAttribute(e, value)
+  //        }
+  //      },
+  //      get () { 
+  //        if (e in this.BOOLEAN_ATTRIBUTES) {
+  //          return this.hasAttribute(e)
+  //        } else {
+  //          // @todo defining variable at the top most will always overwrite by this
+  //          // ex. arr:any = [1] 
+  //          return JSON.parse(this.getAttribute(e)) 
+  //        }
+  //      }
+  //    })  
+  //  }
+  //}
+  
   private updateContents(prop: any) {
-    
-    let withUpdate = false
-    if (Object.hasOwn(watchRef, prop)) {
-        for (const uniqId of Object.keys(watchRef[prop])) {
-          if (this.shadowRoot) {
-            let el = this.shadowRoot.querySelector(`[data-id__="${uniqId}"]`) 
-            if (el) {
-              el.innerHTML = watchRef[prop][uniqId] ? watchRef[prop][uniqId].call(this) : this[prop as keyof typeof this]
-              withUpdate = true
-            }  
-          }
-      }
-    }
+
+    let withUpdate = watchFn(prop, this) // @todo list of plugin directives function
     
     return withUpdate
 
@@ -145,7 +168,21 @@ export class RedGin extends HTMLElement {
 
   private _onInit() { 
     // @ts-ignore
-    this.propReflect(this.constructor.observedAttributes)
+    //this.propReflect(this.constructor.observedAttributes)
+
+    // dont include built in props
+    const propsToExclude = ['BOOLEAN_ATTRIBUTES', 'IGNORE_PROP_REFLECTION'] 
+    let props = Object.getOwnPropertyNames(this).filter( (e: any) => !propsToExclude.includes(e))
+    // @ts-ignore
+    const observedAttributes = this.constructor.observedAttributes
+    for (const prop of props) {
+      // @ts-ignore
+      const { type, value } = this[prop]
+      if (observedAttributes.includes(prop)) {
+        this.propReflect(prop, type, value)
+      } 
+    }
+    // do Change on the html
 
     /* moved here instead of constructor, 
      * so class props default value can also cover in rendering
@@ -168,6 +205,7 @@ export class RedGin extends HTMLElement {
     const propsToExclude = ['BOOLEAN_ATTRIBUTES', 'IGNORE_PROP_REFLECTION'] 
     let props = Object.getOwnPropertyNames(this).filter( (e: any) => !propsToExclude.includes(e))
     for (const prop of props) {
+      // @ts-ignore
       const withUpdate = this.updateContents(prop)
       if (withUpdate) this._onUpdated() //call when dom change
     }

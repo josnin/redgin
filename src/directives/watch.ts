@@ -2,6 +2,9 @@ import { getUniqID } from '../utils.js'
 
 var watchRef: any = {}
 
+class InWatch extends HTMLElement { }
+customElements.define('in-watch', InWatch);
+
 export const watch = (ref: string[], exp: any) => {
   const el = document.createElement('in-watch')
   const uniqId = getUniqID()

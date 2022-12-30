@@ -4,9 +4,10 @@ interface IGetSet {
 }
 
 // getset behavior
-export function getsetFn(this: any, prop: string, forWatch: boolean, value: any) {
+export function getsetFn(this: any, prop: string, propValue: any) {
+    const { value: val, forWatch } = propValue
 
-    this[`#${prop}`] = value
+    this[`#${prop}`] = val
 
     Object.defineProperty(this, prop, {
       configurable: true,

@@ -1,10 +1,12 @@
 
-import { customDirectives, 
+import { applyDirectives, 
   events, eventBus, tags } from './directives/index.js';
 import { propReflectFn } from './propReflect.js'
+import { getsetFn } from './getset.js'
 
 export * from './directives/index.js'
 export * from './propReflect.js'
+export * from './getset.js'
 
 // export most used tags only else use tags.div?
 export const { a, b, strong, br, div, h1, i, img, ol, 
@@ -53,8 +55,7 @@ export class RedGin extends HTMLElement {
   
   private updateContents(prop: any) {
 
-    const d = new customDirectives(prop, this);
-    let withUpdate = d.apply();
+    const withUpdate = applyDirectives.call(this, prop);
     
     return withUpdate
 
@@ -78,10 +79,18 @@ export class RedGin extends HTMLElement {
     const observedAttributes = this.constructor.observedAttributes
     for (const prop of props) {
       // @ts-ignore
-      const { type, value } = this[prop]
-      if (observedAttributes.includes(prop)) {
+      if (observedAttributes.includes(prop) && this[prop].name === 'propReflect') {
+        // @ts-ignore
+        const { type, value } = this[prop]
         propReflectFn.call(this, prop, type, value)
       } 
+
+        // @ts-ignore
+      if (this[prop].name === 'getset') {
+        // @ts-ignore
+        const { forWatch, value } = this[prop]
+        getsetFn.call(this, prop, forWatch, value)
+      }
 
       // @todo getsetFn here?
     }

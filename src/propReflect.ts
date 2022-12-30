@@ -1,6 +1,6 @@
 import { kebabToCamel } from './utils.js'
 
-export interface IPropReflect {
+interface IPropReflect {
   type?: any;
 }
 
@@ -74,6 +74,6 @@ export function propReflectFn(this: any, prop: string, type: any, val: any) {
   
 // propReflect placeholder
 export const propReflect = (value: any, options?: IPropReflect) => {
-  return { value, ...options, what: 'propReflect' }
+  return { value, ...options, name: 'propReflect' }
 
 }

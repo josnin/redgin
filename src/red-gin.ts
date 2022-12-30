@@ -1,12 +1,9 @@
 
-import { tags, events  } from './directives.js';
-import { eventBus } from './state.js'
-
-import { customDirectives } from './directives/directives.js';
+import { customDirectives, 
+  events, eventBus, tags } from './directives/index.js';
 import { propReflectFn } from './propReflect.js'
 
 export * from './directives/index.js'
-export * from './directives.js'
 export * from './propReflect.js'
 
 // export most used tags only else use tags.div?

@@ -1,27 +1,15 @@
-import { getUniqID } from './utils.js'
-import { IElOptions, IPropReflect } from './interface.js'
-import { profReflectRef, eventBus, divBus } from './state.js'
 
+import { getUniqID } from '../utils.js'
 
-
-export const events: any = {}
-// @todo any way to get all event attributes?
-const EVENT_ATTRS = ['afterprint', 'beforeprint', 'beforeunload', 'error', 'hashchange',
-'load', 'message', 'offline', 'online', 'pagehide', 'pageshow', 'popstate', 'resize',
-'storage', 'unload', 'blur', 'change', 'contextmenu', 'focus', 'input', 'invalid', 'reset',
-'search', 'select', 'submit', 'keydown', 'keypress', 'keyup', 'click', 'dblclick', 'mousedown',
-'mousemove', 'mouseout', 'mouseover', 'mouseup', 'mousewheel', 'wheel', 'drag', 'dragend', 
-'dragenter', 'dragleave', 'dragover', 'dragstart', 'drop', 'scroll', 'copy', 'cut', 'paste',
-'abort', 'canplay', 'canplaythrough', 'cuechange', 'durationchange', 'emptied', 'ended', 'loadeddata', 
-'loadedmetadata', 'loadstart', 'pause', 'play', 'playing', 'progress', 'ratechange', 'seeked',
-'seeking', 'onstalled', 'suspend', 'timeupdate', 'volumechange', 'waiting', 'toggle'] ;
-for (const e of EVENT_ATTRS) {
-  events[e] = (fn: any) => {
-    const uniq = getUniqID()
-    eventBus.push([e, fn, uniq])
-    return `id=${uniq}`
-  }
+export interface IElOptions {
+  id?: string;
+  class?: string;
+  style?: string;
+  exp?: any;
 }
+
+var divBus: any = {}
+
 
 
 const buildElement = (ref: string[], type: any, exp: any, options?: IElOptions) => {
@@ -67,11 +55,5 @@ for (const t of HTML_TAGS) {
     return buildElement(ref, t, exp, options).outerHTML
   }
 }
-
-//export const propReflect = (value: any, options?: IPropReflect) => {
-//  // propReflectRef
-//  return { value, ...options, what: 'propReflect' }
-//
-//}
 
 

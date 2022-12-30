@@ -1,10 +1,14 @@
 import { getUniqID } from '../utils.js'
+import { customDirectives } from './directives.js'
 
 var watchRef: any = {}
 
 class InWatch extends HTMLElement { }
 customElements.define('in-watch', InWatch);
 
+/*
+ * watch element here
+*/
 export const watch = (ref: string[], exp: any) => {
   const el = document.createElement('in-watch')
   const uniqId = getUniqID()
@@ -19,6 +23,9 @@ export const watch = (ref: string[], exp: any) => {
 
 }
 
+/*
+ * watch behavior here
+*/
 export const watchFn = (prop: string, _this: any) => {
     let withUpdate = false
     if (Object.hasOwn(watchRef, prop)) {
@@ -34,3 +41,6 @@ export const watchFn = (prop: string, _this: any) => {
     }
     return withUpdate
 }
+
+// add watch behavior at core updateContent
+customDirectives.define(watchFn)

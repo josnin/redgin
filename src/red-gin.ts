@@ -1,12 +1,13 @@
 
-import { kebabToCamel,  } from './utils.js'
 import { tags, events  } from './directives.js';
-import { divBus, eventBus } from './state.js'
+import { eventBus } from './state.js'
 
-import { Directives } from './directives/directives.js';
+import { customDirectives } from './directives/directives.js';
+import { propReflectFn } from './propReflect.js'
 
 export * from './directives/index.js'
 export * from './directives.js'
+export * from './propReflect.js'
 
 // export most used tags only else use tags.div?
 export const { a, b, strong, br, div, h1, i, img, ol, 
@@ -25,24 +26,6 @@ enum EventListenType {
 
 
 export class RedGin extends HTMLElement {
-
-  /*
-   * accepts list of regex
-   * all "aria" attributes have a corresponding props (aria-*)
-   * equivalent of "class" attribute in properties are "className" & "classList", 
-   * adding in observedAttributes can overwrite the existing props.
-   * same with id, dataset attr
-   * anything else?
-   */
-  IGNORE_PROP_REFLECTION = ['class', 'style', 'className', 
-  'classList', 'id', 'dataset', '^data-', '^aria-']
-
-  /* 
-   * treat as a HTML standard boolean attrs
-   * presence of attr is true
-   * absence of attr is false
-   */
-  BOOLEAN_ATTRIBUTES = ['disabled']
 
   constructor() {
     super();
@@ -70,90 +53,11 @@ export class RedGin extends HTMLElement {
     this.processEventListeners(EventListenType.REMOVE)
   }
 
-  private isValidAttr(attr: string) {
-    let isValid = true
-    for (const regexPattern of this.IGNORE_PROP_REFLECTION) {
-      const regex = new RegExp(regexPattern, 'g')
-      if (attr.match(regex)) {
-        isValid = false
-        console.warn(`Unable to apply auto propReflection of ${attr} 
-        defined in observedAttributes`)
-        break 
-      }
-    }
-    return isValid
-  }
-
-  private propReflect(prop: string, type: any, val: any) {
-
-      if (!this.isValidAttr(prop) === true) return
-
-      Object.defineProperty(this, kebabToCamel(prop), {
-        configurable: true,
-        set (value) {
-          // @todo to proceed check first if value change 
-          if (this.BOOLEAN_ATTRIBUTES.includes(prop) && Boolean(value) === true) {
-            this.setAttribute(prop, '') 
-          } else if (this.BOOLEAN_ATTRIBUTES.includes(prop) && Boolean(value) === false) {
-            this.removeAttribute(prop)
-          } else {
-            this.setAttribute(prop, value)
-          }
-        },
-        get () { 
-          if (prop in this.BOOLEAN_ATTRIBUTES) {
-            return this.hasAttribute(prop)
-          } else {
-            // @todo defining variable at the top most will always overwrite by this
-            // ex. arr:any = [1] 
-            if ([Boolean, String].includes(type) && !this.hasAttribute(prop)) {
-              return val
-            } else if ([Boolean, String].includes(type) && this.hasAttribute(prop)) {
-              return this.getAttribute(prop)
-            } else {
-              return JSON.parse(this.getAttribute(prop)) 
-            }
-          }
-        }
-      })  
-  }
-  
-  //private propReflect(observedAttributes: any) {
-  //  if (!observedAttributes) return
-  //  for (const e of observedAttributes) {
-
-  //    if (!this.isValidAttr(e) === true) continue
-
-  //    Object.defineProperty(this, kebabToCamel(e), {
-  //      configurable: true,
-  //      set (value) {
-  //        // @todo to proceed check first if value change 
-  //        if (this.BOOLEAN_ATTRIBUTES.includes(e) && Boolean(value) === true) {
-  //          this.setAttribute(e, '') 
-  //        } else if (this.BOOLEAN_ATTRIBUTES.includes(e) && Boolean(value) === false) {
-  //          this.removeAttribute(e)
-  //        } else {
-  //          this.setAttribute(e, value)
-  //        }
-  //      },
-  //      get () { 
-  //        if (e in this.BOOLEAN_ATTRIBUTES) {
-  //          return this.hasAttribute(e)
-  //        } else {
-  //          // @todo defining variable at the top most will always overwrite by this
-  //          // ex. arr:any = [1] 
-  //          return JSON.parse(this.getAttribute(e)) 
-  //        }
-  //      }
-  //    })  
-  //  }
-  //}
   
   private updateContents(prop: any) {
 
-    const directives = new Directives(prop, this);
-    let withUpdate = directives.apply();
-    //let withUpdate = watchFn(prop, this) // @todo list of plugin directives function
+    const d = new customDirectives(prop, this);
+    let withUpdate = d.apply();
     
     return withUpdate
 
@@ -171,23 +75,24 @@ export class RedGin extends HTMLElement {
 
   }
 
-  private _onInit() { 
-    // @ts-ignore
-    //this.propReflect(this.constructor.observedAttributes)
-
-    // dont include built in props
-    const propsToExclude = ['BOOLEAN_ATTRIBUTES', 'IGNORE_PROP_REFLECTION'] 
-    let props = Object.getOwnPropertyNames(this).filter( (e: any) => !propsToExclude.includes(e))
+  private setPropsBehavior() {
+    let props = Object.getOwnPropertyNames(this)
     // @ts-ignore
     const observedAttributes = this.constructor.observedAttributes
     for (const prop of props) {
       // @ts-ignore
       const { type, value } = this[prop]
       if (observedAttributes.includes(prop)) {
-        this.propReflect(prop, type, value)
+        propReflectFn.call(this, prop, type, value)
       } 
+
+      // @todo getsetFn here?
     }
-    // do Change on the html
+  }
+
+  private _onInit() { 
+
+    this.setPropsBehavior()
 
     /* moved here instead of constructor, 
      * so class props default value can also cover in rendering
@@ -207,8 +112,7 @@ export class RedGin extends HTMLElement {
     // do Change on the html
 
     // dont include built in props
-    const propsToExclude = ['BOOLEAN_ATTRIBUTES', 'IGNORE_PROP_REFLECTION'] 
-    let props = Object.getOwnPropertyNames(this).filter( (e: any) => !propsToExclude.includes(e))
+    let props = Object.getOwnPropertyNames(this)
     for (const prop of props) {
       // @ts-ignore
       const withUpdate = this.updateContents(prop)

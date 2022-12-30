@@ -2,8 +2,6 @@ import { getUniqID } from './utils.js'
 import { IElOptions, IPropReflect } from './interface.js'
 import { profReflectRef, eventBus, divBus } from './state.js'
 
-class InWatch extends HTMLElement { }
-customElements.define('in-watch', InWatch);
 
 
 export const events: any = {}
@@ -70,10 +68,10 @@ for (const t of HTML_TAGS) {
   }
 }
 
-export const propReflect = (value: any, options?: IPropReflect) => {
-  // propReflectRef
-  return { value, ...options, what: 'propReflect' }
-
-}
+//export const propReflect = (value: any, options?: IPropReflect) => {
+//  // propReflectRef
+//  return { value, ...options, what: 'propReflect' }
+//
+//}
 
 

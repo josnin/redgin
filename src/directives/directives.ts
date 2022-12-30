@@ -2,20 +2,26 @@ import {
     watchFn
 } from '../directives/index.js'
 
-export class Directives {
-    args: any[]
 
-    register: any = [watchFn] 
+export class customDirectives {
+
+    args: any
+    static reg: any = [];
 
     constructor(...args: any[]) {
       this.args = args;
     }
 
+    static define(d: any) {
+      customDirectives.reg.push(d)
+    }
+
     apply() {
         const [prop, _this] = this.args;
-        for (const d of this.register) {
-            d(prop, _this)
+        let wUpdate = false
+        for (const d of customDirectives.reg) {
+            wUpdate = d(prop, _this)
         }
-        return true // temporary return @todo
+        return true // @todo at least 1 true means true
       }
 }

@@ -81,14 +81,8 @@ export class RedGin extends HTMLElement {
       // @ts-ignore
       const propValue = this[prop]
 
-      if (propValue.name === 'propReflect') {
-        propReflectFn.call(this, prop, propValue, observedAttributes)
-      } 
-
-      if (propValue.name === 'getset') {
-        getsetFn.call(this, prop, propValue)
-      }
-
+      if (propValue.name === 'propReflect') propReflectFn.call(this, prop, propValue, observedAttributes)
+      if (propValue.name === 'getset') getsetFn.call(this, prop, propValue)
     }
   }
 

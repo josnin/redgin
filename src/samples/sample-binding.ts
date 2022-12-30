@@ -3,7 +3,7 @@ import { RedGin, div, propReflect } from "../red-gin.js";
 class Binding extends RedGin {
   msg: any = propReflect('Hello world!', { type: String })
 
-  static observedAttributes = ['title']
+  static observedAttributes = ['msg']
 
   render() {
     return `${ div('msg')}` 

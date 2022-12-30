@@ -38,7 +38,12 @@ const isValidAttr = (attr: string) => {
 
 // propReflect behavior
 // this doesnt work in arrow func
-export function propReflectFn(this: any, prop: string, type: any, val: any) {
+export function propReflectFn(this: any, prop: string, type: any, val: any, observedAttributes: string ) {
+  
+    if (!observedAttributes.includes(prop)) {
+      console.error(`Unable to apply propReflect for '${prop}', Please add '${prop}' in the observedAttributes`)
+      return
+    } 
 
     if (!isValidAttr(prop) === true) return
 

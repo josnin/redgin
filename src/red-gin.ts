@@ -81,9 +81,13 @@ export class RedGin extends HTMLElement {
       // @ts-ignore
       const propValue = this[prop]
 
-      if (observedAttributes.includes(prop) && propValue.name === 'propReflect') {
-        const { type, value } = propValue
-        propReflectFn.call(this, prop, type, value)
+      if (propValue.name === 'propReflect') {
+        if (!observedAttributes.includes(prop)) {
+          console.error(`Unable to apply propReflect for '${prop}', Please add '${prop}' in the observedAttributes`)
+        } else {
+          const { type, value } = propValue
+          propReflectFn.call(this, prop, type, value)
+        }
       } 
 
       if (propValue.name === 'getset') {

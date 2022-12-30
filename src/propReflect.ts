@@ -28,7 +28,7 @@ const isValidAttr = (attr: string) => {
       const regex = new RegExp(regexPattern, 'g')
       if (attr.match(regex)) {
         isValid = false
-        console.warn(`Unable to apply auto propReflection of ${attr} 
+        console.error(`Unable to apply auto propReflection of '${attr}' 
         defined in observedAttributes`)
         break 
       }

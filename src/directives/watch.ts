@@ -26,14 +26,14 @@ export const watch = (ref: string[], exp: any) => {
 /*
  * watch behavior here
 */
-export const watchFn = (prop: string, _this: any) => {
+export function watchFn(this: any, prop: string){
     let withUpdate = false
     if (Object.hasOwn(watchRef, prop)) {
         for (const uniqId of Object.keys(watchRef[prop])) {
-          if (_this.shadowRoot) {
-            let el = _this.shadowRoot.querySelector(`[data-id__="${uniqId}"]`) 
+          if (this.shadowRoot) {
+            let el = this.shadowRoot.querySelector(`[data-id__="${uniqId}"]`) 
             if (el) {
-              el.innerHTML = watchRef[prop][uniqId] ? watchRef[prop][uniqId].call(_this) : _this[prop as keyof typeof _this]
+              el.innerHTML = watchRef[prop][uniqId] ? watchRef[prop][uniqId].call(this) : this[prop as keyof typeof this]
               withUpdate = true
             }  
           }

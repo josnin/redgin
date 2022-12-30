@@ -79,20 +79,18 @@ export class RedGin extends HTMLElement {
     const observedAttributes = this.constructor.observedAttributes
     for (const prop of props) {
       // @ts-ignore
-      if (observedAttributes.includes(prop) && this[prop].name === 'propReflect') {
-        // @ts-ignore
-        const { type, value } = this[prop]
+      const propValue = this[prop]
+
+      if (observedAttributes.includes(prop) && propValue.name === 'propReflect') {
+        const { type, value } = propValue
         propReflectFn.call(this, prop, type, value)
       } 
 
-        // @ts-ignore
-      if (this[prop].name === 'getset') {
-        // @ts-ignore
-        const { forWatch, value } = this[prop]
+      if (propValue.name === 'getset') {
+        const { forWatch, value } = propValue
         getsetFn.call(this, prop, forWatch, value)
       }
 
-      // @todo getsetFn here?
     }
   }
 

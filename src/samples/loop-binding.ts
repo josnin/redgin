@@ -4,7 +4,7 @@ import { RedGin, watch,  propReflect, getset } from "../redgin.js";
 class LoopBinding extends RedGin {
   arr = propReflect('Hello?', {  type: String } ) 
   arr2 = propReflect(false, {  type: Boolean } ) 
-  arr3 = getset(false, { forWatch: true }) 
+  arr3 = getset(false, { forWatch: false }) 
 
   static observedAttributes = ['arr', 'arr2'];
   

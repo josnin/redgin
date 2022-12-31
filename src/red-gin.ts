@@ -1,12 +1,10 @@
 
 import { applyDirectives, 
   events, eventBus, tags } from './directives/index.js';
-import { propReflectFn } from './propReflect.js'
-import { getsetFn } from './getset.js'
+import { applyPropsBehavior } from './props/index.js'
 
 export * from './directives/index.js'
-export * from './propReflect.js'
-export * from './getset.js'
+export * from './props/index.js'
 
 // export most used tags only else use tags.div?
 export const { a, b, strong, br, div, h1, i, img, ol, 
@@ -81,8 +79,8 @@ export class RedGin extends HTMLElement {
       // @ts-ignore
       const propValue = this[prop]
 
-      if (propValue.name === 'propReflect') propReflectFn.call(this, prop, propValue, observedAttributes)
-      if (propValue.name === 'getset') getsetFn.call(this, prop, propValue)
+      applyPropsBehavior.call(this, prop, propValue, observedAttributes)
+
     }
   }
 

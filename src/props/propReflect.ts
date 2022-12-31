@@ -1,4 +1,5 @@
-import { kebabToCamel } from './utils.js'
+import { kebabToCamel } from '../utils.js'
+import { customPropBehaviors } from './props.js'
 
 interface IPropReflect {
   type?: any;
@@ -37,8 +38,10 @@ const isValidAttr = (attr: string) => {
 
 // propReflect behavior
 // this doesnt work in arrow func
-export function propReflectFn(this: any, prop: string, propValue: any, observedAttributes: string ) {
-    const { type, value: val } = propValue
+function propReflectFn(this: any, prop: string, propValue: any, observedAttributes: string ) {
+    const { type, value: val, name } = propValue
+    
+    if (name != 'propReflect') return // only apply for 
   
     if (!observedAttributes.includes(prop)) {
       console.error(`Unable to apply propReflect for '${prop}', Please add '${prop}' in the observedAttributes`)
@@ -82,3 +85,5 @@ export const propReflect = (value: any, options?: IPropReflect) => {
   return { value, ...options, name: 'propReflect' }
 
 }
+
+customPropBehaviors.define(propReflectFn)

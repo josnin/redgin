@@ -1,11 +1,14 @@
+import { customPropBehaviors } from './props.js'
 
 interface IGetSet {
   forWatch?: boolean;
 }
 
 // getset behavior
-export function getsetFn(this: any, prop: string, propValue: any) {
-    const { value: val, forWatch } = propValue
+function getsetFn(this: any, prop: string, propValue: any, observedAttributes: any) {
+    const { value: val, forWatch, name } = propValue
+
+    if (name != 'getset') return
 
     this[`#${prop}`] = val
 
@@ -14,6 +17,7 @@ export function getsetFn(this: any, prop: string, propValue: any) {
       set (value) {
           // create a value placeholder 
           this[`#${prop}`] = value
+          console.log(forWatch, prop)
           if (forWatch) this.updateContents(prop)
       },
       get () { return this[`#${prop}`]  }
@@ -29,3 +33,5 @@ export const getset = (value: any, options?: IGetSet) => {
   return { value, ...defaults, ...options, name: 'getset' }
 
 }
+
+customPropBehaviors.define(getsetFn)

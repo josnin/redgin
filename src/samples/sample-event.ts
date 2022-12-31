@@ -1,12 +1,12 @@
-import { RedGin, click, propReflect, watch } from "../red-gin.js";
+import { RedGin, click, propReflect, watch } from "../redgin.js";
 
 
 class Event extends RedGin {
-  arr = propReflect([1, 2, 3], { type: Array })
+  arr: any = propReflect([1, 2, 3], { type: Array })
 
   render() {
     return `
-        ${ watch(['arr'], () => this.arr.map( e => `
+        ${ watch(['arr'], () => this.arr.map( (e: any) => `
                     <button ${ click( () => alert(e) )} >clickMe</button>
                   `) 
         ) }

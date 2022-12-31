@@ -1,4 +1,4 @@
-import { RedGin, propReflect, watch } from '../red-gin.js'
+import { RedGin, propReflect, watch } from '../redgin.js'
 
 
 class If extends RedGin {

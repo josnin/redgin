@@ -1,12 +1,12 @@
-import { RedGin, div, propReflect } from "../red-gin.js";
+import { RedGin, watch, propReflect } from "../redgin.js";
 
 class Binding extends RedGin {
-  msg: any = propReflect('Hello world!', { type: String })
+  arr: any = propReflect('Hello world!', { type: String })
 
-  static observedAttributes = ['msg']
+  static observedAttributes = ['arr']
 
   render() {
-    return `${ div('msg')}` 
+    return `${ watch(['arr'], () => this.arr )}` 
   }
  
 }

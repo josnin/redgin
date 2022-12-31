@@ -1,5 +1,5 @@
 import { kebabToCamel } from '../utils.js'
-import { customPropBehaviors } from './props.js'
+import { customPropsBehavior } from './props.js'
 
 interface IPropReflect {
   type?: any;
@@ -86,4 +86,4 @@ export const propReflect = (value: any, options?: IPropReflect) => {
 
 }
 
-customPropBehaviors.define(propReflectFn)
+customPropsBehavior.define(propReflectFn)

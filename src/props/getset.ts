@@ -1,4 +1,4 @@
-import { customPropBehaviors } from './props.js'
+import { customPropsBehavior } from './props.js'
 
 interface IGetSet {
   forWatch?: boolean;
@@ -34,4 +34,4 @@ export const getset = (value: any, options?: IGetSet) => {
 
 }
 
-customPropBehaviors.define(getsetFn)
+customPropsBehavior.define(getsetFn)

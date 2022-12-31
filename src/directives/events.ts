@@ -1,7 +1,12 @@
 import { getUniqID } from '../utils.js'
 
-export var eventBus: any = []
+var eventRef: any = []
+enum EventListenType {
+  ADD = 0,
+  REMOVE = 1,
+}
 
+// placeholder only?
 export const events: any = {}
 // @todo any way to get all event attributes?
 const EVENT_ATTRS = ['afterprint', 'beforeprint', 'beforeunload', 'error', 'hashchange',
@@ -16,7 +21,31 @@ const EVENT_ATTRS = ['afterprint', 'beforeprint', 'beforeunload', 'error', 'hash
 for (const e of EVENT_ATTRS) {
   events[e] = (fn: any) => {
     const uniq = getUniqID()
-    eventBus.push([e, fn, uniq])
-    return `id=${uniq}`
+    eventRef.push([e, fn, uniq])
+    return `data-evt__=${uniq}`
+    //return `id=${uniq}`
   }
+}
+
+
+function baseEvent(this: any, etype: EventListenType) {
+    // todo? update only with changes
+    for (const e of eventRef) {
+      const [evt, fn, id] = e
+      if (this.shadowRoot) {
+        let el: HTMLElement = this.shadowRoot.querySelector(`[data-evt__="${id}"]`)
+        //el.addEventListener(evt, fn)
+        etype === EventListenType.ADD ? el.addEventListener(evt, fn) : el.removeEventListener(evt, fn)
+      }
+    }
+
+}
+
+
+export function applyEventListeners(this: any) {
+  baseEvent.call(this, EventListenType.ADD)
+}
+
+export function removeEventListeners(this: any) {
+  baseEvent.call(this, EventListenType.REMOVE)
 }

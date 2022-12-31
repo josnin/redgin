@@ -1,6 +1,10 @@
 
-import { applyDirectives, 
-  events, eventBus, tags } from './directives/index.js';
+import { 
+  applyDirectives, 
+  applyEventListeners, 
+  removeEventListeners,
+  events, 
+  tags } from './directives/index.js';
 import { applyPropsBehavior } from './props/index.js'
 
 export * from './directives/index.js'
@@ -14,12 +18,6 @@ export const { a, b, strong, br, div, h1, i, img, ol,
 // both tags also have 'select' directives, when importing use events.select instead
 export const { click, input, focus, blur, change, 
   submit } = events
-
-
-enum EventListenType {
-  ADD = 0,
-  REMOVE = 1,
-}
 
 
 export class RedGin extends HTMLElement {
@@ -47,7 +45,7 @@ export class RedGin extends HTMLElement {
 
 
   disconnectedCallback() {
-    this.processEventListeners(EventListenType.REMOVE)
+    removeEventListeners.call(this)
   }
 
   
@@ -59,16 +57,8 @@ export class RedGin extends HTMLElement {
 
   }
 
-  private processEventListeners(etype: EventListenType) {
-    // todo? update only with changes
-    for (const e of eventBus) {
-      let [evt, fn, id] = e
-      if (this.shadowRoot) {
-        let el = this.shadowRoot.getElementById(id)
-        etype === EventListenType.ADD ? el?.addEventListener(evt, fn) : el?.removeEventListener(evt, fn)
-      }
-    }
-
+  private setEventListeners() {
+    applyEventListeners.call(this)
   }
 
   private setPropsBehavior() {
@@ -118,8 +108,10 @@ export class RedGin extends HTMLElement {
   }
 
   private _onUpdated() {
-    this.processEventListeners(EventListenType.ADD)
+
+    this.setEventListeners()
     this.onUpdated()
+    
   }
 
   onInit() {}

@@ -3,7 +3,6 @@ import {
   applyDirectives, 
   applyEventListeners, 
   removeEventListeners,
-  events, 
   tags } from './directives/index.js';
 import { applyPropsBehavior } from './props/index.js'
 
@@ -13,11 +12,6 @@ export * from './props/index.js'
 // export most used tags only else use tags.div?
 export const { a, b, strong, br, div, h1, i, img, ol, 
   ul, li, p, span, option, select } = tags
-
-// export most used events only else use events.click?
-// both tags also have 'select' directives, when importing use events.select instead
-export const { click, input, focus, blur, change, 
-  submit } = events
 
 
 export class RedGin extends HTMLElement {
@@ -111,7 +105,7 @@ export class RedGin extends HTMLElement {
 
     this.setEventListeners()
     this.onUpdated()
-    
+
   }
 
   onInit() {}

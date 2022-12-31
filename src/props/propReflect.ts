@@ -38,13 +38,15 @@ const isValidAttr = (attr: string) => {
 
 // propReflect behavior
 // this doesnt work in arrow func
-function propReflectFn(this: any, prop: string, propValue: any, observedAttributes: string ) {
+function propReflectFn(this: any, prop: string, propValue: any) {
     const { type, value: val, name } = propValue
+    // @ts-ignore
+    const observedAttributes = this.constructor.observedAttributes
     
     if (name != 'propReflect') return // only apply for 
   
-    if (!observedAttributes.includes(prop)) {
-      console.error(`Unable to apply propReflect for '${prop}', Please add '${prop}' in the observedAttributes`)
+    if (observedAttributes === undefined || !observedAttributes.includes(prop)) {
+      console.error(`Unable to apply propReflect for attribute '${prop}', Please add '${prop}' in the observedAttributes of ${this.constructor.name} component`)
       return
     } 
 

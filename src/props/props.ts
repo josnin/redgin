@@ -1,7 +1,7 @@
 
-export function applyPropsBehavior(this: any, prop: string, propValue: string, observedAttributes: any) {
+export function applyPropsBehavior(this: any, prop: string, propValue: string) {
     for (const p of customPropsBehavior.reg) {
-        p.call(this, prop, propValue, observedAttributes)
+        p.call(this, prop, propValue)
     }
 }
 

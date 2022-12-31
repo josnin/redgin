@@ -5,7 +5,7 @@ interface IGetSet {
 }
 
 // getset behavior
-function getsetFn(this: any, prop: string, propValue: any, observedAttributes: any) {
+function getsetFn(this: any, prop: string, propValue: any) {
     const { value: val, forWatch, name } = propValue
 
     if (name != 'getset') return

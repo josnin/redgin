@@ -73,13 +73,11 @@ export class RedGin extends HTMLElement {
 
   private setPropsBehavior() {
     let props = Object.getOwnPropertyNames(this)
-    // @ts-ignore
-    const observedAttributes = this.constructor.observedAttributes
     for (const prop of props) {
       // @ts-ignore
       const propValue = this[prop]
 
-      applyPropsBehavior.call(this, prop, propValue, observedAttributes)
+      applyPropsBehavior.call(this, prop, propValue)
 
     }
   }

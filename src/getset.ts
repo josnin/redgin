@@ -14,7 +14,7 @@ export function getsetFn(this: any, prop: string, propValue: any) {
       set (value) {
           // create a value placeholder 
           this[`#${prop}`] = value
-          this.updateContents(prop)
+          if (forWatch) this.updateContents(prop)
       },
       get () { return this[`#${prop}`]  }
     })  
@@ -22,6 +22,10 @@ export function getsetFn(this: any, prop: string, propValue: any) {
 
 // getset placeholder
 export const getset = (value: any, options?: IGetSet) => {
-  return { value, ...options, name: 'getset' }
+  const defaults = {
+    forWatch: true,
+  };
+
+  return { value, ...defaults, ...options, name: 'getset' }
 
 }

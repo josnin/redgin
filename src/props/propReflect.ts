@@ -29,7 +29,7 @@ const isValidAttr = (attr: string) => {
       const regex = new RegExp(regexPattern, 'g')
       if (attr.match(regex)) {
         isValid = false
-        console.error(`Please remove ${attr} in the observedAttributes, There is already an existing props reflection for the attributes.`)
+        console.error(`Please remove attribute '${attr}' in the observedAttributes, DOM already provided built-in props reflection for this attribute.`)
         break 
       }
     }

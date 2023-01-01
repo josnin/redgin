@@ -17,7 +17,7 @@ export const watch = (ref: string[], exp: any) => {
     watchRef[prop][uniqId] = exp
   }
 
-  el.dataset.id__ = uniqId
+  el.dataset.watch__ = uniqId
 
   return el.outerHTML;
 
@@ -32,7 +32,7 @@ export function watchFn(this: any, _prop: string){
     if (Object.hasOwn(watchRef, prop)) {
         for (const uniqId of Object.keys(watchRef[prop])) {
           if (this.shadowRoot) {
-            let el = this.shadowRoot.querySelector(`[data-id__="${uniqId}"]`) 
+            let el = this.shadowRoot.querySelector(`[data-watch__="${uniqId}"]`) 
             if (el) {
               el.innerHTML = watchRef[prop][uniqId] ? watchRef[prop][uniqId].call(this) : this[prop as keyof typeof this]
               withUpdate = true

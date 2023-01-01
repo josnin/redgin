@@ -6,9 +6,10 @@ interface IGetSet {
 
 // getset behavior
 function getsetFn(this: any, prop: string, propValue: any) {
+    if (propValue === undefined || propValue.name != 'getset') return // only apply for 
+
     const { value: val, forWatch, name } = propValue
 
-    if (name != 'getset') return
 
     this[`#${prop}`] = val
 

@@ -84,20 +84,15 @@ export class RedGin extends HTMLElement {
 
   private _onDoUpdate() {  //apply DOM change based on init 
 
-
     // do Change on the html
-
-    // dont include built in props
     let props = Object.getOwnPropertyNames(this)
     for (const prop of props) {
-      // @ts-ignore
       const withUpdate = this.updateContents(prop)
       if (withUpdate) this._onUpdated() //call when dom change
     }
     // do Change on the html
 
     this.onDoUpdate() 
-
 
   }
 

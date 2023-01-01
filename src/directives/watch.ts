@@ -1,4 +1,4 @@
-import { getUniqID } from '../utils.js'
+import { getUniqID, kebabToCamel } from '../utils.js'
 import { customDirectives } from './directives.js'
 
 var watchRef: any = {}
@@ -26,7 +26,8 @@ export const watch = (ref: string[], exp: any) => {
 /*
  * watch behavior here
 */
-export function watchFn(this: any, prop: string){
+export function watchFn(this: any, _prop: string){
+    const prop = kebabToCamel(_prop) // attr is kebab , props in camel case
     let withUpdate = false
     if (Object.hasOwn(watchRef, prop)) {
         for (const uniqId of Object.keys(watchRef[prop])) {

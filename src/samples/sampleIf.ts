@@ -10,7 +10,7 @@ class If extends RedGin {
     return `
         ${ watch(['isDisable'], () => 
             `<button  
-                ${ this.isDisable ? `disable`: ``}
+                ${ this.isDisable ? `disabled`: ``}
                 > clickMe
             </button>`
          )

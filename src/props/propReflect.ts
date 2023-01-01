@@ -61,26 +61,30 @@ function propReflectFn(this: any, _prop: string, propValue: any) {
     set (value) {
         // @todo to proceed check first if value change 
         if ( ( type === Boolean || BOOLEAN_ATTRIBUTES.includes(prop) ) && value === true) {
-        this.setAttribute(prop , '') 
+          this.setAttribute(prop , '') 
         } else if ( ( type === Boolean || BOOLEAN_ATTRIBUTES.includes(prop) ) && value === false) {
-        this.removeAttribute(prop)
+         this.removeAttribute(prop)
+        } else if ([Object, Array].includes(type) && value) {
+          this.setAttribute(prop , JSON.stringify(value) )
+        } else if ([String, Number].includes(type) && value) {
+          this.setAttribute(prop , value)
         } else {
-        this.setAttribute(prop , value)
+          this.removeAttribute(prop)
         }
     },
     get () { 
         if (prop in BOOLEAN_ATTRIBUTES || type === Boolean) {
-        return this.hasAttribute(prop)
+          return this.hasAttribute(prop)
         } else {
-        // @todo defining variable at the top most will always overwrite by this
-        // ex. arr:any = [1] 
-        if ([ String, Array, Object].includes(type) && !this.hasAttribute(prop)) {
-            return val
-        } else if ([Array, Object].includes(type) && this.hasAttribute(prop)) {
-            return JSON.parse(this.getAttribute(prop))
-        } else if ([String].includes(type) && this.hasAttribute(prop)) {
-            return this.getAttribute(prop)
-        }
+          if ([ String, Array, Object].includes(type) && !this.hasAttribute(prop)) {
+              return val
+          } else if (type === String && this.hasAttribute(prop)) {
+              return this.getAttribute(prop)
+          } else if (type === Number && this.hasAttribute(prop)) {
+              return Number(this.getAttribute(prop))
+          } else if ([Array, Object].includes(type) && this.hasAttribute(prop)) {
+              return JSON.parse(this.getAttribute(prop))
+          }
         }
     }
     })  

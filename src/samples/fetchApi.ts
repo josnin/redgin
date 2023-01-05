@@ -3,7 +3,7 @@ import { RedGin, watch,  getset } from "../redgin.js";
 
 
 class FetchApi extends RedGin {
-  ready: any = getset(false)
+  ready: boolean = getset<boolean>(false)
   // ready: boolean = false
   todos: any
 

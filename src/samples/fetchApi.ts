@@ -8,7 +8,7 @@ class FetchApi extends RedGin {
   todos: any
 
   onInit() {
-    // getset<boolean(this.ready) ?
+    // getset<boolean>(this.ready) ?
     fetch('https://jsonplaceholder.typicode.com/todos/1')
       .then(response => response.json())
       .then(json => {

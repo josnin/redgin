@@ -4,10 +4,11 @@ import { RedGin, watch,  getset } from "../redgin.js";
 
 class FetchApi extends RedGin {
   ready: any = getset(false)
+  // ready: boolean = false
   todos: any
 
   onInit() {
-    // getset<boolean>('ready', { default: false } ) ?
+    // getset<boolean(this.ready) ?
     fetch('https://jsonplaceholder.typicode.com/todos/1')
       .then(response => response.json())
       .then(json => {

@@ -8,7 +8,7 @@ interface IObj {
 
 class ForLoop extends RedGin {
   // typescript sample
-  obj: IObj[] = getset<IObj[]>([
+  obj = getset<IObj[]>([
     { id: 1, name: 'John' },
     { id: 2, name: 'John 2' },
   ])

@@ -4,7 +4,7 @@ import { RedGin, watch,  getset } from "../redgin.js";
 
 class FetchApi extends RedGin {
   // typescript sample
-  ready: boolean = getset<boolean>(false)
+  ready = getset<boolean>(false)
   todos: any
 
   onInit() {

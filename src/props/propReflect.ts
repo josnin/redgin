@@ -1,8 +1,12 @@
-import { kebabToCamel, camelToKebab } from '../utils.js'
+import { getUniqID, kebabToCamel, camelToKebab } from '../utils.js'
 import { customPropsBehavior } from './props.js'
+
+var propReflectRef : any = {}
 
 interface IPropReflect {
   type?: any;
+  name?: string;
+  value?: any;
 }
 
 /*
@@ -36,10 +40,11 @@ const isValidAttr = (attr: string) => {
     return isValid
   }
 
+
 // propReflect behavior
 // this doesnt work in arrow func
-function propReflectFn(this: any, _prop: string, propValue: any) {
-    if (propValue === undefined || propValue.name != 'propReflect') return // only apply for 
+function propReflectFn(this: any, _prop: string, propValue: any) : object {
+    if (propValue === undefined || propValue.name != 'propReflect') return {id: 1, name: ''} // only apply for 
 
     const { type, value: val, name } = propValue
     // @ts-ignore
@@ -49,51 +54,54 @@ function propReflectFn(this: any, _prop: string, propValue: any) {
     
     if (observedAttributes === undefined || !observedAttributes.includes( prop )) {
       console.error(`Unable to apply propReflect '${propCamel}' for attribute '${prop}', Please add '${prop}' in the observedAttributes of ${this.constructor.name} component`)
-      return
+      return val
     } 
 
 
-    if (!isValidAttr(prop) === true) return
+    if (!isValidAttr(prop) === true) return val
 
 
+
+    // @todo need to organize attri setter/ getter?
     Object.defineProperty(this, propCamel, {
     configurable: true,
     set (value) {
         // @todo to proceed check first if value change 
-        if ( ( type === Boolean || BOOLEAN_ATTRIBUTES.includes(prop) ) && value === true) {
+        if ( ( type === Boolean || typeof value === 'boolean' || BOOLEAN_ATTRIBUTES.includes(prop) ) && value === true) {
           this.setAttribute(prop , '') 
         } else if ( ( type === Boolean || BOOLEAN_ATTRIBUTES.includes(prop) ) && value === false) {
          this.removeAttribute(prop)
-        } else if ([Object, Array].includes(type) && value) {
+        } else if ( ( [Object, Array].includes(type) || ['object', 'array'].includes(typeof value) ) && value) {
           this.setAttribute(prop , JSON.stringify(value) )
-        } else if ([String, Number].includes(type) && value) {
+        } else if ( ([String, Number].includes(type) || ['string', 'number'].includes(typeof value) ) && value) {
           this.setAttribute(prop , value)
         } else {
           this.removeAttribute(prop)
         }
     },
     get () { 
-        if (prop in BOOLEAN_ATTRIBUTES || type === Boolean) {
+        if (prop in BOOLEAN_ATTRIBUTES || type === Boolean || typeof val === 'boolean' ) {
           return this.hasAttribute(prop)
         } else {
-          if ([ String, Array, Object].includes(type) && !this.hasAttribute(prop)) {
+          if ( ( [ String, Array, Object].includes(type) || ['string', 'array', 'object'].includes(typeof val) )  && !this.hasAttribute(prop)) {
               return val
-          } else if (type === String && this.hasAttribute(prop)) {
+          } else if ( ( type === String || typeof val === 'string' ) && this.hasAttribute(prop)) {
               return this.getAttribute(prop)
-          } else if (type === Number && this.hasAttribute(prop)) {
+          } else if ( (type === Number || typeof val === 'number' ) && this.hasAttribute(prop)) {
               return Number(this.getAttribute(prop))
-          } else if ([Array, Object].includes(type) && this.hasAttribute(prop)) {
+          } else if ( ([Array, Object].includes(type) || ['array', 'object'].includes(typeof val) ) && this.hasAttribute(prop)) {
               return JSON.parse(this.getAttribute(prop))
           }
         }
     }
     })  
+    return val
 }
   
-// propReflect placeholder
-export const propReflect = (value: any, options?: IPropReflect) => {
-  return { value, ...options, name: 'propReflect' }
+export function propReflect<T>(value: T, options?: IPropReflect): T 
 
+export function propReflect(value: any, options?: IPropReflect) {
+  return { value, ...options, name: 'propReflect' }
 }
 
 customPropsBehavior.define(propReflectFn)

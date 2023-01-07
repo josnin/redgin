@@ -2,13 +2,14 @@ import { RedGin, event, propReflect, watch } from "../redgin.js";
 
 
 class Event extends RedGin {
-  arr: any = propReflect([1, 2, 3], { type: Array })
+  // typescript sample
+  arr = propReflect<number[]>([1, 2, 3])
 
   static observedAttributes = ['arr']
 
   render() {
     return `
-        ${ watch(['arr'], () => this.arr.map( (e: any) => `
+        ${ watch(['arr'], () => this.arr.map( (e: number ) => `
                     <button ${ event('click', () => alert(e) )} >clickMe</button>
                   `).join('')
         ) }

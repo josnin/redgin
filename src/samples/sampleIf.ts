@@ -2,7 +2,8 @@ import { RedGin, propReflect, watch } from '../redgin.js'
 
 
 class If extends RedGin {
-  isDisable = propReflect(false, { type: Boolean }) 
+  // typescript sample
+  isDisable = propReflect<boolean>(false) 
 
   static  observedAttributes = ['is-disable']; 
 

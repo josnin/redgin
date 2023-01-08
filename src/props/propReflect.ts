@@ -33,7 +33,10 @@ const isValidAttr = (attr: string) => {
       const regex = new RegExp(regexPattern, 'g')
       if (attr.match(regex)) {
         isValid = false
-        console.error(`Please remove attribute '${attr}' in the observedAttributes, DOM already provided built-in props reflection for this attribute.`)
+        console.error(
+          `Please remove attribute '${attr}' in the observedAttributes, 
+          DOM already provided built-in props reflection for this attribute.`
+        )
         break 
       }
     }
@@ -53,7 +56,10 @@ function propReflectFn(this: any, _prop: string, propValue: any) {
     const prop = camelToKebab(_prop)
     
     if (observedAttributes === undefined || !observedAttributes.includes( prop )) {
-      console.error(`Unable to apply propReflect '${propCamel}' for attribute '${prop}', Please add '${prop}' in the observedAttributes of ${this.constructor.name} component`)
+      console.error(
+        `Unable to apply propReflect '${propCamel}' for attribute '${prop}', 
+        Please add '${prop}' in the observedAttributes of ${this.constructor.name} component`
+      )
       return _default
     } 
 

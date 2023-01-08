@@ -1,12 +1,12 @@
 import { getUniqID, kebabToCamel, camelToKebab } from '../utils.js'
 import { customPropsBehavior } from './props.js'
 
-var propReflectRef : any = {}
 
-interface IPropReflect {
-  type?: any;
-  name?: string;
-  value?: any;
+interface IPropReflect<T = any> {
+  serializerFn?: (this: any , prop: string, type: any, _default: T) => T 
+  deserializerFn?: (this: any, prop: string, type: any, _default: T, value: T) => void
+  type?: any
+  name?: string
 }
 
 /*
@@ -43,10 +43,10 @@ const isValidAttr = (attr: string) => {
 
 // propReflect behavior
 // this doesnt work in arrow func
-function propReflectFn(this: any, _prop: string, propValue: any) : object {
+function propReflectFn(this: any, _prop: string, propValue: any) {
     if (propValue === undefined || propValue.name != 'propReflect') return {id: 1, name: ''} // only apply for 
 
-    const { type, value: val, name } = propValue
+    const { type, value: _default, serializerFn, deserializerFn } = propValue
     // @ts-ignore
     const observedAttributes = this.constructor.observedAttributes
     const propCamel = kebabToCamel(_prop) 
@@ -54,11 +54,11 @@ function propReflectFn(this: any, _prop: string, propValue: any) : object {
     
     if (observedAttributes === undefined || !observedAttributes.includes( prop )) {
       console.error(`Unable to apply propReflect '${propCamel}' for attribute '${prop}', Please add '${prop}' in the observedAttributes of ${this.constructor.name} component`)
-      return val
+      return _default
     } 
 
 
-    if (!isValidAttr(prop) === true) return val
+    if (!isValidAttr(prop) === true) return _default
 
 
 
@@ -66,40 +66,66 @@ function propReflectFn(this: any, _prop: string, propValue: any) : object {
     Object.defineProperty(this, propCamel, {
     configurable: true,
     set (value) {
-        // @todo to proceed check first if value change 
-        if ( ( type === Boolean || typeof value === 'boolean' || BOOLEAN_ATTRIBUTES.includes(prop) ) && value === true) {
+
+        /* 
+         * use deserialize fn if define
+         */
+        if (deserializerFn) {
+          return deserializerFn.call(this, prop, type, _default, value)
+        }
+
+        if ( ( type === Boolean || typeof value === 'boolean' 
+          || BOOLEAN_ATTRIBUTES.includes(prop) ) && value === true) {
           this.setAttribute(prop , '') 
-        } else if ( ( type === Boolean || BOOLEAN_ATTRIBUTES.includes(prop) ) && value === false) {
+        } else if ( ( type === Boolean 
+          || BOOLEAN_ATTRIBUTES.includes(prop) ) && value === false) {
          this.removeAttribute(prop)
-        } else if ( ( [Object, Array].includes(type) || ['object', 'array'].includes(typeof value) ) && value) {
+        } else if ( ( [Object, Array].includes(type) 
+          || ['object', 'array'].includes(typeof value) ) && value) {
           this.setAttribute(prop , JSON.stringify(value) )
-        } else if ( ([String, Number].includes(type) || ['string', 'number'].includes(typeof value) ) && value) {
+        } else if ( ([String, Number].includes(type) 
+          || ['string', 'number'].includes(typeof value) ) && value) {
           this.setAttribute(prop , value)
         } else {
           this.removeAttribute(prop)
         }
     },
     get () { 
-        if (prop in BOOLEAN_ATTRIBUTES || type === Boolean || typeof val === 'boolean' ) {
+
+        /* 
+         * use serialize function if define
+         */
+        if (serializerFn) {
+          return serializerFn.call(this, prop, type, _default)
+        }
+
+
+        if (prop in BOOLEAN_ATTRIBUTES 
+          || type === Boolean || typeof _default === 'boolean' ) {
           return this.hasAttribute(prop)
         } else {
-          if ( ( [ String, Array, Object].includes(type) || ['string', 'array', 'object'].includes(typeof val) )  && !this.hasAttribute(prop)) {
-              return val
-          } else if ( ( type === String || typeof val === 'string' ) && this.hasAttribute(prop)) {
+          if ( ( [ String, Array, Object].includes(type) 
+            || ['string', 'array', 'object'].includes(typeof _default) )  
+            && !this.hasAttribute(prop)) {
+              return _default
+          } else if ( ( type === String || typeof _default === 'string' ) 
+            && this.hasAttribute(prop)) {
               return this.getAttribute(prop)
-          } else if ( (type === Number || typeof val === 'number' ) && this.hasAttribute(prop)) {
+          } else if ( (type === Number || typeof _default === 'number' ) 
+            && this.hasAttribute(prop)) {
               return Number(this.getAttribute(prop))
-          } else if ( ([Array, Object].includes(type) || ['array', 'object'].includes(typeof val) ) && this.hasAttribute(prop)) {
+          } else if ( ([Array, Object].includes(type) 
+            || ['array', 'object'].includes(typeof _default) ) 
+            && this.hasAttribute(prop)) {
               return JSON.parse(this.getAttribute(prop))
           }
         }
+
     }
     })  
-    return val
 }
   
-export function propReflect<T>(value: T, options?: IPropReflect): T 
-
+export function propReflect<T>(value: T, options?: IPropReflect<T>): T 
 export function propReflect(value: any, options?: IPropReflect) {
   return { value, ...options, name: 'propReflect' }
 }

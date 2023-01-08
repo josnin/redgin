@@ -76,9 +76,9 @@ function propReflectFn(this: any, _prop: string, propValue: any) {
         /* 
          * use deserialize fn if define
          */
-        if (deserializerFn) {
-          return deserializerFn.call(this, prop, type, _default, value)
-        }
+        if (deserializerFn) return deserializerFn.call(
+            this, prop, type, _default, value
+          )
 
         if ( ( type === Boolean || typeof value === 'boolean' 
           || BOOLEAN_ATTRIBUTES.includes(prop) ) && value === true) {
@@ -101,9 +101,9 @@ function propReflectFn(this: any, _prop: string, propValue: any) {
         /* 
          * use serialize function if define
          */
-        if (serializerFn) {
-          return serializerFn.call(this, prop, type, _default)
-        }
+        if (serializerFn) return serializerFn.call(
+            this, prop, type, _default
+          )
 
 
         if (prop in BOOLEAN_ATTRIBUTES 

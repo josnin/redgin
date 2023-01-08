@@ -3,8 +3,19 @@ import { customPropsBehavior } from './props.js'
 
 
 interface IPropReflect<T = any> {
-  serializerFn?: (this: any , prop: string, type: any, _default: T) => T 
-  deserializerFn?: (this: any, prop: string, type: any, _default: T, value: T) => void
+  serializerFn?: (
+    this: any , 
+    prop: string, 
+    type: any, 
+    _default: T
+  ) => T 
+  deserializerFn?: (
+    this: any, 
+    prop: string, 
+    type: any, 
+    _default: T, 
+    value: T
+  ) => void
   type?: any
   name?: string
 }
@@ -47,24 +58,36 @@ const isValidAttr = (attr: string) => {
 // propReflect behavior
 // this doesnt work in arrow func
 function propReflectFn(this: any, _prop: string, propValue: any) {
-    if (propValue === undefined || propValue.name != 'propReflect') return {id: 1, name: ''} // only apply for 
+    if (
+      propValue === undefined ||
+      propValue.name != 'propReflect'
+    ) return  // only apply for 
 
-    const { type, value: _default, serializerFn, deserializerFn } = propValue
+    const { 
+      type, 
+      value: _default, 
+      serializerFn, 
+      deserializerFn 
+    } = propValue
+
     // @ts-ignore
     const observedAttributes = this.constructor.observedAttributes
     const propCamel = kebabToCamel(_prop) 
     const prop = camelToKebab(_prop)
     
-    if (observedAttributes === undefined || !observedAttributes.includes( prop )) {
+    if (
+      observedAttributes === undefined || 
+      !observedAttributes.includes( prop )
+    ) {
       console.error(
         `Unable to apply propReflect '${propCamel}' for attribute '${prop}', 
         Please add '${prop}' in the observedAttributes of ${this.constructor.name} component`
       )
-      return _default
+      return 
     } 
 
 
-    if (!isValidAttr(prop) === true) return _default
+    if (!isValidAttr(prop) === true) return
 
 
 

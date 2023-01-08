@@ -6,12 +6,18 @@ interface IGetSet {
 
 // getset behavior
 function getsetFn(this: any, prop: string, propValue: any) {
-    if (propValue === undefined || propValue.name != 'getset') return // only apply for 
+    if (
+      propValue === undefined || 
+      propValue.name != 'getset'
+    ) return // only apply for 
 
-    const { value: val, forWatch, name } = propValue
+    const { 
+      value: _default, 
+      forWatch
+    } = propValue
 
 
-    this[`#${prop}`] = val
+    this[`#${prop}`] = _default
 
     Object.defineProperty(this, prop, {
       configurable: true,
@@ -31,7 +37,12 @@ export function getset(value: any, options?: IGetSet) {
     forWatch: true,
   };
 
-  return { value, ...defaults, ...options, name: 'getset' }
+  return { 
+    value, 
+    ...defaults, 
+    ...options, 
+    name: 'getset' 
+  }
 
 }
 

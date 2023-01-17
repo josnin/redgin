@@ -5,6 +5,7 @@ import {
   removeEventListeners,
   tags } from './directives/index.js';
 import { applyPropsBehavior } from './props/index.js'
+import { camelToKebab } from './utils.js'
 
 export * from './directives/index.js'
 export * from './props/index.js'
@@ -15,7 +16,7 @@ export const { a, b, strong, br, div, h1, i, img, ol,
   ul, li, p, span, option, select } = tags
 
 
-export let injectStyles = []
+export const injectStyles = []
 
 
 export class RedGin extends HTMLElement {
@@ -78,9 +79,14 @@ export class RedGin extends HTMLElement {
   }
 
   injectStyles() { 
-    const finalStyles = []
+    const finalStyles: string[] = []
     for (const s of injectStyles) {
-      finalStyles.push(`<style>${s}</style>`)
+      // @ts-ignore
+      if (s.startsWith('<link')) {
+        finalStyles.push(s)
+      } else {
+        finalStyles.push(`<style>${s}</style>`)
+      }
     }
     return finalStyles.join('')
   }

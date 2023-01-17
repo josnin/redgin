@@ -28,8 +28,8 @@ interface IPropReflect<T = any> {
 * same with id, dataset attr
 * anything else?
 */
-const IGNORE_PROP_REFLECTION = ['class', 'style', 'className', 
-  'classList', 'id', 'dataset', '^data-', '^aria-']
+const IGNORE_PROP_REFLECTION = ['^class$', '^style$', '^className$', 
+  '^classList$', '^id$', '^dataset$', '^data-', '^aria-']
 
 /* 
 * treat as a HTML standard boolean attrs

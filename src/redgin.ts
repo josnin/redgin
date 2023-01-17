@@ -5,7 +5,6 @@ import {
   removeEventListeners,
   tags } from './directives/index.js';
 import { applyPropsBehavior } from './props/index.js'
-import { camelToKebab } from './utils.js'
 
 export * from './directives/index.js'
 export * from './props/index.js'
@@ -16,7 +15,14 @@ export const { a, b, strong, br, div, h1, i, img, ol,
   ul, li, p, span, option, select } = tags
 
 
-export const injectStyles = []
+export const injectStyles: string[] = []
+export const defaultStyles: string[] = [
+  ` /* Custom elements are display: inline by default, 
+     * so setting their width or height will have no effect 
+    */
+    :host { display: block; }
+  `
+]
 
 
 export class RedGin extends HTMLElement {
@@ -78,14 +84,15 @@ export class RedGin extends HTMLElement {
     }
   }
 
-  injectStyles() { 
+  getStyles(styles: string[]) { 
     const finalStyles: string[] = []
-    for (const s of injectStyles) {
-      // @ts-ignore
+    for (const s of styles) {
       if (s.startsWith('<link')) {
         finalStyles.push(s)
       } else {
-        finalStyles.push(`<style>${s}</style>`)
+        const style = document.createElement('style')
+        style.innerHTML = s
+        finalStyles.push(style.outerHTML)
       }
     }
     return finalStyles.join('')
@@ -99,7 +106,8 @@ export class RedGin extends HTMLElement {
      * so class props default value can also cover in rendering
      */
     if (this.shadowRoot) this.shadowRoot.innerHTML = `
-      ${this.injectStyles()} 
+      ${this.getStyles(injectStyles)} 
+      ${this.getStyles(defaultStyles)} 
       ${this.render()}
       `
 

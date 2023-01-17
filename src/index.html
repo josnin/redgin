@@ -3,17 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>libweb sample</title>
-    <link rel="stylesheet" href="/static/css/index.css">
+    <title>RedGin</title>
+    <!--<link rel="preload' href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" as="style">-->
 </head>
 <body>
 
 	test
-    <loop-binding></loop-binding>
+    <for-loop></for-loop>
+    <sample-binding></sample-binding>
 
     <script type="module">
-        import './loop-binding.js'
-        import './sample-binding.js' 
+       // import '../samples/forLoop.js'
+       // import '../samples/sample-binding.js'
+
+         import("./redgin.js")
+            .then(({ injectStyles }) => {
+                injectStyles.push('@import "https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"')
+
+                import('../samples/forLoop.js')
+                import('../samples/sample-binding.js')
+
+            })
+            .catch((err) => {
+                console.log(err)
+            });
+
     </script> 
+    
 </body>
 </html>

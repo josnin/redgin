@@ -9,16 +9,27 @@ import { applyPropsBehavior } from './props/index.js'
 export * from './directives/index.js'
 export * from './props/index.js'
 
+
 // export most used tags only else use tags.div?
 export const { a, b, strong, br, div, h1, i, img, ol, 
   ul, li, p, span, option, select } = tags
+
+
+export let injectStyles = []
 
 
 export class RedGin extends HTMLElement {
 
   constructor() {
     super();
-    this.attachShadow({mode: 'open'});
+    this.attachShadow({
+      mode: 'open', 
+      delegatesFocus: true 
+    });
+
+    
+    
+
   }  
 
   connectedCallback() {    
@@ -66,6 +77,14 @@ export class RedGin extends HTMLElement {
     }
   }
 
+  injectStyles() { 
+    const finalStyles = []
+    for (const s of injectStyles) {
+      finalStyles.push(`<style>${s}</style>`)
+    }
+    return finalStyles.join('')
+  }
+
   private _onInit() { 
 
     this.setPropsBehavior()
@@ -73,7 +92,10 @@ export class RedGin extends HTMLElement {
     /* moved here instead of constructor, 
      * so class props default value can also cover in rendering
      */
-    if (this.shadowRoot) this.shadowRoot.innerHTML = this.render()
+    if (this.shadowRoot) this.shadowRoot.innerHTML = `
+      ${this.injectStyles()} 
+      ${this.render()}
+      `
 
     // place where u can override value defined in class props
     // fetch api
@@ -107,6 +129,5 @@ export class RedGin extends HTMLElement {
   onDoUpdate() {}
   onUpdated() {}
   render(): string { return `` }
-
 
 }

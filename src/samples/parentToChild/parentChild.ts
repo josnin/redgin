@@ -2,6 +2,10 @@
 
 import { RedGin, getset, watch, propReflect } from "../../redgin.js";
 
+interface IChild extends HTMLElement {
+  item: string
+}
+
 // configure child component
 class Child extends RedGin {
 
@@ -40,9 +44,9 @@ class Parent extends RedGin {
     /*
      * send data to child component using properties
      */
-    const child = this.shadowRoot?.querySelector('child-comp')
-    // @ts-ignore
+    const child: IChild = this.shadowRoot?.querySelector('child-comp')!
     child.item = this.currentItem
+
   }
 
   render() {       

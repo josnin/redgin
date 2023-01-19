@@ -118,6 +118,7 @@ export class RedGin extends HTMLElement {
     if (this.shadowRoot) this.shadowRoot.innerHTML = `
       ${this.getStyles(injectStyles)} 
       ${this.getStyles(defaultStyles)} 
+      ${this.getStyles(this.styles())} 
       ${this.render()}
       `
 
@@ -152,6 +153,7 @@ export class RedGin extends HTMLElement {
   onInit() {}
   onDoUpdate() {}
   onUpdated() {}
+  styles(): string[] { return [] }
   render(): string { return `` }
 
 }

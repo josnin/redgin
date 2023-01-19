@@ -85,17 +85,27 @@ export class RedGin extends HTMLElement {
   }
 
   getStyles(styles: string[]) { 
-    const finalStyles: string[] = []
+    const styleSheets: string[] = []
+    const adoptedStyleSheets: any = []
+    const hasBrowserSupport = this.shadowRoot?.adoptedStyleSheets
     for (const s of styles) {
-      if (s.startsWith('<link')) {
-        finalStyles.push(s)
-      } else {
+      if (s.startsWith('@import')) {
         const style = document.createElement('style')
         style.innerHTML = s
-        finalStyles.push(style.outerHTML)
+        styleSheets.push(style.outerHTML)
+      } else if (s.startsWith('<link') ||
+      !hasBrowserSupport ) {
+        styleSheets.push(s)
+      } else {
+        const sheets = new CSSStyleSheet()
+        sheets.replaceSync(s)
+        adoptedStyleSheets.push(sheets)
       }
     }
-    return finalStyles.join('')
+
+    if (this.shadowRoot) this.shadowRoot.adoptedStyleSheets = adoptedStyleSheets
+
+    return styleSheets.join('')
   }
 
   private _onInit() { 

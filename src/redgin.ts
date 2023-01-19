@@ -89,13 +89,12 @@ export class RedGin extends HTMLElement {
     const adoptedStyleSheets: any = []
     const hasBrowserSupport = this.shadowRoot?.adoptedStyleSheets
     for (const s of styles) {
-      if (s.startsWith('@import')) {
+      if (s.startsWith('<link')) {
+        styleSheets.push(s)
+      } else if (s.startsWith('@import') || !hasBrowserSupport) {
         const style = document.createElement('style')
         style.innerHTML = s
         styleSheets.push(style.outerHTML)
-      } else if (s.startsWith('<link') ||
-      !hasBrowserSupport ) {
-        styleSheets.push(s)
       } else {
         const sheets = new CSSStyleSheet()
         sheets.replaceSync(s)
@@ -118,7 +117,7 @@ export class RedGin extends HTMLElement {
     if (this.shadowRoot) this.shadowRoot.innerHTML = `
       ${this.getStyles(injectStyles)} 
       ${this.getStyles(defaultStyles)} 
-      ${this.getStyles(this.styles())} 
+      ${this.getStyles(this.styles)} 
       ${this.render()}
       `
 
@@ -153,7 +152,7 @@ export class RedGin extends HTMLElement {
   onInit() {}
   onDoUpdate() {}
   onUpdated() {}
-  styles(): string[] { return [] }
+  styles: string[] = [] 
   render(): string { return `` }
 
 }

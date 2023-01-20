@@ -1,4 +1,5 @@
-import { RedGin, event, propReflect, watch } from "../redgin.js";
+// @ts-ignore
+import { RedGin, event, propReflect, watch } from "https://cdn.jsdelivr.net/gh/josnin/redgin@main/dist/redgin.js";
 
 
 class Event extends RedGin {

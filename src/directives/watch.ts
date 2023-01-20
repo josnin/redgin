@@ -4,7 +4,7 @@ import { customDirectives } from './directives.js'
 var watchRef: any = {}
 
 class InWatch extends HTMLElement { }
-customElements.define('in-watch', InWatch);
+if (!customElements.get('in-watch')) customElements.define('in-watch', InWatch);
 
 /*
  * watch element here

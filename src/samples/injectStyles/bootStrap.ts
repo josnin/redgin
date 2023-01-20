@@ -1,5 +1,5 @@
-
-import { RedGin } from "../../redgin.js";
+// @ts-ignore
+import { RedGin } from "https://cdn.jsdelivr.net/gh/josnin/redgin@main/dist/redgin.js";
 
 
 class BootStrap extends RedGin {

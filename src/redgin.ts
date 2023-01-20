@@ -14,7 +14,10 @@ export * from './props/index.js'
 //export const { a, b, strong, br, div, h1, i, img, ol, 
 //  ul, li, p, span, option, select } = tags
 
-
+export const attachShadow: ShadowRootInit = {
+    mode: 'open', 
+    delegatesFocus: true 
+}
 export const injectStyles: string[] = []
 export const defaultStyles: string[] = [
   ` /* Custom elements are display: inline by default, 
@@ -29,14 +32,7 @@ export class RedGin extends HTMLElement {
 
   constructor() {
     super();
-    this.attachShadow({
-      mode: 'open', 
-      delegatesFocus: true 
-    });
-
-    
-    
-
+    this.attachShadow(attachShadow);
   }  
 
   connectedCallback() {    

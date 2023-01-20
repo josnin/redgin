@@ -20,8 +20,13 @@ export const event = (type: string, fn: any) => {
 /*
  * emit.call(this, 'newItem', item)
  */
-export function emit(this: any, customEvent: string, value: any){
-  const event = new CustomEvent(customEvent, { detail: value, composed: true });
+export function emit(this: any, customEvent: string, value: any, options?: CustomEvent){
+  const defaults = {
+    detail: value,
+    composed: true,
+  };
+  //const event = new CustomEvent(customEvent, { detail: value, composed: true });
+  const event = new CustomEvent(customEvent, { ...defaults, ...options });
   if (this.shadowRoot) this.shadowRoot.dispatchEvent(event);
 }
 

@@ -82,7 +82,7 @@ export class RedGin extends HTMLElement {
 
   getStyles(styles: string[]) { 
     const styleSheets: string[] = []
-    const adoptedStyleSheets: any = []
+    const adoptedStyleSheets: CSSStyleSheet[] = []
     const hasBrowserSupport = this.shadowRoot?.adoptedStyleSheets
     for (const s of styles) {
       if (s.startsWith('<link')) {
@@ -98,7 +98,7 @@ export class RedGin extends HTMLElement {
       }
     }
 
-    if (this.shadowRoot) this.shadowRoot.adoptedStyleSheets = adoptedStyleSheets
+    if (this.shadowRoot && adoptedStyleSheets.length > 0) this.shadowRoot.adoptedStyleSheets = adoptedStyleSheets
 
     return styleSheets.join('')
   }

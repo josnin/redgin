@@ -1,4 +1,5 @@
-import { RedGin, event, emit } from "../../redgin.js";
+// @ts-ignore
+import { RedGin, event, emit } from "https://cdn.jsdelivr.net/gh/josnin/redgin@main/dist/redgin.js";
 
 
 // configure child component

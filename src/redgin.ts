@@ -3,7 +3,7 @@ import {
   applyDirectives, 
   applyEventListeners, 
   removeEventListeners,
-  tags } from './directives/index.js';
+} from './directives/index.js';
 import { applyPropsBehavior } from './props/index.js'
 
 export * from './directives/index.js'
@@ -11,8 +11,8 @@ export * from './props/index.js'
 
 
 // export most used tags only else use tags.div?
-export const { a, b, strong, br, div, h1, i, img, ol, 
-  ul, li, p, span, option, select } = tags
+//export const { a, b, strong, br, div, h1, i, img, ol, 
+//  ul, li, p, span, option, select } = tags
 
 
 export const injectStyles: string[] = []

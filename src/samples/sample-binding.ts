@@ -1,4 +1,5 @@
-import { RedGin, watch, propReflect } from "../redgin.js";
+// @ts-ignore
+import { RedGin, watch, propReflect } from "https://cdn.jsdelivr.net/gh/josnin/redgin@main/dist/redgin.js";
 
 class Binding extends RedGin {
   // typescript sample

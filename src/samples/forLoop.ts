@@ -1,4 +1,5 @@
-import { RedGin, watch, getset } from "../redgin.js";
+// @ts-ignore
+import { RedGin, watch, getset } from "https://cdn.jsdelivr.net/gh/josnin/redgin@main/dist/redgin.js";
 
 interface IObj {
   id: number

@@ -1,5 +1,5 @@
-export * from './directives/index.js';
-export * from './props/index.js';
+export { event, emit, watch, customDirectives } from './directives/index.js';
+export { getset, propReflect, customPropsBehavior } from './props/index.js';
 export declare const attachShadow: ShadowRootInit;
 export declare const injectStyles: string[];
 export declare const defaultStyles: string[];

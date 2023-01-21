@@ -1,5 +1,4 @@
-// @ts-ignore
-import { RedGin, watch,  getset } from "https://cdn.jsdelivr.net/gh/josnin/redgin@main/dist/redgin.js";
+import { RedGin, watch, getset } from "https://cdn.jsdelivr.net/gh/josnin/libweb@main/dist/redgin.min.js";
 
 
 class FetchApi extends RedGin {

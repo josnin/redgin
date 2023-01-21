@@ -4,10 +4,21 @@ import {
   applyEventListeners, 
   removeEventListeners,
 } from './directives/index.js';
-import { applyPropsBehavior } from './props/index.js'
+import { 
+  applyPropsBehavior 
+} from './props/index.js'
 
-export * from './directives/index.js'
-export * from './props/index.js'
+export { 
+  event, 
+  emit, 
+  watch, 
+  customDirectives 
+} from './directives/index.js'
+export { 
+  getset, 
+  propReflect, 
+  customPropsBehavior 
+} from './props/index.js'
 
 
 // export most used tags only else use tags.div?

@@ -1,8 +1,20 @@
-// @ts-ignore
-import { RedGin } from "https://cdn.jsdelivr.net/gh/josnin/redgin@main/dist/redgin.js";
+import { RedGin } from "https://cdn.jsdelivr.net/gh/josnin/libweb@main/dist/redgin.min.js";
 
+const styles = [
+      `
+        :host {
+          background-color:blue;
+        }
+      `,
+      `
+        :host {
+          color:green;
+        }
+      `
+    ]
 
 class BootStrap extends RedGin {
+
 
   render() {       
     return ` 

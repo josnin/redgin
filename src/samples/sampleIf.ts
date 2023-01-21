@@ -1,5 +1,4 @@
-// @ts-ignore
-import { RedGin, propReflect, watch } from 'https://cdn.jsdelivr.net/gh/josnin/redgin@main/dist/redgin.js'
+import { RedGin, propReflect, watch } from "https://cdn.jsdelivr.net/gh/josnin/libweb@main/dist/redgin.min.js";
 
 
 class If extends RedGin {

@@ -1,8 +1,6 @@
-// @ts-ignore
-import { RedGin, event, emit } from "https://cdn.jsdelivr.net/gh/josnin/redgin@main/dist/redgin.js";
+//import { RedGin, event, emit, injectStyles } from "../../redgin.js";
+import { RedGin, event, emit, injectStyles } from "https://cdn.jsdelivr.net/gh/josnin/libweb@main/dist/redgin.min.js";
 
-
-// configure child component
 class Child extends RedGin {
 
   render() {       

@@ -1,5 +1,5 @@
-export { event, emit, watch, customDirectives } from './directives/index.js';
-export { getset, propReflect, customPropsBehavior } from './props/index.js';
+export { event, emit, watch, customDirectives } from './redgin.min.js';
+export { getset, propReflect, customPropsBehavior } from './redgin.min.js';
 export declare const attachShadow: ShadowRootInit;
 export declare const injectStyles: string[];
 export declare const defaultStyles: string[];

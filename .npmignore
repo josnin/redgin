@@ -1,8 +1,6 @@
-src/*.js
-src/*.js.map
-src/*.d.ts.map
-src/*/*.js
-src/*/*/*.js
+src
 .vscode
 .git
 samples
+esbuild.config.js
+tslint.json

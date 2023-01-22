@@ -1,8 +1,18 @@
 {
   "name": "redgin",
   "version": "0.1.0",
-  "description": "Lib for building web components",
-  "main": "index.js",
+  "description": "Simplified library for building web components",
+  "main": "dist/redgin.min.js",
+  "engines": {
+    "node": ">=16"
+  },
+  "files": [
+    "dist",
+    "src/*.d.ts",
+    "src/directives/*.d.ts",
+    "src/props/*.d.ts"
+  ]
+  ,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc -w",

@@ -3,22 +3,22 @@ import {
   applyDirectives, 
   applyEventListeners, 
   removeEventListeners,
-} from './directives/index.js';
+} from './directives/index';
 import { 
   applyPropsBehavior 
-} from './props/index.js'
+} from './props/index'
 
 export { 
   event, 
   emit, 
   watch, 
   customDirectives 
-} from './directives/index.js'
+} from './directives/index'
 export { 
   getset, 
   propReflect, 
   customPropsBehavior 
-} from './props/index.js'
+} from './props/index'
 
 
 // export most used tags only else use tags.div?

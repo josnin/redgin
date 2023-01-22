@@ -1,4 +1,4 @@
-import { getUniqID } from '../utils.js'
+import { getUniqID } from '../utils'
 
 const eventRef: any = []
 

@@ -4,30 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RedGin</title>
-<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous"> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 </head>
 <body>
 
-	test
-    <for-loop></for-loop>
-    <sample-binding></sample-binding>
-
     <script type="module">
 
-         import("./redgin.js")
+        document.body.innerHTML = `
+            <div class="spinner-grow" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        `
+
+         import("https://cdn.jsdelivr.net/gh/josnin/libweb@main/dist/redgin.min.js")
+         //import("./redgin.js")
             .then( ({ injectStyles }) => {
                 /* 
                  * inject global styles to all components 
                  */
                 injectStyles.push('<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">')
-                //injectStyles.push('@import "https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"')
+                //injectStyles.push('@import url("https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css")')
 
-                import('../samples/forLoop.js')
-                import('../samples/sample-binding.js')
+
+                import('../samples/childParent/index.js')
+               // import('../samples/injectStyles/bootStrap.js')
+
+               document.body.innerHTML = `
+                    <parent-comp></parent-comp>
+                `
+
+               //const chld = document.querySelector('child-comp')
+               //chld.addEventListener('newItem', (d) => {
+               //   console.log('listen parent???', d.detail)
+               //})
+
+
             })
             .catch((err) => console.log(err))
 
     </script> 
+
     
 </body>
 </html>

@@ -1,4 +1,5 @@
 //import { RedGin, watch, getset } from "https://cdn.jsdelivr.net/gh/josnin/libweb@main/dist/redgin.min.js";
+// sample here > https://stackblitz.com/edit/typescript-ntwqdt?file=index.ts
 import { RedGin, watch, getset } from "../redgin";
 class FetchApi extends RedGin {
     // typescript sample

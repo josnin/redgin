@@ -16,8 +16,9 @@
             </div>
         `
 
-         import("https://cdn.jsdelivr.net/gh/josnin/libweb@main/dist/redgin.min.js")
-         //import("./redgin.js")
+         //import("https://josnin.sgp1.cdn.digitaloceanspaces.com/redgin/redgin.min.js")
+         import("./src/redgin.js")
+
             .then( ({ injectStyles }) => {
                 /* 
                  * inject global styles to all components 
@@ -26,11 +27,10 @@
                 //injectStyles.push('@import url("https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css")')
 
 
-                import('../samples/childParent/index.js')
-               // import('../samples/injectStyles/bootStrap.js')
+                import('./src/forLoop.js')
 
                document.body.innerHTML = `
-                    <parent-comp></parent-comp>
+                    <for-loop></for-loop>
                 `
 
                //const chld = document.querySelector('child-comp')

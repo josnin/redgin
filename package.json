@@ -1,11 +1,12 @@
 {
   "name": "redgin",
-  "version": "0.1.4",
+  "version": "0.1.7",
   "description": "Simplified library for building web components",
   "main": "dist/redgin.min.js",
   "types": "dist/redgin.d.ts",
+  "type": "module",
   "engines": {
-    "node": ">=16"
+    "node": ">=16.0.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -23,19 +24,13 @@
   },
   "homepage": "https://github.com/josnin/redgin#readme",
   "dependencies": {
-    "@fastify/static": "^5.0.0",
-    "@types/node": "^18.11.14",
-    "codelyzer": "^6.0.2",
-    "esbuild": "^0.16.4",
-    "fastify": "^3.21.0",
-    "typescript": "^4.9.4"
+    "typescript": "^4.9.4",
+    "vite": "^4.0.4"
   },
   "devDependencies": {
-    "@fastify/static": "^5.0.0",
     "@types/node": "^18.11.14",
     "codelyzer": "^6.0.2",
     "esbuild": "^0.16.4",
-    "fastify": "^3.21.0",
     "typescript": "^4.9.4"
   }
 }

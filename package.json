@@ -5,6 +5,7 @@
   "keywords": [
     "redgin",
     "web components",
+    "custom elements"
   ],
   "main": "dist/redgin.min.js",
   "types": "dist/redgin.d.ts",
@@ -15,7 +16,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc -w",
-    "start": "node server.js"
+    "bundle": "npx esbuild --bundle src/redgin.js --minify --sourcemap --format=esm --outfile=dist/redgin.min.js --target=es2022",
+    "dev": "node node_modules/vite/bin/vite.js"
   },
   "repository": {
     "type": "git",

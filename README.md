@@ -14,20 +14,43 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>       
-    <script src="https://josnin.sgp1.digitaloceanspaces.com/redgin/dist/redgin.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RedGin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 </head>
 <body>
-   <app-root></app-root>
-    
-   <script type="module">     
-     class AppRoot extends RedGin {  
-       render() { 
-         return ` This is app root! `
-       }
-     }
-     customElements.define('app-root', AppRoot);
-   </script> 
+
+
+    <script type="module">
+
+        /* to handle flicker add spinner?? */
+        document.body.innerHTML = `
+            <div class="spinner-grow" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        `
+
+         import("https://josnin.sgp1.cdn.digitaloceanspaces.com/redgin/redgin.min.js")
+            .then( ({ injectStyles }) => {
+                /* 
+                 * inject global styles to all components 
+                 */
+                injectStyles.push('<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">')
+
+                /* load components */
+                import('./bootStrap.js')
+
+               /* to handle flicker */
+               document.body.innerHTML = `
+                    <btn-bootstrap></btn-bootstrap>
+                `
+
+            })
+            .catch((err) => console.log(err))
+
+    </script> 
     
 </body>
 </html>
@@ -39,7 +62,7 @@
 ### Inline Events
 it uses events tag ( click ) to create event listener behind the scene and automatically clear once the component is remove from DOM
 ```js
-import { RedGin, click } from 'red-gin.js';
+import { RedGin, click } from 'https://josnin.sgp1.cdn.digitaloceanspaces.com/redgin/redgin.min.js';
 
 class Event extends RedGin { 
   render() {
@@ -56,7 +79,7 @@ customElements.define('sample-event', Event);
 * dynamically create reactive props define in observedAttributes()
 * its uses watch directives to rerender inside html when value change
 ```js
-import { RedGin, watch } from 'red-gin.js';
+import { RedGin, watch } from 'https://josnin.sgp1.cdn.digitaloceanspaces.com/redgin/redgin.min.js';
 
 class Loop extends RedGin {
 
@@ -89,7 +112,7 @@ customElements.define('sample-loop', Loop);
 
 ### IF condition (Static)
 ```js
-import { RedGin } from 'red-gin.js';
+import { RedGin } from 'https://josnin.sgp1.cdn.digitaloceanspaces.com/redgin/redgin.min.js';
 
 class If extends RedGin {
   isDisabled = true
@@ -110,7 +133,7 @@ customElements.define('sample-if', If);
 * dynamically create reactive props define in observedAttributes()
 * its uses directive watch to rerender inside html when value change
 ```js
-import { RedGin, watch } from "./red-gin.js";
+import { RedGin, watch } from "https://josnin.sgp1.cdn.digitaloceanspaces.com/redgin/redgin.min.js";
 
 class If extends RedGin {
 
@@ -138,7 +161,7 @@ customElements.define('sample-if', If);
 * recommend to use watch directive when rendering obj
 ```js
 
-obj = setget({
+obj = getset({
     id:1, 
     name:'John Doe'
  }, { forWatch: false } ) // forWatch default is true, for complex just define a setter/getter manually?
@@ -165,20 +188,7 @@ render() {
 }
 ```
 
-### Render with Simplified tag (Reactive)
-* recommend to use div (span, etc.) directives for simple display of value
-```js
-onInit(): void {
-  this.id = 1;
-  this.name = 'Joh Doe'
-}
-  
-render() {       
-  return `
-    ${ div('id') }
-    ${ div('name') }`
-  }
-```
+
 
 ### PropReflect Custom
 Can only define single variable to each attr

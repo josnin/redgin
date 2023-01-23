@@ -2,6 +2,10 @@
   "name": "redgin",
   "version": "0.1.7",
   "description": "Simplified library for building web components",
+  "keywords": [
+    "redgin",
+    "web components",
+  ],
   "main": "dist/redgin.min.js",
   "types": "dist/redgin.d.ts",
   "type": "module",

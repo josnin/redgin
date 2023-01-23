@@ -2,9 +2,9 @@
 # Simplified library for building [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components)
 
 * Javascript [Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) for Template syntax
-* Introduced Reactive Tags, Directives (watch, div, span, ...)
-* Getters/Setters is handled by RedGin
-* Inline Events 
+* Introduced Reactive Tags, Directives (watch) 
+* Getters/Setters, Prop reflection is handled by RedGin
+* Inline Events, Custom Events 
 * Vanilla JS, Works on all JS framework
 
 

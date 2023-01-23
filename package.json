@@ -17,6 +17,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc -w",
     "bundle": "npx esbuild --bundle src/redgin.js --minify --sourcemap --format=esm --outfile=dist/redgin.min.js --target=es2022",
+    "bundle_ts": "npx esbuild --bundle src/redgin.ts --minify --sourcemap --outfile=dist/redgin.min.ts",
     "dev": "node node_modules/vite/bin/vite.js"
   },
   "repository": {

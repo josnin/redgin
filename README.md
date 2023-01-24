@@ -138,14 +138,12 @@ https://web.dev/custom-elements-best-practices/
 
 https://web.dev/shadowdom-v1/
 
-## Installation 
-```
-npm install
-```
 
 ## How to run development server? 
 ```
+git clone git@github.com:josnin/redgin.git 
 cd ~/Documents/redgin/
+npm install
 npm run dev
 ```
 

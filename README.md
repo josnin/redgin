@@ -1,11 +1,13 @@
 # RedGin
-# Simplified library for building [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components)
+# ~5.3kb Simplified library for building [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components) that works on Vanilla JS, all JS framework
 
 * Javascript [Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) for Template syntax
-* Introduced Reactive Tags, Directives (watch) 
-* Getters/Setters, Prop reflection is handled by RedGin
-* Inline Events, Custom Events 
-* Vanilla JS, Works on all JS framework
+* Rerender element with <code>watch</code>  
+* Create getter/setters with <code>getset</code> 
+* Property reflection with <code>propReflect</code>
+* Inline Events with <code>event</code> 
+* Create custom events with <code>emit</code> 
+
 
 
 ## Use directly in browser

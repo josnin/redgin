@@ -1,7 +1,7 @@
 # RedGin
-# ~5.3kb Simplified library for building [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components) that works on Vanilla JS, all JS framework
+# ~5.3kb Simplified library for building [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components), works on Vanilla JS / all JS framework
 
-* Javascript [Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) for Template syntax
+* Use Javascript [Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) for Template syntax
 * Rerender element with <code>watch</code>  
 * Create getter/setters with <code>getset</code> 
 * Create Property reflection with <code>propReflect</code>
@@ -214,8 +214,7 @@ npm install
 ## How to run development server? 
 ```
 cd ~/Documents/redgin/
-npm run build
-npm start
+npm run dev
 ```
 
 ## Help

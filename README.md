@@ -2,12 +2,12 @@
 # ~5.3kb Simplified library for building [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components), works on Vanilla JS / all JS framework
 
 * Use Javascript [Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) for Template syntax
-* Rerender element with <code>watch</code>  
-* Create getter/setters with <code>getset</code> 
+* Rerender element with [<code>watch</code>](https://stackblitz.com/edit/typescript-t3fqo8?file=sampleWatch.ts)  
+* Create getter/setters with [<code>getset</code>](https://stackblitz.com/edit/typescript-t3fqo8?file=sampleWatch.ts)   
 * Create Property reflection with <code>propReflect</code>
-* Create Inline Events with <code>event</code> 
-* Create custom events with <code>emit</code> 
-* Inject Global Styles with <code>injectStyles</code>
+* Create Inline Events with [<code>event</code>](https://stackblitz.com/edit/typescript-t3fqo8?file=sampleWatch.ts)   
+* Create custom events with [<code>emit</code>](https://stackblitz.com/edit/redgin-childtoparent?file=index.ts) 
+* Inject Global Styles with [<code>injectStyles</code>](https://stackblitz.com/edit/redgin-bootstrap?file=index.ts)
 * Support Typescript
 
 

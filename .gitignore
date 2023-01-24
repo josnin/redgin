@@ -6,3 +6,4 @@ src/*.js.map
 src/*.d.ts.map
 src/*/*.js
 src/*/*/*.js
+dist/redgin.min.js.map

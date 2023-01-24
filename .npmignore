@@ -3,5 +3,7 @@ src
 .git
 samples
 esbuild.config.js
+tsconfig.json
 tslint.json
 index.html
+dist/redgin.min.js.map

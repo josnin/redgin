@@ -81,7 +81,7 @@ export class RedGin extends HTMLElement {
   }
 
   private setPropsBehavior() {
-    let props = Object.getOwnPropertyNames(this)
+    let props = Object.getOwnPropertyNames(this).filter(e => e != 'styles') // @todo how exclude styles
     for (const prop of props) {
       // @ts-ignore
       const propValue = this[prop]

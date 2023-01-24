@@ -134,7 +134,7 @@ function propReflectFn(this: any, _prop: string, propValue: any) {
           return this.hasAttribute(prop)
         } else {
           if ( ( [ String, Array, Object].includes(type) 
-            || ['string', 'array', 'object'].includes(typeof _default) )  
+            || ['number', 'string', 'array', 'object'].includes(typeof _default) )  
             && !this.hasAttribute(prop)) {
               return _default
           } else if ( ( type === String || typeof _default === 'string' ) 

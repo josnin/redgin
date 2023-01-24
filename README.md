@@ -4,9 +4,10 @@
 * Javascript [Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) for Template syntax
 * Rerender element with <code>watch</code>  
 * Create getter/setters with <code>getset</code> 
-* Property reflection with <code>propReflect</code>
-* Inline Events with <code>event</code> 
+* Create Property reflection with <code>propReflect</code>
+* Create Inline Events with <code>event</code> 
 * Create custom events with <code>emit</code> 
+* Inject Global Styles with <code>injectStyles</code>
 * Support Typescript
 
 

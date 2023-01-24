@@ -7,6 +7,7 @@
 * Property reflection with <code>propReflect</code>
 * Inline Events with <code>event</code> 
 * Create custom events with <code>emit</code> 
+* Support Typescript
 
 
 

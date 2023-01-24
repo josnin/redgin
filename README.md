@@ -11,68 +11,38 @@
 * [Support Typescript](https://stackblitz.com/edit/typescript-ue61k6?file=index.ts)
 
 
+## Install
 
-## Use directly in browser
+### Plug & Play, Import directly from cdn
 
-```html 
+```js
+    import { RedGin } from 'https://josnin.sgp1.cdn.digitaloceanspaces.com/redgin/redgin.min.js'
+ 
+```
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RedGin</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-</head>
-<body>
+### Or Install using NPM
 
+```js
+    npm i redgin   
+```
 
-    <script type="module">
+#### then import the library, helpers
 
-        /* to handle flicker add spinner?? */
-        document.body.innerHTML = `
-            <div class="spinner-grow" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-        `
-
-         import("https://josnin.sgp1.cdn.digitaloceanspaces.com/redgin/redgin.min.js")
-            .then( ({ injectStyles }) => {
-                /* 
-                 * inject global styles to all components 
-                 */
-                injectStyles.push('<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">')
-
-                /* load components */
-                import('./bootStrap.js')
-
-               /* to handle flicker */
-               document.body.innerHTML = `
-                    <btn-bootstrap></btn-bootstrap>
-                `
-
-            })
-            .catch((err) => console.log(err))
-
-    </script> 
-    
-</body>
-</html>
-
+```js
+    import { Redgin } from 'redgin'
 ```
 
 
-## How to?
+## How to use?
 ### Inline Events
-it uses events tag ( click ) to create event listener behind the scene and automatically clear once the component is remove from DOM
+it uses <code>event</code> directive to create event listener behind the scene and automatically clear once the component is remove from DOM
 ```js
-import { RedGin, click } from 'https://josnin.sgp1.cdn.digitaloceanspaces.com/redgin/redgin.min.js';
+import { RedGin, event } from 'redgin'
 
 class Event extends RedGin { 
   render() {
-    return `<button ${ click( () => alert('Click Me') )} >Submit</button>`
-  }
- 
+    return `<button ${ event('click', () => alert('Click Me') )} >Submit</button>`
+  } 
 }
 
 customElements.define('sample-event', Event);
@@ -80,14 +50,15 @@ customElements.define('sample-event', Event);
 ```
 
 ### List Render (Reactive) 
-* dynamically create reactive props define in observedAttributes()
-* its uses watch directives to rerender inside html when value change
+* its uses <code>propReflect</code> to dynamically create reactive props reflection define in observedAttributes()
+* its uses <code>watch</code> directives to rerender inside html when value change
 ```js
-import { RedGin, watch } from 'https://josnin.sgp1.cdn.digitaloceanspaces.com/redgin/redgin.min.js';
+import { RedGin, watch, propReflect } from 'redgin';
 
 class Loop extends RedGin {
 
-  static get observedAttributes() { return ['arr'] } // dynamically create reactive props this.arr
+  arr = propReflect([1, 2, 3])
+  static get observedAttributes() { return ['arr'] } 
   
   render() {    
     return `<ul> ${ watch(['arr'], () => 
@@ -101,48 +72,16 @@ class Loop extends RedGin {
 customElements.define('sample-loop', Loop);
 
 ```
-#### results
-```html
-
-       <ul>
-         <li>Number: 1</li>
-         <li>Number: 2</li>
-         <li>Number: 3</li>
-       </ul>
-
-```
-
-
-
-### IF condition (Static)
-```js
-import { RedGin } from 'https://josnin.sgp1.cdn.digitaloceanspaces.com/redgin/redgin.min.js';
-
-class If extends RedGin {
-  isDisabled = true
-  
-  render() {
-    return `<button 
-                ${ this.isDisabled ? `disabled` : ``}
-              > Submit
-             </button>    
-  } 
-}
-
-customElements.define('sample-if', If);
-
-```
 
 ### IF condition (Reactive)
-* dynamically create reactive props define in observedAttributes()
-* its uses directive watch to rerender inside html when value change
+* its uses <code>propReflect</code> to dynamically create reactive props reflection define in observedAttributes()
+* its uses <code>watch</code> directives to rerender inside html when value change
 ```js
-import { RedGin, watch } from "https://josnin.sgp1.cdn.digitaloceanspaces.com/redgin/redgin.min.js";
+import { RedGin, watch, propReflect } from 'redgin'
 
 class If extends RedGin {
-
+  isDisable = propReflect(false)
   static get observedAttributes() { return ['is-disable']; } 
-  // dynamically create camelCase props. ie. this.isDisable
 
   render() {
     return `
@@ -181,7 +120,7 @@ render() {
 
 ### Render List of Obj (Reactive)
 ```js
-onInit(): void {
+onInit() {
   this.obj = [{id:1, name:'John Doe'}]
 }
   
@@ -193,13 +132,6 @@ render() {
 ```
 
 
-
-### PropReflect Custom
-Can only define single variable to each attr
-IF define , auto creation of attr props is ignored
-```js
-msg = propReflect('Hello?', {  type: String } ) 
-```
 
 ## Reference
 https://web.dev/custom-elements-best-practices/

@@ -16,20 +16,20 @@
 ### Plug & Play, Import directly from cdn
 
 ```js
-    import { RedGin } from 'https://cdn.jsdelivr.net/gh/josnin/redgin@v0.1.9/dist/redgin.min.js'
+import { RedGin } from 'https://cdn.jsdelivr.net/gh/josnin/redgin@v0.1.9/dist/redgin.min.js'
  
 ```
 
 ### Or Install using NPM
 
 ```js
-    npm i redgin   
+npm i redgin   
 ```
 
 #### then import the library, helpers
 
 ```js
-    import { Redgin } from 'redgin'
+import { Redgin } from 'redgin'
 ```
 
 

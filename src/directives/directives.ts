@@ -1,10 +1,10 @@
 
 export function applyDirectives(this: any, prop: string) {
-    let wUpdate = false
+    let wUpdate: boolean[] = []
     for (const d of customDirectives.reg) {
-        wUpdate = d.call(this, prop)
+        wUpdate.push(d.call(this, prop))
     }
-    return true // @todo at least 1 true means true
+    return wUpdate.filter(e => e === true).length > 0 //reupdate at least 1 true? 
 }
 
 export class customDirectives {

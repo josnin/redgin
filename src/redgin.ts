@@ -109,7 +109,9 @@ export class RedGin extends HTMLElement {
       }
     }
 
-    if (this.shadowRoot && adoptedStyleSheets.length > 0) this.shadowRoot.adoptedStyleSheets = adoptedStyleSheets
+    if (this.shadowRoot && adoptedStyleSheets.length > 0) this.shadowRoot.adoptedStyleSheets = [
+      ...this.shadowRoot.adoptedStyleSheets, ...adoptedStyleSheets
+    ]
 
     return styleSheets.join('')
   }
@@ -138,7 +140,7 @@ export class RedGin extends HTMLElement {
   private _onDoUpdate() {  //apply DOM change based on init 
 
     // do Change on the html
-    let props = Object.getOwnPropertyNames(this)
+    let props = Object.getOwnPropertyNames(this).filter(e => e != 'styles') // @todo how exclude styles
     for (const prop of props) {
       const withUpdate = this.updateContents(prop)
       if (withUpdate) this._onUpdated() //call when dom change

@@ -147,6 +147,7 @@ export class RedGin extends HTMLElement {
     }
     // do Change on the html
 
+    this.setEventListeners()
     this.onDoUpdate() 
 
   }

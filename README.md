@@ -16,7 +16,7 @@
 ### Plug & Play, Import directly from cdn
 
 ```js
-import { RedGin } from 'https://cdn.jsdelivr.net/gh/josnin/redgin@v0.1.9/dist/redgin.min.js'
+import { RedGin } from 'https://cdn.jsdelivr.net/gh/josnin/redgin@v0.1.11/dist/redgin.min.js'
  
 ```
 

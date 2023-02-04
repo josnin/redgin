@@ -9,8 +9,7 @@ import("./src/redgin")
 
     import('./samples/injectStyles/bootStrap')
 
-    // @ts-ignore
-    document.getElementById('app').innerHTML = html`
+    document.getElementById('app')!.innerHTML = html`
         <btn-bootstrap></btn-bootstrap>
     `
 

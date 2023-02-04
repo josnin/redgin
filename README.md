@@ -134,7 +134,7 @@ render() {
 
 ## For VSCode Syntax Highlight template literals
 
-### Install VSCode extension [inline-html](https://marketplace.visualstudio.com/items?itemName=pushqrdx.inline-html)
+### Install extension [inline-html](https://marketplace.visualstudio.com/items?itemName=pushqrdx.inline-html)
 
 ```js
     render() {

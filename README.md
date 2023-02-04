@@ -41,7 +41,9 @@ import { RedGin, event, html } from 'redgin'
 
 class Event extends RedGin { 
   render() {
-    return html`<button ${ event('click', () => alert('Click Me') )} >Submit</button>`
+    return html`<button 
+                  ${ event('click', () => alert('Click Me') )} 
+                >Submit</button>`
   } 
 }
 
@@ -59,14 +61,14 @@ watch, propReflect, html } from 'redgin';
 class Loop extends RedGin {
 
   arr = propReflect([1, 2, 3])
-  static get observedAttributes() { return ['arr'] } 
+  static observedAttributes = ['arr'] 
   
   render() {    
     return html`<ul> ${ watch(['arr'], () => 
                         this.arr.map( e => `Number: ${e}`) 
                        ).join('') 
-                  } 
-            </ul>`
+                      } 
+                </ul>`
     } 
 }
 
@@ -78,24 +80,23 @@ customElements.define('sample-loop', Loop);
 * its uses <code>propReflect</code> to dynamically create reactive props reflection define in observedAttributes()
 * its uses <code>watch</code> directives to rerender inside html when value change
 ```js
-import { RedGin, watch, propReflect } from 'redgin'
+import { RedGin, 
+watch, propReflect, html } from 'redgin'
 
 class If extends RedGin {
   isDisable = propReflect(false)
-  static get observedAttributes() { return ['is-disable']; } 
+  static observedAttributes = ['is-disable']
 
   render() {
     return `
         ${ watch(['isDisable'], () => html`
-            <button
-                ${ this.isDisable ? `disable`: ``}
-            > Submit
-            </button>`
+                <button
+                    ${ this.isDisable ?? `disable`}
+                > Submit</button>`
          )
         }
     `
   }
- 
 }
 
 customElements.define('sample-if', If);
@@ -108,13 +109,13 @@ customElements.define('sample-if', If);
 obj = getset({
     id:1, 
     name:'John Doe'
- }, { forWatch: false } ) // forWatch default is true, for complex just define a setter/getter manually?
+ }) //for complex just define a setter/getter manually?
 
   
 render() {       
   return `${ watch(['obj'], () => 
               html`<div>${ this.obj.id }</div>
-               <div>${ this.obj.name }</div>` 
+                   <div>${ this.obj.name }</div>` 
            ) }`
 }
 ```

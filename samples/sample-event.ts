@@ -8,7 +8,7 @@ class Event extends RedGin {
   static observedAttributes = ['arr']
 
   render() {
-    return html`
+    return //html`
         ${ watch(['arr'], () => this.arr.map( (e: number ) => `
                     <button ${ event('click', () => alert(e) )} >clickMe</button>
                   `).join('')

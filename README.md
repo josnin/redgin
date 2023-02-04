@@ -2,12 +2,12 @@
 # ~5.3kb Simplified library for building [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components), works on Vanilla JS / all JS framework
 
 * Use Javascript [Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) for Template syntax
-* Rerender element with [<code>watch</code>](https://stackblitz.com/edit/typescript-t3fqo8?file=sampleWatch.ts)  
-* Create getter/setters with [<code>getset</code>](https://stackblitz.com/edit/typescript-t3fqo8?file=sampleWatch.ts)   
-* Create Property reflection with [<code>propReflect</code>](https://stackblitz.com/edit/typescript-hlms7u?file=index.html)
-* Create Inline Events with [<code>event</code>](https://stackblitz.com/edit/typescript-t3fqo8?file=sampleWatch.ts)   
-* Create custom events with [<code>emit</code>](https://stackblitz.com/edit/redgin-childtoparent?file=index.ts) 
-* Inject Global Styles with [<code>injectStyles</code>](https://stackblitz.com/edit/redgin-bootstrap?file=index.ts)
+* Rerender element with [`watch`](https://stackblitz.com/edit/typescript-t3fqo8?file=sampleWatch.ts)  
+* Create getter/setters with [`getset`](https://stackblitz.com/edit/typescript-t3fqo8?file=sampleWatch.ts)   
+* Create Property reflection with [`propReflect`](https://stackblitz.com/edit/typescript-hlms7u?file=index.html)
+* Create Inline Events with [`event`](https://stackblitz.com/edit/typescript-t3fqo8?file=sampleWatch.ts)   
+* Create custom events with [`emit`](https://stackblitz.com/edit/redgin-childtoparent?file=index.ts) 
+* Inject Global Styles with [`injectStyles`](https://stackblitz.com/edit/redgin-bootstrap?file=index.ts)
 * [Support Typescript](https://stackblitz.com/edit/typescript-ue61k6?file=index.ts)
 
 
@@ -16,8 +16,7 @@
 ### Plug & Play, Import directly from cdn
 
 ```js
-import { RedGin } from 'https://cdn.jsdelivr.net/gh/josnin/redgin@v0.1.11/dist/redgin.min.js'
- 
+import { RedGin } from 'https://cdn.jsdelivr.net/gh/josnin/redgin@v0.1.12/dist/redgin.min.js'
 ```
 
 ### Or Install using NPM
@@ -29,7 +28,7 @@ npm i redgin
 #### then import the library, helpers
 
 ```js
-import { Redgin } from 'redgin'
+import { Redgin, propReflect, getset, watch, event, emit, html, css } from 'redgin'
 ```
 
 
@@ -37,83 +36,70 @@ import { Redgin } from 'redgin'
 ### Inline Events
 it uses <code>event</code> directive to create event listener behind the scene and automatically clear once the component is remove from DOM
 ```js
-import { RedGin, event } from 'redgin'
-
 class Event extends RedGin { 
   render() {
-    return `<button ${ event('click', () => alert('Click Me') )} >Submit</button>`
+    return html`<button 
+                  ${ event('click', () => alert('Click Me') )} 
+                >Submit</button>`
   } 
 }
-
 customElements.define('sample-event', Event);
-
 ```
 
 ### List Render (Reactive) 
 * its uses <code>propReflect</code> to dynamically create reactive props reflection define in observedAttributes()
 * its uses <code>watch</code> directives to rerender inside html when value change
 ```js
-import { RedGin, watch, propReflect } from 'redgin';
-
 class Loop extends RedGin {
-
   arr = propReflect([1, 2, 3])
-  static get observedAttributes() { return ['arr'] } 
-  
+  static observedAttributes = ['arr'] 
+
   render() {    
-    return `<ul> ${ watch(['arr'], () => 
+    return html`<ul> ${ watch(['arr'], () => 
                         this.arr.map( e => `Number: ${e}`) 
                        ).join('') 
-                  } 
-            </ul>`
+                      } 
+                </ul>`
     } 
 }
-
 customElements.define('sample-loop', Loop);
-
 ```
 
 ### IF condition (Reactive)
 * its uses <code>propReflect</code> to dynamically create reactive props reflection define in observedAttributes()
 * its uses <code>watch</code> directives to rerender inside html when value change
 ```js
-import { RedGin, watch, propReflect } from 'redgin'
-
 class If extends RedGin {
   isDisable = propReflect(false)
-  static get observedAttributes() { return ['is-disable']; } 
+  static observedAttributes = ['is-disable']
 
   render() {
     return `
-        ${ watch(['isDisable'], () => 
-            <button
-                ${ this.isDisable ? `disable`: ``}
-            > Submit
-            </button>
+        ${ watch(['isDisable'], () => html`
+                <button
+                    ${ this.isDisable ?? `disable`}
+                > Submit</button>`
          )
         }
     `
   }
- 
 }
-
 customElements.define('sample-if', If);
 ```
 
 ### Render Obj (Reactive)
 * recommend to use watch directive when rendering obj
 ```js
-
 obj = getset({
     id:1, 
     name:'John Doe'
- }, { forWatch: false } ) // forWatch default is true, for complex just define a setter/getter manually?
+ }) //for complex just define a setter/getter manually?
 
   
 render() {       
   return `${ watch(['obj'], () => 
-              `<div>${ this.obj.id }</div>
-               <div>${ this.obj.name }</div>` 
+              html`<div>${ this.obj.id }</div>
+                   <div>${ this.obj.name }</div>` 
            ) }`
 }
 ```
@@ -126,9 +112,19 @@ onInit() {
   
 render() {       
   return `${ watch(['obj'], () => this.obj.map( (e: any) => 
-               `<span>ID:${e.id} Name:${e.name}</span>`)
+               html`<span>ID:${e.id} Name:${e.name}</span>`)
             ) }`
 }
+```
+
+## For VSCode Syntax Highlight template literals
+
+### Install extension [inline-html](https://marketplace.visualstudio.com/items?itemName=pushqrdx.inline-html)
+
+```js
+    render() {
+      return html`<div>with syntax highlighted</div>`
+    }
 ```
 
 

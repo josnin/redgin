@@ -1,4 +1,10 @@
-import { RedGin, event, propReflect, watch } from "https://cdn.jsdelivr.net/gh/josnin/libweb@main/dist/redgin.min.js";
+import { 
+  RedGin, 
+  event, 
+  propReflect, 
+  watch,
+  html
+ } from "../src/redgin";
 
 
 class Event extends RedGin {
@@ -8,8 +14,8 @@ class Event extends RedGin {
   static observedAttributes = ['arr']
 
   render() {
-    return `
-        ${ watch(['arr'], () => this.arr.map( (e: number ) => `
+    return html`
+        ${ watch(['arr'], () => this.arr.map( (e: number ) => html`
                     <button ${ event('click', () => alert(e) )} >clickMe</button>
                   `).join('')
         ) }

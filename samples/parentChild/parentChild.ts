@@ -1,6 +1,10 @@
-
-
-import { RedGin, getset, watch, propReflect } from "../../redgin.js";
+import { 
+  RedGin, 
+  getset, 
+  watch, 
+  propReflect,
+  html
+} from "../../src/redgin";
 
 interface IChild extends HTMLElement {
   item: string
@@ -12,7 +16,7 @@ class Child extends RedGin {
   item = getset<string>('My item?')
 
   render() {       
-    return `<p>
+    return html`<p>
         Today's item: ${ watch(['item'], () => this.item ) }
     </p>`
   }
@@ -27,7 +31,7 @@ class Child2 extends RedGin {
   static observedAttributes = ['item']
 
   render() {       
-    return `<p>
+    return html`<p>
         Today's item: ${ watch(['item'], () => this.item ) }
     </p>`
   }
@@ -50,7 +54,7 @@ class Parent extends RedGin {
   }
 
   render() {       
-    return ` 
+    return html` 
             <child-comp></child-comp>
 
             <!-- send data to child component using attributes -->

@@ -1,8 +1,10 @@
 export { event, emit, watch, customDirectives } from './directives/index';
 export { getset, propReflect, customPropsBehavior } from './props/index';
 export declare const attachShadow: ShadowRootInit;
-export declare const injectStyles: string[];
-export declare const defaultStyles: string[];
+export declare let injectStyles: string[];
+export declare let defaultStyles: string[];
+export declare const html: (raw: TemplateStringsArray, ...values: any[]) => string;
+export declare const css: (raw: TemplateStringsArray, ...values: any[]) => string;
 export declare class RedGin extends HTMLElement {
     constructor();
     connectedCallback(): void;

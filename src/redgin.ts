@@ -29,14 +29,23 @@ export const attachShadow: ShadowRootInit = {
     mode: 'open', 
     delegatesFocus: true 
 }
-export const injectStyles: string[] = []
-export const defaultStyles: string[] = [
+export let injectStyles: string[] = []
+export let defaultStyles: string[] = [
   ` /* Custom elements are display: inline by default, 
      * so setting their width or height will have no effect 
     */
     :host { display: block; }
   `
 ]
+
+/* 
+ * dummy tag just for syntax highlight 
+ * @todo add sanitizing, etc.?
+ */
+export const html = (
+  raw: TemplateStringsArray, ...values: any[]
+  ) => String.raw({raw}, ...values);
+export const css = html;
 
 
 export class RedGin extends HTMLElement {

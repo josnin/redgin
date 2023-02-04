@@ -1,5 +1,9 @@
-//import { RedGin, watch, getset } from "https://cdn.jsdelivr.net/gh/josnin/libweb@main/dist/redgin.min.js";
-import { RedGin, watch, getset } from "../redgin";
+import { 
+  RedGin, 
+  watch, 
+  getset,
+  html
+} from "../src/redgin";
 
 
 class FetchApi extends RedGin {
@@ -20,8 +24,9 @@ class FetchApi extends RedGin {
   }
   
   render() {       
-    return ` ${ watch(['ready'], 
-                () => this.ready ? JSON.stringify(this.todos) : `Loading...` ) 
+    return html`
+      ${ watch(['ready'], 
+                () => this.ready ? JSON.stringify(this.todos) : html`Loading...` ) 
         }` 
   }
   

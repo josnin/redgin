@@ -1,10 +1,14 @@
-//import { RedGin, event, emit, injectStyles } from "../../redgin.js";
-import { RedGin, event, emit, injectStyles } from "https://cdn.jsdelivr.net/gh/josnin/libweb@main/dist/redgin.min.js";
+import { 
+  RedGin, 
+  event, 
+  emit,
+  html
+} from '../../src/redgin';
 
 class Child extends RedGin {
 
   render() {       
-    return `
+    return html`
         <button 
           ${ event('click', () => emit.call(this, 'newItem', 'added New Item?') ) }>
             <slot>Add to parent's list</slot>
@@ -18,7 +22,7 @@ class Child extends RedGin {
 class Parent extends RedGin {
 
   render() {       
-    return `
+    return html`
         <child-comp 
           ${ event('newItem',  (e: CustomEvent) => console.log(`Get child data > ${e.detail}`)  ) }>
             Get Child Data?

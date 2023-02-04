@@ -6,4 +6,7 @@ esbuild.config.js
 tsconfig.json
 tslint.json
 index.html
+index.ts
+index.js
+index.d.ts
 dist/redgin.min.js.map

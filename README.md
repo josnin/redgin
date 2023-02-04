@@ -29,7 +29,7 @@ npm i redgin
 #### then import the library, helpers
 
 ```js
-import { Redgin, html } from 'redgin'
+import { Redgin, propReflect, getset, watch, event, emit, html, css } from 'redgin'
 ```
 
 
@@ -37,8 +37,6 @@ import { Redgin, html } from 'redgin'
 ### Inline Events
 it uses <code>event</code> directive to create event listener behind the scene and automatically clear once the component is remove from DOM
 ```js
-import { RedGin, event, html } from 'redgin'
-
 class Event extends RedGin { 
   render() {
     return html`<button 
@@ -46,23 +44,17 @@ class Event extends RedGin {
                 >Submit</button>`
   } 
 }
-
 customElements.define('sample-event', Event);
-
 ```
 
 ### List Render (Reactive) 
 * its uses <code>propReflect</code> to dynamically create reactive props reflection define in observedAttributes()
 * its uses <code>watch</code> directives to rerender inside html when value change
 ```js
-import { RedGin, 
-watch, propReflect, html } from 'redgin';
-
 class Loop extends RedGin {
-
   arr = propReflect([1, 2, 3])
   static observedAttributes = ['arr'] 
-  
+
   render() {    
     return html`<ul> ${ watch(['arr'], () => 
                         this.arr.map( e => `Number: ${e}`) 
@@ -71,18 +63,13 @@ class Loop extends RedGin {
                 </ul>`
     } 
 }
-
 customElements.define('sample-loop', Loop);
-
 ```
 
 ### IF condition (Reactive)
 * its uses <code>propReflect</code> to dynamically create reactive props reflection define in observedAttributes()
 * its uses <code>watch</code> directives to rerender inside html when value change
 ```js
-import { RedGin, 
-watch, propReflect, html } from 'redgin'
-
 class If extends RedGin {
   isDisable = propReflect(false)
   static observedAttributes = ['is-disable']
@@ -98,14 +85,12 @@ class If extends RedGin {
     `
   }
 }
-
 customElements.define('sample-if', If);
 ```
 
 ### Render Obj (Reactive)
 * recommend to use watch directive when rendering obj
 ```js
-
 obj = getset({
     id:1, 
     name:'John Doe'

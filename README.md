@@ -2,12 +2,12 @@
 # ~5.3kb Simplified library for building [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components), works on Vanilla JS / all JS framework
 
 * Use Javascript [Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) for Template syntax
-* Rerender element with [<code>watch</code>](https://stackblitz.com/edit/typescript-t3fqo8?file=sampleWatch.ts)  
-* Create getter/setters with [<code>getset</code>](https://stackblitz.com/edit/typescript-t3fqo8?file=sampleWatch.ts)   
-* Create Property reflection with [<code>propReflect</code>](https://stackblitz.com/edit/typescript-hlms7u?file=index.html)
-* Create Inline Events with [<code>event</code>](https://stackblitz.com/edit/typescript-t3fqo8?file=sampleWatch.ts)   
-* Create custom events with [<code>emit</code>](https://stackblitz.com/edit/redgin-childtoparent?file=index.ts) 
-* Inject Global Styles with [<code>injectStyles</code>](https://stackblitz.com/edit/redgin-bootstrap?file=index.ts)
+* Rerender element with [`watch`](https://stackblitz.com/edit/typescript-t3fqo8?file=sampleWatch.ts)  
+* Create getter/setters with [`getset`](https://stackblitz.com/edit/typescript-t3fqo8?file=sampleWatch.ts)   
+* Create Property reflection with [`propReflect`](https://stackblitz.com/edit/typescript-hlms7u?file=index.html)
+* Create Inline Events with [`event`](https://stackblitz.com/edit/typescript-t3fqo8?file=sampleWatch.ts)   
+* Create custom events with [`emit`](https://stackblitz.com/edit/redgin-childtoparent?file=index.ts) 
+* Inject Global Styles with [`injectStyles`](https://stackblitz.com/edit/redgin-bootstrap?file=index.ts)
 * [Support Typescript](https://stackblitz.com/edit/typescript-ue61k6?file=index.ts)
 
 
@@ -16,7 +16,7 @@
 ### Plug & Play, Import directly from cdn
 
 ```js
-import { RedGin } from 'https://cdn.jsdelivr.net/gh/josnin/redgin@v0.1.9/dist/redgin.min.js'
+import { RedGin } from 'https://cdn.jsdelivr.net/gh/josnin/redgin@v0.1.11/dist/redgin.min.js'
  
 ```
 
@@ -29,7 +29,7 @@ npm i redgin
 #### then import the library, helpers
 
 ```js
-import { Redgin } from 'redgin'
+import { Redgin, html } from 'redgin'
 ```
 
 
@@ -37,11 +37,11 @@ import { Redgin } from 'redgin'
 ### Inline Events
 it uses <code>event</code> directive to create event listener behind the scene and automatically clear once the component is remove from DOM
 ```js
-import { RedGin, event } from 'redgin'
+import { RedGin, event, html } from 'redgin'
 
 class Event extends RedGin { 
   render() {
-    return `<button ${ event('click', () => alert('Click Me') )} >Submit</button>`
+    return html`<button ${ event('click', () => alert('Click Me') )} >Submit</button>`
   } 
 }
 
@@ -53,7 +53,8 @@ customElements.define('sample-event', Event);
 * its uses <code>propReflect</code> to dynamically create reactive props reflection define in observedAttributes()
 * its uses <code>watch</code> directives to rerender inside html when value change
 ```js
-import { RedGin, watch, propReflect } from 'redgin';
+import { RedGin, 
+watch, propReflect, html } from 'redgin';
 
 class Loop extends RedGin {
 
@@ -61,7 +62,7 @@ class Loop extends RedGin {
   static get observedAttributes() { return ['arr'] } 
   
   render() {    
-    return `<ul> ${ watch(['arr'], () => 
+    return html`<ul> ${ watch(['arr'], () => 
                         this.arr.map( e => `Number: ${e}`) 
                        ).join('') 
                   } 
@@ -85,11 +86,11 @@ class If extends RedGin {
 
   render() {
     return `
-        ${ watch(['isDisable'], () => 
+        ${ watch(['isDisable'], () => html`
             <button
                 ${ this.isDisable ? `disable`: ``}
             > Submit
-            </button>
+            </button>`
          )
         }
     `
@@ -112,7 +113,7 @@ obj = getset({
   
 render() {       
   return `${ watch(['obj'], () => 
-              `<div>${ this.obj.id }</div>
+              html`<div>${ this.obj.id }</div>
                <div>${ this.obj.name }</div>` 
            ) }`
 }
@@ -126,7 +127,7 @@ onInit() {
   
 render() {       
   return `${ watch(['obj'], () => this.obj.map( (e: any) => 
-               `<span>ID:${e.id} Name:${e.name}</span>`)
+               html`<span>ID:${e.id} Name:${e.name}</span>`)
             ) }`
 }
 ```
@@ -134,15 +135,6 @@ render() {
 ## For VSCode Syntax Highlight template literals
 
 ### Install VSCode extension [inline-html](https://marketplace.visualstudio.com/items?itemName=pushqrdx.inline-html)
-
-```js
-    render() {
-      return /*html*/`<div>with syntax highlighted</div>`
-    }
-```
-
-
-### Or [lit-html](https://marketplace.visualstudio.com/items?itemName=bierner.lit-html)
 
 ```js
     render() {

@@ -1,3 +1,3 @@
-export * from './propReflect.js';
-export * from './getset.js';
-export * from './props.js';
+export * from './watch.js';
+export * from './events.js';
+export * from './directives.js';

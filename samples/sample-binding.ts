@@ -1,4 +1,9 @@
-import { RedGin, watch, propReflect } from "../src/redgin";
+import { 
+  RedGin, 
+  watch, 
+  propReflect,
+  html
+} from "../src/redgin";
 
 class Binding extends RedGin {
   // typescript sample
@@ -7,7 +12,7 @@ class Binding extends RedGin {
   static observedAttributes = ['msg']
 
   render() {
-    return /*html*/`${ watch(['msg'], () => this.msg )}
+    return html`${ watch(['msg'], () => this.msg )}
       <button type="button" class="btn btn-danger">Danger</button>
     `
   }

@@ -1,4 +1,9 @@
-import { RedGin, watch, getset } from "../src/redgin";
+import { 
+  RedGin, 
+  watch, 
+  getset,
+  html
+} from "../src/redgin";
 
 
 class FetchApi extends RedGin {
@@ -19,9 +24,9 @@ class FetchApi extends RedGin {
   }
   
   render() {       
-    return /*html*/`
+    return html`
       ${ watch(['ready'], 
-                () => this.ready ? JSON.stringify(this.todos) : `Loading...` ) 
+                () => this.ready ? JSON.stringify(this.todos) : html`Loading...` ) 
         }` 
   }
   

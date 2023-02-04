@@ -15,9 +15,16 @@ const styles = [
 
 class BootStrap extends RedGin {
 
+  styles = [
+    /*css*/ `
+      :host {
+        background-color:blue;
+      }
+    `
+  ]
 
   render() {       
-    return ` 
+    return /*html*/` 
       <button type="button" class="btn">Basic</button>
       <button type="button" class="btn btn-default">Default</button>
       <button type="button" class="btn btn-primary">Primary</button>

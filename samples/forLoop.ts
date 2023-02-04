@@ -1,4 +1,4 @@
-import { RedGin, watch, getset, propReflect } from "../redgin.js";
+import { RedGin, watch, getset, propReflect } from "../src/redgin";
 
 interface IObj {
   id: number
@@ -19,8 +19,7 @@ class ForLoop extends RedGin {
   static observedAttributes = ['foo', 'hidden']
 
   render() {       
-    console.log(this.hidden)
-    return ` 
+    return /*html*/` 
       <style>
         :host {
           height:400px;

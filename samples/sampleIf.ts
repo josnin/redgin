@@ -1,5 +1,4 @@
-import { RedGin, propReflect, watch } from "https://cdn.jsdelivr.net/gh/josnin/libweb@main/dist/redgin.min.js";
-//import { RedGin, propReflect, watch } from "../redgin";
+import { RedGin, propReflect, watch } from "../src/redgin";
 
 
 class If extends RedGin {
@@ -9,9 +8,9 @@ class If extends RedGin {
   static  observedAttributes = ['is-disable']; 
 
   render() {
-    return `
+    return /*html*/`
         ${ watch(['isDisable'], () => 
-            `<button  
+            /*html*/`<button  
                 ${ this.isDisable ? `disabled`: ``}
                 > clickMe
             </button>`

@@ -131,6 +131,25 @@ render() {
 }
 ```
 
+## For VSCode Syntax Highlight template literals
+
+### Install VSCode extension [inline-html](https://marketplace.visualstudio.com/items?itemName=pushqrdx.inline-html)
+
+```js
+    render() {
+      return /*html*/`<div>with syntax highlighted</div>`
+    }
+```
+
+
+### Or [lit-html](https://marketplace.visualstudio.com/items?itemName=bierner.lit-html)
+
+```js
+    render() {
+      return html`<div>with syntax highlighted</div>`
+    }
+```
+
 
 
 ## Reference

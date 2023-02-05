@@ -8,7 +8,7 @@ interface IGetSet {
 function getsetFn(this: any, prop: string, propValue: any) {
     if (
       propValue === undefined || 
-      propValue.name != 'getset'
+      propValue?.name != 'getset'
     ) return // only apply for 
 
     const { 

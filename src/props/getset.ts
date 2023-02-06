@@ -24,7 +24,10 @@ function getsetFn(this: any, prop: string, propValue: any) {
       set (value) {
           // create a value placeholder 
           this[`#${prop}`] = value
-          if (forWatch) this.updateContents(prop)
+          if (forWatch) {
+            const withUpdate = this.updateContents(prop)
+            if (withUpdate) this._onUpdated() //call when dom change
+          }
       },
       get () { return this[`#${prop}`]  }
     })  

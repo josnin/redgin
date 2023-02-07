@@ -60,7 +60,7 @@ const isValidAttr = (attr: string) => {
 function propReflectFn(this: any, _prop: string, propValue: any) {
     if (
       propValue === undefined ||
-      propValue.name != 'propReflect'
+      propValue?.name != 'propReflect'
     ) return  // only apply for 
 
     const { 

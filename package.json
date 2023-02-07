@@ -1,6 +1,6 @@
 {
   "name": "redgin",
-  "version": "0.1.12",
+  "version": "0.1.14",
   "description": "~5.3kb Simplified library for building Web Components, works on Vanilla JS / all JS framework",
   "keywords": [
     "redgin",
@@ -18,7 +18,7 @@
     "clean": "rimraf src/*.js src/*/*.js samples/*.js samples/*/*.js *.d.ts src/*.d.ts src/*/*.d.ts",
     "build": "npm run clean &&  tsc -w",
     "bundle": "npx esbuild --bundle src/redgin.js --minify --sourcemap --format=esm --outfile=dist/redgin.min.js --target=es2022 && npm run copy",
-    "copy": "cp -rvf src/*.d.ts dist/. && cp -rfv src/*/*.d.ts dist/*/.",
+    "copy": "cp -rvf src/*.d.ts dist/. && cp -rfv src/directives/*.d.ts dist/directives/. && cp -rfv src/props/*.d.ts dist/props/.",
     "dev": "node node_modules/vite/bin/vite.js"
   },
   "repository": {

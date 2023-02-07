@@ -20,7 +20,7 @@
 import { Redgin } from 'https://cdn.jsdelivr.net/gh/josnin/redgin@main/dist/redgin.min.js'
 
 // or specific version
-import { RedGin } from 'https://cdn.jsdelivr.net/gh/josnin/redgin@v0.1.12/dist/redgin.min.js'
+import { RedGin } from 'https://cdn.jsdelivr.net/gh/josnin/redgin@v0.1.14/dist/redgin.min.js'
 ```
 
 ### Or Install using NPM

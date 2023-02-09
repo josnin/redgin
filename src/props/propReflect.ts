@@ -1,5 +1,5 @@
-import { getUniqID, kebabToCamel, camelToKebab } from '../utils.js'
-import { customPropsBehavior } from './props.js'
+import { getUniqID, kebabToCamel, camelToKebab } from '../utils'
+import { customPropsBehavior } from './props'
 
 
 interface IPropReflect<T = any> {

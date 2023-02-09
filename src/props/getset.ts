@@ -1,4 +1,4 @@
-import { customPropsBehavior } from './props.js'
+import { customPropsBehavior } from './props'
 
 interface IGetSet {
   forWatch?: boolean;

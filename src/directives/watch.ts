@@ -1,5 +1,5 @@
-import { getUniqID, kebabToCamel } from '../utils.js'
-import { customDirectives } from './directives.js'
+import { getUniqID, kebabToCamel } from '../utils'
+import { customDirectives } from './directives'
 
 var watchRef: any = {}
 

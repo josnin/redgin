@@ -1,6 +1,6 @@
 {
   "name": "redgin",
-  "version": "0.1.16",
+  "version": "0.1.17",
   "description": "~5.3kb Simplified library for building Web Components, works on Vanilla JS / all JS framework",
   "keywords": [
     "redgin",
@@ -31,14 +31,11 @@
     "url": "https://github.com/josnin/redgin/issues"
   },
   "homepage": "https://github.com/josnin/redgin#readme",
-  "dependencies": {
-    "typescript": "^4.9.4",
-    "vite": "^4.0.4"
-  },
   "devDependencies": {
     "@types/node": "^18.11.14",
     "esbuild": "^0.16.4",
     "rimraf": "^4.1.2",
-    "typescript": "^4.9.4"
+    "typescript": "^4.9.5",
+    "vite": "^4.1.1"
   }
 }

@@ -20,7 +20,8 @@
 import { Redgin } from 'https://cdn.jsdelivr.net/npm/redgin@latest/dist/redgin.min.js'
 
 // or specific version
-import { RedGin } from 'https://cdn.jsdelivr.net/npm/redgin@0.1.16/dist/redgin.min.js'
+import { RedGin } from 'https://cdn.jsdelivr.net/npm/redgin@0.1.17/dist/redgin.min.js'
+
 ```
 
 ### Or Install using NPM
@@ -81,7 +82,7 @@ class If extends RedGin {
     return `
         ${ watch(['isDisable'], () => html`
                 <button
-                    ${ this.isDisable ?? `disable`}
+                    ${ this.isDisable ? `disable` : ``}
                 > Submit</button>`
          )
         }

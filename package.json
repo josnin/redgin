@@ -1,7 +1,7 @@
 {
   "name": "redgin",
-  "version": "0.1.18",
-  "description": "~5.3kb Simplified library for building Web Components, works on Vanilla JS / all JS framework",
+  "version": "0.1.19",
+  "description": "A lightweight (~5.3kb) library for building Web Components",
   "keywords": [
     "redgin",
     "web components",

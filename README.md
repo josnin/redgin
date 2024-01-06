@@ -1,126 +1,256 @@
-# RedGin
-# ~5.3kb Simplified library for building [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components), works on Vanilla JS / all JS framework
+# Redgin
 
-* Use Javascript [Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) for Template syntax
-* Rerender element with [`watch`](https://stackblitz.com/edit/typescript-t3fqo8?file=sampleWatch.ts)  
-* Create getter/setters with [`getset`](https://stackblitz.com/edit/typescript-t3fqo8?file=sampleWatch.ts)   
-* Create Property reflection with [`propReflect`](https://stackblitz.com/edit/typescript-hlms7u?file=index.html)
-* Create Inline Events with [`event`](https://stackblitz.com/edit/typescript-t3fqo8?file=sampleWatch.ts)   
-* Create custom events with [`emit`](https://stackblitz.com/edit/redgin-childtoparent?file=index.ts) 
-* Inject Global Styles with [`injectStyles`](https://stackblitz.com/edit/redgin-bootstrap?file=index.ts)
-* [Support Typescript](https://stackblitz.com/edit/typescript-ue61k6?file=index.ts)
+A lightweight (~5.3kb) library for building Web Components, compatible with Vanilla JS and all JavaScript frameworks. This library simplifies the creation of Web Components and offers features such as using JavaScript template literals for template syntax, rerendering elements with watch, creating getter/setters with getset, property reflection with propReflect, inline events with event, custom events with emit, injecting global styles with injectStyles, and support for TypeScript.
 
 
-## Install
 
-### Plug & Play, Import directly from cdn
+## Features
 
-```js
-// latest 
-import { Redgin } from 'https://cdn.jsdelivr.net/npm/redgin@latest/dist/redgin.min.js'
 
-// or specific version
-import { RedGin } from 'https://cdn.jsdelivr.net/npm/redgin@0.1.18/dist/redgin.min.js'
+
+- **JavaScript Template Literals for Template Syntax**: Simplify the creation of templates using JavaScript template literals. [Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)
+
+
+
+- **Rerender Element with Watch**: Easily trigger a rerender of an element by watching for changes.[`watch`](https://stackblitz.com/edit/typescript-t3fqo8?file=sampleWatch.ts)
+
+
+
+- **Create Getter/Setters with getset**: Define getter and setter functions for your properties.[`getset`](https://stackblitz.com/edit/typescript-t3fqo8?file=sampleWatch.ts)
+
+
+
+- **Create Property Reflection with propReflect**: Reflect property changes to corresponding attributes.[`propReflect`](https://stackblitz.com/edit/typescript-hlms7u?file=index.html)
+
+
+
+- **Create Inline Events with event**: Attach events directly in your component's template.[`event`](https://stackblitz.com/edit/typescript-t3fqo8?file=sampleWatch.ts)
+
+
+
+- **Create Custom Events with emit**: Emit custom events from your components.[`emit`](https://stackblitz.com/edit/redgin-childtoparent?file=index.ts)
+
+
+
+- **Inject Global Styles with injectStyles**: Apply global styles for your components.[`injectStyles`](https://stackblitz.com/edit/redgin-bootstrap?file=index.ts)
+
+
+
+- **Support for TypeScript**: Enjoy type safety when using Redgin with TypeScript.[Support Typescript](https://stackblitz.com/edit/typescript-ue61k6?file=index.ts)
+
+
+
+
+- **Build SPAs (Single-Page Applications)**: Simplify the development of SPAs using Redgin.[Single Page Application](https://stackblitz.com/edit/typescript-ezsw6j)
+
+## Installation
+
+
+
+Include the Redgin library in your project.
+
+
+```html
+// via html
+<script type="module" src="https://cdn.jsdelivr.net/npm/redgin@latest/dist/redgin.min.js"></script>
 
 ```
 
-### Or Install using NPM
 
-```js
-npm i redgin   
+Or install it via npm:
+
+
+
+```bash
+
+npm i redgin
+
+```
+## Usage
+
+
+
+1. **Import the Library:**
+
+
+
+```javascript
+
+// via js
+
+import { Redgin, watch, getset, html } from 'https://cdn.jsdelivr.net/npm/redgin@latest/dist/redgin.min.js';
+
+
+
+// via npm
+
+import { Redgin, watch, getset, html } from 'redgin';
+
 ```
 
-#### then import the library, helpers
-
-```js
-import { Redgin, propReflect, getset, watch, event, emit, html, css } from 'redgin'
-```
 
 
-## How to use?
-### Inline Events
-it uses <code>event</code> directive to create event listener behind the scene and automatically clear once the component is remove from DOM
-```js
-class Event extends RedGin { 
-  render() {
-    return html`<button 
-                  ${ event('click', () => alert('Click Me') )} 
-                >Submit</button>`
-  } 
-}
-customElements.define('sample-event', Event);
-```
+2. **Use the Features:**
 
-### List Render (Reactive) 
-* its uses <code>propReflect</code> to dynamically create reactive props reflection define in observedAttributes()
-* its uses <code>watch</code> directives to rerender inside html when value change
-```js
-class Loop extends RedGin {
-  arr = propReflect([1, 2, 3])
-  static observedAttributes = ['arr'] 
 
-  render() {    
-    return html`<ul> ${ watch(['arr'], () => 
-                        this.arr.map( e => `Number: ${e}`) 
-                       ).join('') 
-                      } 
-                </ul>`
-    } 
-}
-customElements.define('sample-loop', Loop);
-```
 
-### IF condition (Reactive)
-* its uses <code>propReflect</code> to dynamically create reactive props reflection define in observedAttributes()
-* its uses <code>watch</code> directives to rerender inside html when value change
-```js
-class If extends RedGin {
-  isDisable = propReflect(false)
-  static observedAttributes = ['is-disable']
+```javascript
 
-  render() {
-    return `
-        ${ watch(['isDisable'], () => html`
-                <button
-                    ${ this.isDisable ? `disable` : ``}
-                > Submit</button>`
-         )
-        }
-    `
+// FetchApiComponent.ts
+
+// Creating a Fetch Api Component that displays Todos using Getset, Watch
+class FetchApi extends RedGin {
+  // Reactive properties using getset
+  ready = getset<boolean>(false);
+  todos: any;
+
+  // Initialize data from the API in the onInit lifecycle method
+  onInit() {
+    fetch('https://jsonplaceholder.typicode.com/todos/1')
+      .then(response => response.json())
+      .then(json => {
+        this.todos = json;
+        this.ready = true;
+      });
+  }
+  
+  // Render method for displaying the fetched data
+  render() {       
+    return html`
+      ${watch(['ready'], 
+        () => this.ready ? JSON.stringify(this.todos) : html`Loading...`
+      )}`;
   }
 }
-customElements.define('sample-if', If);
+
+// Define the custom element 'fetch-api'
+customElements.define('fetch-api', FetchApi);
+
 ```
 
-### Render Obj (Reactive)
-* recommend to use watch directive when rendering obj
-```js
-obj = getset({
-    id:1, 
-    name:'John Doe'
- }) //for complex just define a setter/getter manually?
 
-  
-render() {       
-  return `${ watch(['obj'], () => 
-              html`<div>${ this.obj.id }</div>
-                   <div>${ this.obj.name }</div>` 
-           ) }`
+3. **Passing data from Parent to Child component**
+
+
+
+```javascript
+
+// ParentToChildComponents.ts
+
+class ParentComp extends RedGin {
+  currentItem: string = 'Laptop';
+
+  // Initialize child component with data using properties or attributes
+  onInit() {
+    // Option 1: Send data to child component using properties     
+    const child: IChild = this.shadowRoot?.querySelector('child-comp')!;
+    child.item = this.currentItem;
+  }
+
+  // Render method for the parent component
+  render() {       
+    return html`
+      <child-comp></child-comp>
+
+      <!-- Option 2: Send data to child component using attributes -->
+      <child2-comp item="${this.currentItem}"></child2-comp>
+    `;
+  }
 }
+
+ 
 ```
 
-### Render List of Obj (Reactive)
-```js
-onInit() {
-  this.obj = [{id:1, name:'John Doe'}]
+3. **Passing data from Child to Parent component**
+``` javascript
+
+// ParentChildComponents.ts
+
+// Child component for emitting a custom event
+class ChildComp extends RedGin {
+  render() {
+    return html`
+      <button ${event('click', () => emit.call(this, 'newItem', 'added New Item?'))}>
+        <slot>Add to parent's list</slot>
+      </button>
+    `;
+  }
 }
-  
-render() {       
-  return `${ watch(['obj'], () => this.obj.map( (e: any) => 
-               html`<span>ID:${e.id} Name:${e.name}</span>`)
-            ) }`
+
+// Parent component for receiving the custom event
+class ParentComp extends RedGin {
+  render() {
+    return html`
+      <child-comp 
+        ${event('newItem', (e: CustomEvent) => console.log(`Received child data: ${e.detail}`))}>
+        Get Child Data?
+      </child-comp>
+    `;
+  }
 }
+
 ```
+
+4. Creating a Reactive button
+
+```javascript
+
+// ReactiveButton.ts
+
+class ReactiveButton extends RedGin {
+  // Reactive property using propReflect
+  message = propReflect<string>('Hello, World!');
+
+  // Observed attributes for the component
+  static observedAttributes = ['message'];
+
+  // Render method for the component
+  render() {
+    // Use watch to trigger a rerender when 'message' changes
+    return html`${watch(['message'], () => html`
+      <button type="button">${this.message}</button>
+    `)}
+    `;
+  }
+} 
+
+```
+
+5. For Loop through the list of Products
+``` javascript
+
+// ProductListRenderer.ts
+
+// For Loop through the List of Products
+class ProductListRenderer extends RedGin {
+  // Reactive property using getset
+  products = getset<IProduct[]>([
+    { id: 1, name: 'Laptop' },
+    { id: 2, name: 'Camera' },
+  ]);
+
+  // Render method for displaying the list of products
+  render() {       
+    return html` 
+      <ul>
+        ${watch(['products'], () => 
+          this.products.map(product => 
+            html`<li>${product.id} - ${product.name}</li>`
+          )
+        )}
+      </ul>`;
+  }
+}
+
+
+
+```
+More
+
+
+
+
+
 
 ## For VSCode Syntax Highlight template literals
 
@@ -140,9 +270,9 @@ https://web.dev/custom-elements-best-practices/
 https://web.dev/shadowdom-v1/
 
 
-## How to run development server? 
+## How to run development server?
 ```
-git clone git@github.com:josnin/redgin.git 
+git clone git@github.com:josnin/redgin.git
 cd ~/Documents/redgin/
 npm install
 npm run dev
@@ -155,4 +285,3 @@ Need help? Open an issue in: [ISSUES](https://github.com/josnin/redgin/issues)
 
 ## Contributing
 Want to improve and add feature? Fork the repo, add your changes and send a pull request.
-

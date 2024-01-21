@@ -1,4 +1,4 @@
-# Redgin
+# RedGin
 
 A lightweight (~5.3kb) library for building Web Components, compatible with Vanilla JS and all JavaScript frameworks. This library simplifies the creation of Web Components and offers features such as using JavaScript template literals for template syntax, rerendering elements with watch, creating getter/setters with getset, property reflection with propReflect, inline events with event, custom events with emit, injecting global styles with injectStyles, and support for TypeScript.
 
@@ -47,7 +47,7 @@ A lightweight (~5.3kb) library for building Web Components, compatible with Vani
 
 
 
-Include the Redgin library in your project.
+Include the RedGin library in your project.
 
 
 ```html
@@ -78,13 +78,13 @@ npm i redgin
 
 // via js
 
-import { Redgin, watch, getset, html } from 'https://cdn.jsdelivr.net/npm/redgin@latest/dist/redgin.min.js';
+import { RedGin, watch, getset, html } from 'https://cdn.jsdelivr.net/npm/redgin@latest/dist/redgin.min.js';
 
 
 
 // via npm
 
-import { Redgin, watch, getset, html } from 'redgin';
+import { RedGin, watch, getset, html } from 'redgin';
 
 ```
 

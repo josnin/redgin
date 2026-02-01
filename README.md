@@ -1,3 +1,5 @@
+[![NPM](https://nodei.co/npm/redgin.svg?style=flat&data=v,d&color=red)](https://nodei.co/npm/redgin/)
+
 # RedGin
 
 A lightweight (~5.3kb) library for building Web Components, compatible with Vanilla JS and all JavaScript frameworks. This library simplifies the creation of Web Components and offers features such as using JavaScript template literals for template syntax, rerendering elements with watch, creating getter/setters with getset, property reflection with propReflect, inline events with event, custom events with emit, injecting global styles with injectStyles, and support for TypeScript.

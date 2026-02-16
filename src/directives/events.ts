@@ -1,21 +1,27 @@
+// events.ts
 import { getUniqID } from '../utils'
 
-const eventRef: any = []
+export type EventHandler = (this: any, e: Event) => any
 
-enum EventListenType {
-  ADD = 0,
-  REMOVE = 1,
-}
-
-/*
- * placeholder 
- * <button ${ event('click', () => alert(1) ) }> ok </button>
-*/
-export const event = (type: string, fn: any) => {
+export const event = (type: string, fn: EventHandler) => {
   const uniq = getUniqID()
-  eventRef.push([type, fn, uniq])
-  return `data-evt__=${uniq}`
+  const host = (window as any).__redgin_current_instance as any
+
+  // store the handler in host if available
+  if (host) {
+    if (!host._eventRegistry) host._eventRegistry = new Map<string, [string, EventHandler]>()
+    host._eventRegistry.set(uniq, [type, fn])
+  }
+
+  // returns attribute for template
+  return `data-evt__="${uniq}"`
 }
+
+/**
+ * Alias for 'event'. Moving forward, use 'on' for a more 
+ * declarative feel (e.g., on('click', ...))
+ */
+export const on = event 
 
 /*
  * emit.call(this, 'newItem', item)
@@ -31,25 +37,33 @@ export function emit(this: any, customEvent: string, value: any, options?: Custo
 }
 
 
-function baseEvent(this: any, etype: EventListenType) {
-    // todo? update only with changes
-    for (const e of eventRef) {
-      const [evt, fn, id] = e
-      if (this.shadowRoot) {
-        let el: HTMLElement = this.shadowRoot.querySelector(`[data-evt__="${id}"]`)
-        if (el) { // either to clear eventRef or add this?
-          etype === EventListenType.ADD ? el.addEventListener(evt, fn) : el.removeEventListener(evt, fn)
-        }
-      }
-    }
-
-}
-
-
+/**
+ * Attach all events for this component
+ */
 export function applyEventListeners(this: any) {
-  baseEvent.call(this, EventListenType.ADD)
+  if (!this._eventElements || !this._eventRegistry) return
+  //console.log('does it goes here')
+  //console.log('with eventElements?', this._evenElements)
+  //console.log('w eventRegistry', this._eventRegistry)
+
+  for (const [uniq, el] of this._eventElements) {
+    const handler = this._eventRegistry.get(uniq)
+    if (!handler) continue
+    const [type, fn] = handler
+    el.addEventListener(type, fn)
+  }
 }
 
+/**
+ * Remove all events for this component
+ */
 export function removeEventListeners(this: any) {
-  baseEvent.call(this, EventListenType.REMOVE)
+  if (!this._eventElements || !this._eventRegistry) return
+
+  for (const [uniq, el] of this._eventElements) {
+    const handler = this._eventRegistry.get(uniq)
+    if (!handler) continue
+    const [type, fn] = handler
+    el.removeEventListener(type, fn)
+  }
 }

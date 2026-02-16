@@ -1,11 +1,13 @@
 
-export function applyDirectives(this: any, prop: string) {
-    let wUpdate: boolean[] = []
-    for (const d of customDirectives.reg) {
-        wUpdate.push(d.call(this, prop))
+export function applyDirectives(this: any, prop: string): boolean {
+    for (const directive of customDirectives.reg) {
+        if (directive.call(this, prop)) {
+            return true; // Early exit as soon as we find true
+        }
     }
-    return wUpdate.filter(e => e === true).length > 0 //reupdate at least 1 true? 
+    return false;
 }
+
 
 export class customDirectives {
 

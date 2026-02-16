@@ -101,7 +101,7 @@ import { RedGin, watch, getset, html } from 'redgin';
 // FetchApiComponent.ts
 
 // Creating a Fetch Api Component that displays Todos using Getset, Watch
-class FetchApi extends RedGin {
+class FetchApi extends RedginEl {
   // Reactive properties using getset
   ready = getset<boolean>(false);
   todos: any;
@@ -139,7 +139,7 @@ customElements.define('fetch-api', FetchApi);
 
 // ParentToChildComponents.ts
 
-class ParentComp extends RedGin {
+class ParentComp extends RedginEl {
   currentItem: string = 'Laptop';
 
   // Initialize child component with data using properties or attributes
@@ -169,7 +169,7 @@ class ParentComp extends RedGin {
 // ParentChildComponents.ts
 
 // Child component for emitting a custom event
-class ChildComp extends RedGin {
+class ChildComp extends RedginEl {
   render() {
     return html`
       <button ${event('click', () => emit.call(this, 'newItem', 'added New Item?'))}>
@@ -180,7 +180,7 @@ class ChildComp extends RedGin {
 }
 
 // Parent component for receiving the custom event
-class ParentComp extends RedGin {
+class ParentComp extends RedginEl {
   render() {
     return html`
       <child-comp 
@@ -199,7 +199,7 @@ class ParentComp extends RedGin {
 
 // ReactiveButton.ts
 
-class ReactiveButton extends RedGin {
+class ReactiveButton extends RedginEl {
   // Reactive property using propReflect
   message = propReflect<string>('Hello, World!');
 
@@ -224,7 +224,7 @@ class ReactiveButton extends RedGin {
 // ProductListRenderer.ts
 
 // For Loop through the List of Products
-class ProductListRenderer extends RedGin {
+class ProductListRenderer extends RedginEl {
   // Reactive property using getset
   products = getset<IProduct[]>([
     { id: 1, name: 'Laptop' },

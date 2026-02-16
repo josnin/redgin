@@ -19,7 +19,7 @@
     "build": "npm run clean &&  tsc -w",
     "bundle": "npx esbuild --bundle src/redgin.js --minify --sourcemap --format=esm --outfile=dist/redgin.min.js --target=es2022 && npm run copy",
     "copy": "cp -rvf src/*.d.ts dist/. && cp -rfv src/directives/*.d.ts dist/directives/. && cp -rfv src/props/*.d.ts dist/props/.",
-    "dev": "node node_modules/vite/bin/vite.js"
+    "dev": "node node_modules/vite/bin/vite.js --host 0.0.0.0"
   },
   "repository": {
     "type": "git",
@@ -32,10 +32,10 @@
   },
   "homepage": "https://github.com/josnin/redgin#readme",
   "devDependencies": {
-    "@types/node": "^18.11.14",
+    "@types/node": "^25.2.3",
     "esbuild": "^0.16.4",
     "rimraf": "^4.1.2",
     "typescript": "^4.9.5",
-    "vite": "^4.1.1"
+    "vite": "^7.3.1"
   }
 }

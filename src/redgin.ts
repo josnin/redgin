@@ -1,19 +1,23 @@
+/* ============================================================
+ * RedGin – Core + Styles
+ * ========================================================== */
 
-import { 
-  applyDirectives, 
-  applyEventListeners, 
+import {
+  applyDirectives,
+  applyEventListeners,
   removeEventListeners,
-} from './directives/index';
-import { 
-  applyPropsBehavior 
-} from './props/index'
+  WatchExpression,
+} from './directives/index'
+
+import { applyPropsBehavior } from './props/index'
 
 export { 
   event, 
   emit, 
   watch, 
-  customDirectives 
+  customDirectives,
 } from './directives/index'
+
 export { 
   getset, 
   propReflect, 
@@ -21,157 +25,214 @@ export {
 } from './props/index'
 
 
-// export most used tags only else use tags.div?
-//export const { a, b, strong, br, div, h1, i, img, ol, 
-//  ul, li, p, span, option, select } = tags
+/* ============================================================
+ * Styles
+ * ========================================================== */
 
-export const attachShadow: ShadowRootInit = {
-    mode: 'open', 
-    delegatesFocus: true 
-}
-export let injectStyles: string[] = []
-export let defaultStyles: string[] = [
-  ` /* Custom elements are display: inline by default, 
-     * so setting their width or height will have no effect 
-    */
-    :host { display: block; }
-  `
-]
+const _cache = new Map<string, CSSStyleSheet>()
+export const shared: string[] = []
+export const defaultStyle = ':host{display:block}'
 
-/* 
- * dummy tag just for syntax highlight 
- * @todo add sanitizing, etc.?
+/**
+ * Apply styles to shadowRoot
+ * Handles <link>, @import and adoptedStyleSheets
  */
-export const html = (
-  raw: TemplateStringsArray, ...values: any[]
-  ) => String.raw({raw}, ...values);
-export const css = html;
+export function _applyStyle(
+  styles: string | string[],
+  shadowRoot?: ShadowRoot
+): string {
+  const arr = Array.isArray(styles) ? styles : [styles]
+  const fallback: string[] = []
+  const adopt: CSSStyleSheet[] = []
+  const canAdopt = shadowRoot && 'adoptedStyleSheets' in shadowRoot
 
+  for (let i = 0; i < arr.length; i++) {
+    const s = arr[i]
+
+    // Use <style> fallback for external / @import / unsupported
+    if (s.startsWith('<link') || !canAdopt || s.startsWith('@import')) {
+      fallback.push(s.startsWith('<link') ? s : `<style>${s}</style>`)
+      continue
+    }
+
+    let sheet = _cache.get(s)
+    if (!sheet) {
+      sheet = new CSSStyleSheet()
+      sheet.replaceSync(s)
+      _cache.set(s, sheet)
+    }
+
+    adopt.push(sheet)
+  }
+
+  if (canAdopt && adopt.length) {
+    shadowRoot!.adoptedStyleSheets = [
+      ...shadowRoot!.adoptedStyleSheets,
+      ...adopt
+    ]
+  }
+
+  return fallback.join('')
+}
+
+/**
+ * Public minimal API to share global styles at runtime
+ * Prevents duplicates
+ */
+export function shareStyle(style: string) {
+  if (!shared.includes(style)) shared.push(style)
+}
+
+/* ============================================================
+ * Template Tag
+ * ========================================================== */
+
+export const html = (raw: TemplateStringsArray, ...vals: any[]) =>
+  String.raw({ raw }, ...vals)
+export const css = html
+
+/* ============================================================
+ * RedGin Component
+ * ========================================================== */
 
 export class RedGin extends HTMLElement {
 
+  private _pending = false
+  private _changed = new Set<string>()
+  private _connected = false
+  private _reactiveCache: string[] = []
+
+  // Watch storage per instance
+  _watchRegistry = new Map<string, Map<string, WatchExpression>>()
+  _idToProps = new Map<string, string[]>()
+  _watchElements = new Map<string, HTMLElement>()
+
+  styles: string[] = []
+
   constructor() {
-    super();
-    this.attachShadow(attachShadow);
-  }  
-
-  connectedCallback() {    
-    this._onInit()
-    this._onDoUpdate()
+    super()
+    this.attachShadow({ mode: 'open', delegatesFocus: true })
   }
 
-
-  // attribute change
-  attributeChangedCallback(prop: any, oldValue: any, newValue: any) {
-
-    if (oldValue === newValue) return;
-
-    const withUpdate = this.updateContents(prop)
-    if (withUpdate) this._onUpdated() //call when dom change
-
+  connectedCallback() {
+    if (this._connected) return
+    this._connected = true
+    this._init()
   }
-
 
   disconnectedCallback() {
     removeEventListeners.call(this)
   }
 
-  
-  private updateContents(prop: any) {
-
-    const withUpdate = applyDirectives.call(this, prop);
-    
-    return withUpdate
-
+  attributeChangedCallback(prop: string, oldV: any, newV: any) {
+    if (oldV !== newV) this.requestUpdate(prop)
   }
 
-  private setEventListeners() {
-    applyEventListeners.call(this)
+  protected requestUpdate(prop: string) {
+    this._changed.add(prop)
+    if (this._pending) return
+    this._pending = true
+    queueMicrotask(() => this._flush())
   }
 
-  private setPropsBehavior() {
-    let props = Object.getOwnPropertyNames(this).filter(e => e != 'styles') // @todo how exclude styles
-    for (const prop of props) {
-      // @ts-ignore
-      const propValue = this[prop]
+  private _flush() {
+    this._pending = false
+    if (!this._changed.size) return
 
-      applyPropsBehavior.call(this, prop, propValue)
+    const props = Array.from(this._changed)
+    this._changed.clear()
 
-    }
-  }
-
-  getStyles(styles: string[]) { 
-    const styleSheets: string[] = []
-    const adoptedStyleSheets: CSSStyleSheet[] = []
-    const hasBrowserSupport = this.shadowRoot?.adoptedStyleSheets
-    for (const s of styles) {
-      if (s.startsWith('<link')) {
-        styleSheets.push(s)
-      } else if (s.startsWith('@import') || !hasBrowserSupport) {
-        const style = document.createElement('style')
-        style.innerHTML = s
-        styleSheets.push(style.outerHTML)
-      } else {
-        const sheets = new CSSStyleSheet()
-        sheets.replaceSync(s)
-        adoptedStyleSheets.push(sheets)
-      }
+    let domChanged = false
+    for (let i = 0; i < props.length; i++) {
+      if (this._update(props[i])) domChanged = true
     }
 
-    if (this.shadowRoot && adoptedStyleSheets.length > 0) this.shadowRoot.adoptedStyleSheets = [
-      ...this.shadowRoot.adoptedStyleSheets, ...adoptedStyleSheets
-    ]
-
-    return styleSheets.join('')
+    if (domChanged) this._afterUpdate()
   }
 
-  private _onInit() { 
+  private _init() {
+    this._setupProps()
 
-    this.setPropsBehavior()
+    // Make current instance available for watch registration
+    ;(window as any).__redgin_current_instance = this
 
-    /* moved here instead of constructor, 
-     * so class props default value can also cover in rendering
-     */
-    if (this.shadowRoot) this.shadowRoot.innerHTML = `
-      ${this.getStyles(injectStyles)} 
-      ${this.getStyles(defaultStyles)} 
-      ${this.getStyles(this.styles)} 
-      ${this.render()}
+    if (this.shadowRoot) {
+      this.shadowRoot.innerHTML = `
+        ${_applyStyle(shared, this.shadowRoot)}
+        ${_applyStyle(defaultStyle, this.shadowRoot)}
+        ${_applyStyle(this.styles, this.shadowRoot)}
+        ${this.render()}
       `
-
-    // place where u can override value defined in class props
-    // fetch api
-    this.onInit() 
-
-
-  }
-
-  private _onDoUpdate() {  //apply DOM change based on init 
-
-    // do Change on the html
-    let props = Object.getOwnPropertyNames(this).filter(e => e != 'styles') // @todo how exclude styles
-    for (const prop of props) {
-      const withUpdate = this.updateContents(prop)
-      if (withUpdate) this._onUpdated() //call when dom change
     }
-    // do Change on the html
 
-    this.setEventListeners()
-    this.onDoUpdate() 
+    ;(window as any).__redgin_current_instance = null
+    this._collectWatchElements()
 
+    this.onInit()
+    this._sync()
   }
 
-  private _onUpdated() {
+  private _collectWatchElements() {
+    if (!this.shadowRoot) return
+    const nodes = this.shadowRoot.querySelectorAll<HTMLElement>('[data-watch]')
+    for (let i = 0; i < nodes.length; i++) {
+      const el = nodes[i]
+      this._watchElements.set(el.dataset.watch!, el)
+    }
+  }
 
-    this.setEventListeners()
+  _cleanupWatch(uniqId: string) {
+    const props = this._idToProps.get(uniqId)
+    if (!props) return
+
+    for (let i = 0; i < props.length; i++) {
+      const prop = props[i]
+      const propWatchers = this._watchRegistry.get(prop)
+      if (!propWatchers) continue
+
+      propWatchers.delete(uniqId)
+      if (!propWatchers.size) this._watchRegistry.delete(prop)
+    }
+
+    this._idToProps.delete(uniqId)
+    this._watchElements.delete(uniqId)
+  }
+
+  private _sync() {
+    const props = this._reactiveProps()
+    for (let i = 0; i < props.length; i++) this._update(props[i])
+    applyEventListeners.call(this)
+    this.onDoUpdate()
+  }
+
+  private _update(prop: string): boolean {
+    return applyDirectives.call(this, prop)
+  }
+
+  private _afterUpdate() {
+    applyEventListeners.call(this)
     this.onUpdated()
-
   }
 
+  private _setupProps() {
+    if (!this._reactiveCache.length) {
+      const skip = new Set(['styles', '_pending', '_changed', '_connected'])
+      this._reactiveCache = Object.getOwnPropertyNames(this).filter(p => !skip.has(p))
+    }
+
+    const props = this._reactiveCache
+    for (let i = 0; i < props.length; i++) applyPropsBehavior.call(this, props[i], (this as any)[props[i]])
+  }
+
+  private _reactiveProps(): string[] {
+    return this._reactiveCache
+  }
+
+  /* ============================================================
+   * Hooks
+   * ========================================================== */
   onInit() {}
   onDoUpdate() {}
   onUpdated() {}
-  styles: string[] = [] 
   render(): string { return `` }
-
 }

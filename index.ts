@@ -1,9 +1,14 @@
 import { shareStyle, css } from "./src/redgin"
 import './samples/sample-styles'
 import './samples/sample-binding'
+import './samples/sampleIf'
 import './samples/sample-nested'
+import './samples/sample-allevents'
 import './samples/ecommerce-app'
 import './samples/todo-catalog'
+import './samples/smart-list'
+import './samples/smart-update-list'
+import './samples/xss-sandbox'
 import './samples/parentChild/parentChild'
 import './samples/childParent/cart-manager'
 
@@ -18,7 +23,7 @@ const count = 1;
 
 // Create 1000 instances of the component
 const sampleBindings = Array.from({ length: count }, (_, i) => 
-    `<sample-styles></sample-styles>`
+    `<smart-update-list></smart-update-list>`
 ).join('');
 
 // Benchmark the initial render

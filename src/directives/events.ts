@@ -1,7 +1,7 @@
 // events.ts
 import { getUniqID } from '../utils'
 
-export type EventHandler = (this: any, e: Event) => any
+export type EventHandler = (this: any, e: any) => any
 
 export const event = (type: string, fn: EventHandler) => {
   const uniq = getUniqID()

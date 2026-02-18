@@ -79,7 +79,7 @@ class EcommerceApp extends RedGin {
    * CHECKOUT: Payment logic with disabled state
    */
   renderCheckout() {
-    this.requestUpdate("isProcessing")
+    this.requestUpdate("isProcessing") // triggger force Update
     return html`
       <div class="checkout-card mx-auto p-4 border rounded shadow-sm" style="max-width: 400px;">
         <h3 class="mb-4">Finalise Order ${this.cart}</h3>

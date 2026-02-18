@@ -103,17 +103,29 @@ const ESCAPE_MAP: Record<string, string> = {
   "'": '&#39;'
 };
 
-export const sanitize = (str: any): string => {
-  if (typeof str !== 'string') return String(str ?? '');
-  
-  // Optimization: Don't sanitize if the string looks like RedGin internal markers
-  // or already contains our custom elements (<in-watch>, etc)
-  if (str.includes('data-watch') || str.includes('data-evt__') || str.includes('<in-watch')) {
-    return str;
+/**
+ * RE_TRUSTED: Expanded to detect structural HTML.
+ * If a string contains these, it's likely a RedGin Template, not user input.
+ */
+const RE_TRUSTED = /<[a-z/]|data-|class=|style=|id=|type=|disabled|checked|selected|slot=/i;
+
+export const sanitize = (val: any): string => {
+  // 1. Convert non-strings (numbers/booleans) to string immediately
+  if (typeof val !== 'string') return String(val ?? '');
+
+  // 2. TRUST CHECK:
+  // - <[a-z/] matches tags like <div>, <button>, or </div>
+  // - type=, disabled, checked covers form-heavy components
+  // - slot= covers your shadow DOM compositions
+  if (RE_TRUSTED.test(val)) {
+    return val; 
   }
 
-  return str.replace(/[&<>"']/g, (s) => ESCAPE_MAP[s]);
+  // 3. SECURE ESCAPE:
+  // Only runs on "naked" strings like product names or user bios.
+  return val.replace(/[&<>"']/g, (s) => ESCAPE_MAP[s]);
 };
+
 
 /**
  * Template Tag with Built-in Sanitization

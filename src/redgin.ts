@@ -92,9 +92,48 @@ export function shareStyle(style: string) {
  * Template Tag
  * ========================================================== */
 
-// Simple template tags for better syntax highlighting in editors
-export const html = (raw: TemplateStringsArray, ...vals: any[]) =>
-  String.raw({ raw }, ...vals)
+/**
+ * Fast escape for HTML special characters to prevent XSS.
+ */
+const ESCAPE_MAP: Record<string, string> = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;'
+};
+
+export const sanitize = (str: any): string => {
+  if (typeof str !== 'string') return String(str ?? '');
+  
+  // Optimization: Don't sanitize if the string looks like RedGin internal markers
+  // or already contains our custom elements (<in-watch>, etc)
+  if (str.includes('data-watch') || str.includes('data-evt__') || str.includes('<in-watch')) {
+    return str;
+  }
+
+  return str.replace(/[&<>"']/g, (s) => ESCAPE_MAP[s]);
+};
+
+/**
+ * Template Tag with Built-in Sanitization
+ * Automatically escapes values while preserving RedGin directives.
+ */
+export const html = (raw: TemplateStringsArray, ...vals: any[]) => {
+  const result = raw.reduce((acc, str, i) => {
+    const val = vals[i];
+    
+    // If it's an array (from a .map()), sanitize each item and join
+    const processedVal = Array.isArray(val) 
+      ? val.map(v => sanitize(v)).join('') 
+      : sanitize(val);
+      
+    return acc + str + (processedVal ?? '');
+  }, '');
+  return result;
+};
+
+
 export const css = html
 
 /* ============================================================
@@ -300,8 +339,6 @@ export class RedGin extends HTMLElement {
     // Re-attach listeners to the brand new elements
     applyEventListeners.call(this)
 
-    // 3. Attach the new listeners
-    applyEventListeners.call(this)
     this.onUpdated()
   }
 

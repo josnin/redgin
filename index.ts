@@ -8,6 +8,8 @@ import './samples/ecommerce-app'
 import './samples/todo-catalog'
 import './samples/smart-list'
 import './samples/smart-update-list'
+import './samples/smart-pagination-list'
+import './samples/smart-sort-list'
 import './samples/xss-sandbox'
 import './samples/parentChild/parentChild'
 import './samples/childParent/cart-manager'
@@ -23,7 +25,7 @@ const count = 1;
 
 // Create 1000 instances of the component
 const sampleBindings = Array.from({ length: count }, (_, i) => 
-    `<smart-update-list></smart-update-list>`
+    `<smart-pagination-list></smart-pagination-list>`
 ).join('');
 
 // Benchmark the initial render

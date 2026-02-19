@@ -85,7 +85,7 @@ class ModalApp extends RedGin {
           The modal is STATIC in the DOM. 
           Only the 'is-open' property changes, hitting the Light Path.
         -->
-        ${watch(['showConfirm'], () => `
+        ${watch(['showConfirm'], () => html`
             <smart-modal 
                 title1="Confirm Action" 
                 is-open="${this.showConfirm}"

@@ -228,7 +228,14 @@ export class RedGin extends HTMLElement {
 
 
     // Re-bind listeners if the DOM was updated
-    if (domChanged) this._afterUpdate()
+    // SELECTIVE LIFECYCLE
+    if (domChanged) {
+      // Structural update: re-scan and re-bind (O(N))
+      this._afterUpdate() 
+    } else {
+      // Data-only update: just sync manual DOM states (O(1))
+      this._afterUpdateNoDomChange()
+    }
   }
 
   /**
@@ -351,6 +358,10 @@ export class RedGin extends HTMLElement {
     // Re-attach listeners to the brand new elements
     applyEventListeners.call(this)
 
+    this.onUpdated()
+  }
+
+  private _afterUpdateNoDomChange() {
     this.onUpdated()
   }
 

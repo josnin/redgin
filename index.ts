@@ -14,6 +14,7 @@ import './samples/xss-sandbox'
 import './samples/parentChild/parentChild'
 import './samples/childParent/cart-manager'
 import './samples/modal-app'
+import './samples/master-binding'
 
 shareStyle('<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">')
 shareStyle(css`
@@ -26,7 +27,7 @@ const count = 1;
 
 // Create 1000 instances of the component
 const sampleBindings = Array.from({ length: count }, (_, i) => 
-    `<modal-app></modal-app>`
+    `<master-binding></master-binding>`
 ).join('');
 
 // Benchmark the initial render

@@ -17,6 +17,7 @@ export {
   event, // to obsolete
   emit, 
   watch, 
+  attr,
   customDirectives,
 } from './directives/index'
 
@@ -168,6 +169,9 @@ export class RedGin extends HTMLElement {
   _idToProps = new Map<string, string[]>()                         // watchId -> [relatedProps]
   _watchElements = new Map<string, HTMLElement>()                  // watchId -> DOM Node reference
 
+  _attrRegistry = new Map<string, Map<string, WatchExpression>>() // prop -> { id: callback }
+  _attrElements = new Map<string, HTMLElement>()                  // attrId -> DOM Node reference
+
   _eventElements = new Map<string, HTMLElement>() // id -> Node reference for events
 
   styles: string[] = []
@@ -267,6 +271,7 @@ export class RedGin extends HTMLElement {
      * After this, we never need querySelector again for property updates.
      */
     this._collectWatchElements()
+    this._collectAttrElements()
 
     this.onInit()
     this._sync()
@@ -282,6 +287,15 @@ export class RedGin extends HTMLElement {
     if (!this.shadowRoot) return
     const nodes = this.shadowRoot.querySelectorAll<HTMLElement>('[data-watch]')
     for (const el of nodes) this._watchElements.set(el.dataset.watch!, el)
+  }
+
+  /**
+   * Maps every [data-attr__] ID to its actual HTMLElement.
+   */
+  private _collectAttrElements() {
+    if (!this.shadowRoot) return
+    const nodes = this.shadowRoot.querySelectorAll<HTMLElement>('[data-prop__]')
+    for (const el of nodes) this._attrElements.set(el.dataset.prop__!, el)
   }
 
   /**
@@ -323,6 +337,7 @@ export class RedGin extends HTMLElement {
      * after the first set of updates has run.
      */
     this._collectWatchElements()
+    this._collectAttrElements()
     this._collectEventElements()
     applyEventListeners.call(this)
     
@@ -346,6 +361,7 @@ export class RedGin extends HTMLElement {
      * When HTML is replaced, old <in-watch> and [data-evt__] nodes are dead.
      * We clear the caches and re-scan the ShadowRoot to find the new nodes.
      */
+    console.log('is this being called?')
     //this._watchElements.clear() 
     //this._eventElements.clear()
     // 1. Only clear events because we MUST re-bind listeners to new nodes

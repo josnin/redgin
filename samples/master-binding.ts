@@ -1,52 +1,43 @@
-import { RedGin, watch, getset, propReflect, on, html, css } from "../src/redgin";
+import { RedGin, watch, attr, getset, propReflect, on, html, css } from "../src/redgin";
 
 class MasterBinding extends RedGin {
-  // 1. Attribute Binding (Reflected)
   theme = propReflect<'light' | 'dark'>('light')
-  
-  // 2. State Binding (Internal)
   isEditable = getset<boolean>(false)
-  
-  // 3. List Binding (Array)
   tags = getset<string[]>(['Tech', 'RedGin', 'Fast'])
-  
-  // 4. Content Binding (Simple String)
   username = getset<string>('Admin_User')
 
   static observedAttributes = ['theme']
 
-  styles = [
-    css`
-      :host { display: block; font-family: sans-serif; transition: all 0.3s; }
-      .dark-mode { background: #333; color: white; padding: 20px; }
-      .light-mode { background: #fff; color: #333; padding: 20px; border: 1px solid #ddd; }
-      .tag { display: inline-block; padding: 2px 8px; margin: 2px; background: #e0e0e0; color: #333; border-radius: 4px; font-size: 12px; }
-    `
-  ]
+  styles = [css`
+    :host { display: block; font-family: sans-serif; transition: 0.3s; }
+    .dark-mode { background: #333; color: white; padding: 20px; }
+    .light-mode { background: #fff; color: #333; padding: 20px; border: 1px solid #ddd; }
+    .tag { display: inline-block; padding: 2px 8px; margin: 2px; background: #e0e0e0; color: #333; border-radius: 4px; font-size: 12px; }
+  `]
 
   render() {
     return html`
-      <!-- BINDING 1: Dynamic Class (based on 'theme') -->
-      <div class="${ watch(['theme'], () => this.theme === 'dark' ? 'dark-mode' : 'light-mode') }">
+      <div ${ attr(['theme'], 'class', () => this.theme === 'dark' ? 'dark-mode' : 'light-mode') }">
         
-        <!-- BINDING 2: Text Content -->
-        <h3>Welcome, ${ watch(['username'], () => this.username) }!</h3>
+        <!-- SHORTHAND BINDING: watch(['username']) resolves to this.username automatically -->
+        <h3>Welcome, ${ watch(['username']) }!</h3>
 
-        <!-- BINDING 3: Attribute (disabled/enabled) + Conditional Render -->
         <div class="mb-3">
-          ${ watch(['isEditable'], () => html`
-            <input type="text" 
-              ${ !this.isEditable ? 'disabled' : '' } 
-              value="${this.username}"
-              ${ on('input', (e: any) => this.username = e.target.value) }
-            >
-            <small>${this.isEditable ? '🔓 Editing mode active' : '🔒 Read-only'}</small>
-          `)}
+          <!-- SURGICAL ATTRIBUTE: Using the new 'attr' helper for the input state -->
+          <input type="text" 
+            ${ attr(['isEditable'], 'disabled', () => !this.isEditable) } 
+            value="${this.username}"
+            ${ on('input', (e: any) => this.username = e.target.value) }
+          >
+          
+          <small>
+            ${ watch(['isEditable'], () => this.isEditable ? '🔓 Editing' : '🔒 Locked') }
+          </small>
         </div>
 
-        <!-- BINDING 4: List Rendering (map) -->
         <div class="tags-container">
           <strong>Labels:</strong>
+          <!-- LIST BINDING: Surgical child generation -->
           ${ watch(['tags'], () => this.tags.map(tag => html`
             <span class="tag">${tag}</span>
           `).join('')) }
@@ -54,19 +45,23 @@ class MasterBinding extends RedGin {
 
         <hr>
 
-        <!-- BINDING 5: Event Handlers (Action) -->
         <div class="controls">
           <button ${ on('click', () => this.theme = this.theme === 'light' ? 'dark' : 'light') }>
             Toggle Theme
           </button>
           
           <button ${ on('click', () => this.isEditable = !this.isEditable) }>
-            Toggle Edit
+            Toggle Edit Mode
           </button>
 
-          <button ${ on('click', () => this.tags = [...this.tags, 'New']) }>
+          <button ${ on('click', () => this.tags = [...this.tags, 'New Tag']) }>
             Add Tag
           </button>
+        </div>
+
+        <!-- EXTERNAL COMPONENT SYNC: Passing data surgically to a child via attr -->
+        <div class="mt-4">
+          <user-badge ${ attr(['username'], 'name') }></user-badge>
         </div>
       </div>
     `

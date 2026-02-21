@@ -28,7 +28,7 @@ const count = 1;
 
 // Create 1000 instances of the component
 const sampleBindings = Array.from({ length: count }, (_, i) => 
-    `<sample-if></sample-if>`
+    `<xss-sandbox></xss-sandbox>`
 ).join('');
 
 // Benchmark the initial render

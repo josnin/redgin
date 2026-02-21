@@ -40,7 +40,7 @@ class MasterBinding extends RedGin {
           <!-- LIST BINDING: Surgical child generation -->
           ${ s(() => this.tags.map(tag => html`
             <span class="tag">${tag}</span>
-          `).join('')) }
+          `)) }
         </div>
 
         <hr>

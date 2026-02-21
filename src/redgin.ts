@@ -93,62 +93,50 @@ export function shareStyle(style: string) {
 /* ============================================================
  * Template Tag
  * ========================================================== */
-
 /**
- * Fast escape for HTML special characters to prevent XSS.
+ * THE SURGICAL FLATTENER: 
+ * 1. Flattens nested arrays.
+ * 2. Filters out 'dead' values (null, undefined, false).
+ * 3. Joins with EMPTY STRING '' (kills the comma).
  */
-const ESCAPE_MAP: Record<string, string> = {
-  '&': '&amp;',
-  '<': '&lt;',
-  '>': '&gt;',
-  '"': '&quot;',
-  "'": '&#39;'
+const _f = (v: any): string => {
+  if (Array.isArray(v)) return v.map(_f).join('');
+  
+  // CRITICAL: Return empty string for dead values so they don't stringify
+  if (v === null || v === undefined || v === false) return '';
+  
+  return String(v);
 };
 
 /**
- * RE_TRUSTED: Expanded to detect structural HTML.
- * If a string contains these, it's likely a RedGin Template, not user input.
+ * THE CLEAN HTML TAG:
+ * No more trailing undefineds, no more commas.
  */
-const RE_TRUSTED = /<[a-z/]|data-|class=|style=|id=|type=|disabled|checked|selected|slot=/i;
-
-export const sanitize = (val: any): string => {
-  // 1. Convert non-strings (numbers/booleans) to string immediately
-  if (typeof val !== 'string') return String(val ?? '');
-
-  // 2. TRUST CHECK:
-  // - <[a-z/] matches tags like <div>, <button>, or </div>
-  // - type=, disabled, checked covers form-heavy components
-  // - slot= covers your shadow DOM compositions
-  if (RE_TRUSTED.test(val)) {
-    return val; 
-  }
-
-  // 3. SECURE ESCAPE:
-  // Only runs on "naked" strings like product names or user bios.
-  return val.replace(/[&<>"']/g, (s) => ESCAPE_MAP[s]);
-};
-
-
-/**
- * Template Tag with Built-in Sanitization
- * Automatically escapes values while preserving RedGin directives.
- */
-export const html = (raw: TemplateStringsArray, ...vals: any[]) => {
-  const result = raw.reduce((acc, str, i) => {
-    const val = vals[i];
-    
-    // If it's an array (from a .map()), sanitize each item and join
-    const processedVal = Array.isArray(val) 
-      ? val.map(v => sanitize(v)).join('') 
-      : sanitize(val);
-      
-    return acc + str + (processedVal ?? '');
+// TODO it creates extra comma for map
+export const html = (raw: TemplateStringsArray, ...vals: any[]): string => {
+  return raw.reduce((acc, str, i) => {
+    // Only process a value if we haven't run out of them
+    const val = i < vals.length ? _f(vals[i]) : '';
+    return acc + str + val;
   }, '');
-  return result;
 };
 
 
-export const css = html
+/**
+ * safeHTML: The "Shield" helper.
+ * Use this specifically when rendering content from an API or User Bio.
+ */
+const ESC_MAP: Record<string, string> = { 
+  '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' 
+};
+export const safe = (val: any): string => {
+  const str = _f(val);
+  return str.replace(/[&<>"']/g, s => ESC_MAP[s]);
+};
+
+export const css = html;
+
+
 
 /* ============================================================
  * RedGin Component

@@ -1,4 +1,4 @@
-import { RedGin, watch, propReflect, on, html, css } from "../src/redgin";
+import { RedGin, s, propReflect, on, html, css } from "../src/redgin";
 
 class Binding extends RedGin {
   msg = propReflect<string>('Hello world!')
@@ -28,7 +28,7 @@ class Binding extends RedGin {
         <hr>
 
         <!-- Only the display parts are reactive -->
-        ${ watch(['msg'], () => html`
+        ${ s(() => html`
             <span class="text-primary">Live Data: ${this.msg}</span>
         `)}
 

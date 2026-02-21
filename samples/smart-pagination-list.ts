@@ -1,4 +1,4 @@
-import { RedGin, watch, getset, propReflect, on, html, css } from "../src/redgin";
+import { RedGin, s, watch, getset, propReflect, on, html, css } from "../src/redgin";
 
 /**
  * CHILD: smart-page-row
@@ -22,7 +22,7 @@ class SmartPageRow extends RedGin {
     this.renderCount++; // Proves the component is REUSED, not recreated
     return html`
       <div class="row-item">
-        <span><strong>#${watch(['rid'], () => this.rid)}</strong> - ${watch(['name'], () => this.name)}</span>
+        <span><strong>#${s(() => this.rid)}</strong> - ${s(() => this.name)}</span>
         <span class="badge">Instance Lifetime Render: ${this.renderCount}</span>
       </div>
     `
@@ -58,7 +58,7 @@ class SmartPaginationList extends RedGin {
             <button class="btn btn-outline-dark btn-sm" 
               ${on('click', () => this.currentPage > 1 && this.currentPage--)}>Prev</button>
             <span class="px-3 align-self-center fw-bold">
-              Page ${watch(['currentPage'], () => this.currentPage)}
+              Page ${s(() => this.currentPage)}
             </span>
             <button class="btn btn-outline-dark btn-sm" 
               ${on('click', () => this.currentPage++)}>Next</button>

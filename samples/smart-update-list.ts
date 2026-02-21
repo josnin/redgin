@@ -1,4 +1,4 @@
-import { RedGin, watch, getset, propReflect, on, html, css } from "../src/redgin";
+import { RedGin, s, getset, propReflect, on, html, css } from "../src/redgin";
 
 /**
  * 1. CHILD: smart-update-row
@@ -37,8 +37,8 @@ class SmartUpdateRow extends RedGin {
     return html`
       <div class="row-item">
         <span>
-          <strong>#${ watch(['rid'], () => this.rid) }</strong> - 
-          ${ watch(['name'], () => this.name) }
+          <strong>#${ s(() => this.rid) }</strong> - 
+          ${ s(() => this.name) }
         </span>
         <span class="badge">Render Count: ${this.renderCount}</span>
       </div>
@@ -92,7 +92,7 @@ class SmartUpdateList extends RedGin {
             Renders the <smart-update-row> tags ONCE.
             Subsequent 'items' updates only sync attributes to existing tags.
           -->
-          ${ watch(['items'], () => this.items.map( item => html`
+          ${ s(() => this.items.map( item => html`
               <smart-update-row rid="${item.id}" name="${item.name}"></smart-update-row>
           `).join('') ) }
         </div>

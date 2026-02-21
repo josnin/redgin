@@ -16,7 +16,8 @@ export {
   on,
   event, // to obsolete
   emit, 
-  watch, 
+  s, 
+  watch,
   attr,
   customDirectives,
 } from './directives/index'
@@ -270,8 +271,9 @@ export class RedGin extends HTMLElement {
      * We crawl the ShadowRoot ONCE to find all watchers.
      * After this, we never need querySelector again for property updates.
      */
-    this._collectWatchElements()
-    this._collectAttrElements()
+    this._collectElements()
+    //this._collectWatchElements()
+    //this._collectAttrElements()
 
     this.onInit()
     this._sync()
@@ -280,32 +282,74 @@ export class RedGin extends HTMLElement {
     ;(window as any).__redgin_current_instance = null
   }
 
-  /**
-   * Maps every [data-watch] ID to its actual HTMLElement.
-   */
-  private _collectWatchElements() {
-    if (!this.shadowRoot) return
-    const nodes = this.shadowRoot.querySelectorAll<HTMLElement>('[data-watch]')
-    for (const el of nodes) this._watchElements.set(el.dataset.watch!, el)
+  ///**
+  // * Maps every [data-watch] ID to its actual HTMLElement.
+  // */
+  //private _collectWatchElements() {
+  //  if (!this.shadowRoot) return
+  //  const nodes = this.shadowRoot.querySelectorAll<HTMLElement>('[data-watch]')
+  //  for (const el of nodes) this._watchElements.set(el.dataset.watch!, el)
+  //}
+
+  ///**
+  // * Maps every [data-attr__attrName] ID to its actual HTMLElement.
+  // */
+  //private _collectAttrElements() {
+  //  if (!this.shadowRoot) return
+  //  const nodes = this.shadowRoot.querySelectorAll<HTMLElement>('[data-attr__*]')
+  //  console.log(nodes)
+  //  for (const el of nodes) this._attrElements.set(el.dataset.attr__!, el)
+  //}
+
+  ///**
+  // * Maps every [data-evt__] ID to its actual HTMLElement.
+  // */
+  //private _collectEventElements() {
+  //  if (!this.shadowRoot) return
+  //  const nodes = this.shadowRoot.querySelectorAll<HTMLElement>('[data-evt__]')
+  //  for (const el of nodes) this._eventElements.set(el.dataset.evt__!, el)
+  //}
+
+  private _collectElements(type: 'all' | 'events' = 'all') {
+    if (!this.shadowRoot) return;
+
+    // 1. Surgical Clear
+    if (type === 'all') {
+      this._watchElements.clear();
+      this._attrElements.clear();
+    }
+    this._eventElements.clear(); // Events are always cleared as they are most prone to "death" on DOM swap
+
+    const walker = document.createTreeWalker(
+      this.shadowRoot,
+      NodeFilter.SHOW_ELEMENT,
+      null
+    );
+
+    let node: HTMLElement | null;
+    while (node = walker.nextNode() as HTMLElement) {
+      const attrs = node.attributes;
+      
+      for (let i = 0; i < attrs.length; i++) {
+        const { name, value } = attrs[i];
+
+        // EVENT COLLECTION (Always runs)
+        if (name === 'data-evt__') {
+          this._eventElements.set(value, node);
+        } 
+        
+        // WATCH/ATTR COLLECTION (Only on Full Scan)
+        else if (type === 'all') {
+          if (name === 'data-watch') {
+            this._watchElements.set(value, node);
+          } else if (name.startsWith('data-attr__')) {
+            this._attrElements.set(value, node);
+          }
+        }
+      }
+    }
   }
 
-  /**
-   * Maps every [data-attr__] ID to its actual HTMLElement.
-   */
-  private _collectAttrElements() {
-    if (!this.shadowRoot) return
-    const nodes = this.shadowRoot.querySelectorAll<HTMLElement>('[data-prop__]')
-    for (const el of nodes) this._attrElements.set(el.dataset.prop__!, el)
-  }
-
-  /**
-   * Maps every [data-evt__] ID to its actual HTMLElement.
-   */
-  private _collectEventElements() {
-    if (!this.shadowRoot) return
-    const nodes = this.shadowRoot.querySelectorAll<HTMLElement>('[data-evt__]')
-    for (const el of nodes) this._eventElements.set(el.dataset.evt__!, el)
-  }
 
   /**
    * Garbage collection: Removes watcher references when an <in-watch> element is removed.
@@ -336,9 +380,10 @@ export class RedGin extends HTMLElement {
      * IMPORTANT: For nested coverage, we collect and apply 
      * after the first set of updates has run.
      */
-    this._collectWatchElements()
-    this._collectAttrElements()
-    this._collectEventElements()
+    this._collectElements()
+    //this._collectWatchElements()
+    //this._collectAttrElements()
+    //this._collectEventElements()
     applyEventListeners.call(this)
     
     this.onDoUpdate()
@@ -361,15 +406,15 @@ export class RedGin extends HTMLElement {
      * When HTML is replaced, old <in-watch> and [data-evt__] nodes are dead.
      * We clear the caches and re-scan the ShadowRoot to find the new nodes.
      */
-    console.log('is this being called?')
     //this._watchElements.clear() 
     //this._eventElements.clear()
-    // 1. Only clear events because we MUST re-bind listeners to new nodes
-    this._eventElements.clear();
 
     
     // Scan for new [data-watch] and [data-evt__] anchors
-    this._collectEventElements()
+    //// 1. Only clear events because we MUST re-bind listeners to new nodes
+    //this._eventElements.clear();
+    this._collectElements('events')
+    //this._collectEventElements()
 
     // Re-attach listeners to the brand new elements
     applyEventListeners.call(this)

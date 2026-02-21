@@ -1,9 +1,9 @@
 import { 
   RedGin, 
-  watch, 
+  s, 
   getset, 
   html ,
-  event
+  on
 } from "../src/redgin";
 
 class NestedBinding extends RedGin {
@@ -16,24 +16,24 @@ class NestedBinding extends RedGin {
   render() {
     return html`
       <div class="p-3">
-        <button ${event('click', () => this.showContainer = !this.showContainer)}">
+        <button ${on('click', () => this.showContainer = !this.showContainer)}">
           Toggle Container
         </button>
         
-        <button ${event('click', () => this.msg = 'Updated ' + Math.random() )}">
+        <button ${on('click', () => this.msg = 'Updated ' + Math.random() )}">
           Update Message
         </button>
 
         <hr>
 
         <!-- OUTER WATCH -->
-        ${ watch(['showContainer'], () => this.showContainer ? html`
+        ${ s(() => this.showContainer ? html`
             <div class="alert alert-info">
               
               <!-- INNER WATCH (Nested) -->
               <!-- If outer renders, this generates a NEW <in-watch> tag -->
               <strong>Message:</strong> 
-              ${ watch(['msg'], () => this.msg) }
+              ${ s(() => this.msg) }
 
             </div>
         ` : html`<p>Container hidden</p>`) }

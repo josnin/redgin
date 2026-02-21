@@ -1,4 +1,4 @@
-import { RedGin, watch, attr, getset, propReflect, on, html, css } from "../src/redgin";
+import { RedGin, s, attr, getset, propReflect, on, html, css } from "../src/redgin";
 
 class MasterBinding extends RedGin {
   theme = propReflect<'light' | 'dark'>('light')
@@ -17,28 +17,28 @@ class MasterBinding extends RedGin {
 
   render() {
     return html`
-      <div ${ attr(['theme'], 'class', () => this.theme === 'dark' ? 'dark-mode' : 'light-mode') }">
+      <div ${ attr('class', () => this.theme === 'dark' ? 'dark-mode' : 'light-mode') }>
         
         <!-- SHORTHAND BINDING: watch(['username']) resolves to this.username automatically -->
-        <h3>Welcome, ${ watch(['username']) }!</h3>
+        <h3>Welcome, ${ s(() => this.username) }!</h3>
 
         <div class="mb-3">
           <!-- SURGICAL ATTRIBUTE: Using the new 'attr' helper for the input state -->
           <input type="text" 
-            ${ attr(['isEditable'], 'disabled', () => !this.isEditable) } 
+            ${ attr('disabled', () => !this.isEditable) } 
             value="${this.username}"
             ${ on('input', (e: any) => this.username = e.target.value) }
           >
           
           <small>
-            ${ watch(['isEditable'], () => this.isEditable ? '🔓 Editing' : '🔒 Locked') }
+            ${ s(() => this.isEditable ? '🔓 Editing' : '🔒 Locked') }
           </small>
         </div>
 
         <div class="tags-container">
           <strong>Labels:</strong>
           <!-- LIST BINDING: Surgical child generation -->
-          ${ watch(['tags'], () => this.tags.map(tag => html`
+          ${ s(() => this.tags.map(tag => html`
             <span class="tag">${tag}</span>
           `).join('')) }
         </div>
@@ -61,7 +61,7 @@ class MasterBinding extends RedGin {
 
         <!-- EXTERNAL COMPONENT SYNC: Passing data surgically to a child via attr -->
         <div class="mt-4">
-          <user-badge ${ attr(['username'], 'name') }></user-badge>
+          <user-badge ${ attr('name', () => this.username) }></user-badge>
         </div>
       </div>
     `

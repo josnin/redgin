@@ -9,13 +9,29 @@ import { customDirectives } from './directives'
  * 'this' is typed as the component instance.
  */
 type WatchExpression<T = any> = (this: T) => any
-export const attr = (refs: string[], attrName: string, exp?: WatchExpression) => {
+
+export const attr = (attrName: string, exp: WatchExpression) => {
   const uniqId = getUniqID();
   const host = (window as any).__redgin_current_instance as any;
 
   if (host) {
-    for (const prop of refs) {
-      // Use a separate registry specifically for attributes to avoid clashing with 'watch'
+    // 1. Discovery: Extract variables from the function source
+    const fnStr = exp.toString();
+    const regex = /this\.([a-zA-Z_$][\w$]*)/g;
+    let match;
+    const discoveredProps = new Set<string>();
+
+    while ((match = regex.exec(fnStr)) !== null) {
+      const propName = match[1];
+
+      // 2. Validation: Only track if it's a valid getset/propReflect variable
+      if (host._reactiveCache && host._reactiveCache.includes(propName)) {
+        discoveredProps.add(propName);
+      }
+    }
+
+    // 3. Registration: Link the UniqID to each discovered property
+    for (const prop of discoveredProps) {
       if (!host._attrRegistry) host._attrRegistry = new Map();
       
       let attrWatchers = host._attrRegistry.get(prop);
@@ -23,12 +39,14 @@ export const attr = (refs: string[], attrName: string, exp?: WatchExpression) =>
         attrWatchers = new Map();
         host._attrRegistry.set(prop, attrWatchers);
       }
-      // Store specific attribute config
       attrWatchers.set(uniqId, { attrName, exp });
     }
   }
-  return `data-attr__${attrName}="${uniqId}"`;
+
+  // 4. Marker: Return the attribute hook for the TreeWalker to find
+  return `data-attr_${attrName}="${uniqId}"`;
 };
+
 
 customDirectives.define(function attrFn(this: any, rawProp: string): boolean {
   const prop = kebabToCamel(rawProp);
@@ -38,11 +56,12 @@ customDirectives.define(function attrFn(this: any, rawProp: string): boolean {
   let updated = false;
 
   for (const [uniqId, config] of attrWatchers) {
-    let el = this._watchElements.get(uniqId);
+    let el = this._attrElements.get(uniqId);
+    //console.log(config, uniqId, el)
     
     if (!el || !el.isConnected) {
-      el = this.shadowRoot.querySelector(`[data-attr__${config.attrName}="${uniqId}"]`);
-      if (el) this._watchElements.set(uniqId, el);
+      el = this.shadowRoot.querySelector(`[data-attr_${config.attrName}="${uniqId}"]`);
+      if (el) this._attrElements.set(uniqId, el);
     }
 
 

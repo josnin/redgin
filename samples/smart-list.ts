@@ -1,6 +1,6 @@
 import { 
   RedGin, 
-  watch, 
+  s, 
   getset, 
   propReflect, 
   on,
@@ -21,8 +21,8 @@ class SmartRow extends RedGin {
     return html`
       <li class="d-flex justify-content-between align-items-center p-2 border-bottom">
         <div>
-          <strong>#${ watch(['rid'], () => this.rid) }</strong> - 
-          ${ watch(['name'], () => this.name) }
+          <strong>#${ s(() => this.rid) }</strong> - 
+          ${ s(() => this.name) }
         </div>
         <!-- Emit the ID back to the parent for deletion -->
         <button class="btn btn-sm btn-outline-danger" 
@@ -61,7 +61,7 @@ class SmartList extends RedGin {
         <ul class="list-unstyled mt-3" 
             style="max-height: 500px; overflow-y: auto;"
         >
-          ${ watch(['obj'], () => this.obj.map( (e) => html`
+          ${ s(() => this.obj.map( (e) => html`
               <smart-row 
                 ${ on('remove-item', (e: CustomEvent) => this.handleRemove(e)) }
                 rid="${e.id}" 

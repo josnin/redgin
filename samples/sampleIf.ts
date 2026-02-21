@@ -1,9 +1,8 @@
 import { 
   RedGin, 
   propReflect, 
-  watch,
+  s,
   on, // Using the new 'on' alias we created
-  event,
   html
 } from "../src/redgin";
 
@@ -31,7 +30,7 @@ class SubmitButton extends RedGin {
   render() {
     return html`
       <div class="p-3">
-        ${ watch(['isLoading'], () => html`
+        ${ s(() => html`
             <button 
               class="btn ${this.isLoading ? 'btn-secondary' : 'btn-primary'}"
               ${ this.isLoading ? 'disabled' : '' }

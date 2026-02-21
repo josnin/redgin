@@ -1,4 +1,4 @@
-import { RedGin, watch, getset, propReflect, on, html, css } from "../src/redgin";
+import { RedGin, s, getset, propReflect, on, html, css } from "../src/redgin";
 
 /**
  * CHILD: smart-sort-row
@@ -80,13 +80,13 @@ class SmartSortList extends RedGin {
           <h4>📊 Multi-Column Smart Sort (1,000 Rows)</h4>
           <div class="btn-group w-100">
             <button class="btn btn-outline-dark btn-sm" ${on('click', () => this.applySort('id'))}>
-              Sort ID ${watch(['sortKey', 'sortOrder'], () => this.sortKey === 'id' ? (this.sortOrder === 'asc' ? '↑' : '↓') : '')}
+              Sort ID ${s(() => this.sortKey === 'id' ? (this.sortOrder === 'asc' ? '↑' : '↓') : '')}
             </button>
             <button class="btn btn-outline-dark btn-sm" ${on('click', () => this.applySort('name'))}>
-              Sort Name ${watch(['sortKey', 'sortOrder'], () => this.sortKey === 'name' ? (this.sortOrder === 'asc' ? '↑' : '↓') : '')}
+              Sort Name ${s(() => this.sortKey === 'name' ? (this.sortOrder === 'asc' ? '↑' : '↓') : '')}
             </button>
             <button class="btn btn-outline-dark btn-sm" ${on('click', () => this.applySort('score'))}>
-              Sort Score ${watch(['sortKey', 'sortOrder'], () => this.sortKey === 'score' ? (this.sortOrder === 'asc' ? '↑' : '↓') : '')}
+              Sort Score ${s(() => this.sortKey === 'score' ? (this.sortOrder === 'asc' ? '↑' : '↓') : '')}
             </button>
           </div>
         </header>
@@ -96,7 +96,7 @@ class SmartSortList extends RedGin {
             The map creates the order. The browser's DOM diffing 
             moves existing nodes based on the new array order.
           -->
-          ${watch(['items'], () => this.items.map(item => html`
+          ${s(() => this.items.map(item => html`
               <smart-sort-row rid="${item.id}" name="${item.name}" score="${item.score}"></smart-sort-row>
           `).join(''))}
         </div>

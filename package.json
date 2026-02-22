@@ -1,6 +1,6 @@
 {
   "name": "redgin",
-  "version": "0.1.19",
+  "version": "0.2.1",
   "description": "A lightweight (~5.3kb) library for building Web Components",
   "keywords": [
     "redgin",

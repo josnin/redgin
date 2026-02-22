@@ -2,283 +2,224 @@
 
 # RedGin
 
-A lightweight (~5.3kb) library for building Web Components, compatible with Vanilla JS and all JavaScript frameworks. This library simplifies the creation of Web Components and offers features such as using JavaScript template literals for template syntax, rerendering elements with watch, creating getter/setters with getset, property reflection with propReflect, inline events with event, custom events with emit, injecting global styles with injectStyles, and support for TypeScript.
+A lightweight (~5.3kb) library that solves the pain points of native Web Components. RedGin offers fine-grained reactivity, surgical updates, and intuitive APIs - making Web Components actually enjoyable to build.
 
+## Why RedGin?
 
+Native Web Components are powerful but come with friction:
 
-## Features
+| Pain Point | Native Web Components | RedGin |
+|------------|----------------------|--------|
+| **Boilerplate** | Manual lifecycle callbacks, attributeChangedCallback, getters/setters | Zero boilerplate with `getset` and `propReflect` |
+| **Reactivity** | Manual observation with `attributeChangedCallback` | Automatic reactivity with `watch`, `s()`, and fine-grained updates |
+| **Template Updates** | Manual DOM manipulation | Surgical updates - only changed parts re-render |
+| **Attribute Reflection** | Manual sync between properties and attributes | Automatic with `propReflect` |
+| **Event Binding** | `addEventListener` boilerplate | Inline events with `on()` |
+| **Style Sharing** | Duplicated styles per component | Global `shareStyle` injection |
+| **Performance** | Full re-renders on any change | Only changed elements update |
+| **TypeScript** | Complex typing for custom elements | First-class TypeScript support |
 
+## Core Philosophy
 
+RedGin is built around **surgical updates** - only the elements that need to change, change. No virtual DOM, no heavy diffing, just precise, targeted updates to your components.
 
-- **JavaScript Template Literals for Template Syntax**: Simplify the creation of templates using JavaScript template literals. [Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)
+## Key Features
 
-
-
-- **Rerender Element with Watch**: Easily trigger a rerender of an element by watching for changes.[`watch`](https://stackblitz.com/edit/typescript-t3fqo8?file=sampleWatch.ts)
-
-
-
-- **Create Getter/Setters with getset**: Define getter and setter functions for your properties.[`getset`](https://stackblitz.com/edit/typescript-t3fqo8?file=sampleWatch.ts)
-
-
-
-- **Create Property Reflection with propReflect**: Reflect property changes to corresponding attributes.[`propReflect`](https://stackblitz.com/edit/typescript-hlms7u?file=index.html)
-
-
-
-- **Create Inline Events with event**: Attach events directly in your component's template.[`event`](https://stackblitz.com/edit/typescript-t3fqo8?file=sampleWatch.ts)
-
-
-
-- **Create Custom Events with emit**: Emit custom events from your components.[`emit`](https://stackblitz.com/edit/redgin-childtoparent?file=index.ts)
-
-
-
-- **Inject Global Styles with injectStyles**: Apply global styles for your components.[`injectStyles`](https://stackblitz.com/edit/redgin-bootstrap?file=index.ts)
-
-
-
-- **Support for TypeScript**: Enjoy type safety when using Redgin with TypeScript.[Support Typescript](https://stackblitz.com/edit/typescript-ue61k6?file=index.ts)
-
-
-
-
-- **Build SPAs (Single-Page Applications)**: Simplify the development of SPAs using Redgin.[Single Page Application](https://stackblitz.com/edit/typescript-ezsw6j)
+- **🎯 Surgical Rendering**: Update only what changes - perfect for large lists
+- **📝 Template Literals**: Write components using familiar JS template syntax
+- **⚡️ Fine-grained Reactivity**: Multiple reactivity patterns (`watch`, `s()`, `getset`, `propReflect`)
+- **🔗 Attribute Binding**: Smart `attr()` helper for dynamic attributes
+- **🔄 Property Reflection**: Sync properties with attributes using `propReflect`
+- **📊 Reactive Getters/Setters**: Create reactive state with `getset`
+- **🎨 Style Management**: Global style injection with `shareStyle` and scoped styles with `css`
+- **📘 TypeScript Ready**: Full type safety and IntelliSense
 
 ## Installation
 
-
-
-Include the RedGin library in your project.
-
-
-```html
-// via html
-<script type="module" src="https://cdn.jsdelivr.net/npm/redgin@latest/dist/redgin.min.js"></script>
-
-```
-
-
-Or install it via npm:
-
-
-
+### Via npm
 ```bash
-
 npm i redgin
-
 ```
-## Usage
 
+## Via CDN
 
-
-1. **Import the Library:**
-
-
-
-```javascript
-
-// via js
-
-import { RedGin, watch, getset, html } from 'https://cdn.jsdelivr.net/npm/redgin@latest/dist/redgin.min.js';
-
-
-
-// via npm
-
-import { RedGin, watch, getset, html } from 'redgin';
-
+```js
+<script type="module" src="https://cdn.jsdelivr.net/npm/redgin@latest/dist/redgin.min.js"></script>
 ```
 
 
+## Quick Start
 
-2. **Use the Features:**
+```js
+import { RedGin, getset, on, html } from 'redgin';
 
+class Counter extends RedGin {
+  count = getset(0);
 
-
-```javascript
-
-// FetchApiComponent.ts
-
-// Creating a Fetch Api Component that displays Todos using Getset, Watch
-class FetchApi extends RedGin {
-  // Reactive properties using getset
-  ready = getset<boolean>(false);
-  todos: any;
-
-  // Initialize data from the API in the onInit lifecycle method
-  onInit() {
-    fetch('https://jsonplaceholder.typicode.com/todos/1')
-      .then(response => response.json())
-      .then(json => {
-        this.todos = json;
-        this.ready = true;
-      });
-  }
-  
-  // Render method for displaying the fetched data
-  render() {       
-    return html`
-      ${watch(['ready'], 
-        () => this.ready ? JSON.stringify(this.todos) : html`Loading...`
-      )}`;
-  }
-}
-
-// Define the custom element 'fetch-api'
-customElements.define('fetch-api', FetchApi);
-
-```
-
-
-3. **Passing data from Parent to Child component**
-
-
-
-```javascript
-
-// ParentToChildComponents.ts
-
-class ParentComp extends RedGin {
-  currentItem: string = 'Laptop';
-
-  // Initialize child component with data using properties or attributes
-  onInit() {
-    // Option 1: Send data to child component using properties     
-    const child: IChild = this.shadowRoot?.querySelector('child-comp')!;
-    child.item = this.currentItem;
-  }
-
-  // Render method for the parent component
-  render() {       
-    return html`
-      <child-comp></child-comp>
-
-      <!-- Option 2: Send data to child component using attributes -->
-      <child2-comp item="${this.currentItem}"></child2-comp>
-    `;
-  }
-}
-
- 
-```
-
-3. **Passing data from Child to Parent component**
-``` javascript
-
-// ParentChildComponents.ts
-
-// Child component for emitting a custom event
-class ChildComp extends RedGin {
   render() {
     return html`
-      <button ${event('click', () => emit.call(this, 'newItem', 'added New Item?'))}>
-        <slot>Add to parent's list</slot>
+      <button ${on('click', () => this.count++)}>
+        Count: ${this.count}
       </button>
     `;
   }
 }
 
-// Parent component for receiving the custom event
-class ParentComp extends RedGin {
-  render() {
-    return html`
-      <child-comp 
-        ${event('newItem', (e: CustomEvent) => console.log(`Received child data: ${e.detail}`))}>
-        Get Child Data?
-      </child-comp>
-    `;
-  }
-}
-
+customElements.define('my-counter', Counter);
 ```
 
-4. Creating a Reactive button
-
-```javascript
-
-// ReactiveButton.ts
-
-class ReactiveButton extends RedGin {
-  // Reactive property using propReflect
-  message = propReflect<string>('Hello, World!');
-
-  // Observed attributes for the component
-  static observedAttributes = ['message'];
-
-  // Render method for the component
-  render() {
-    // Use watch to trigger a rerender when 'message' changes
-    return html`${watch(['message'], () => html`
-      <button type="button">${this.message}</button>
-    `)}
-    `;
-  }
-} 
-
-```
-
-5. For Loop through the list of Products
-``` javascript
-
-// ProductListRenderer.ts
-
-// For Loop through the List of Products
-class ProductListRenderer extends RedGin {
-  // Reactive property using getset
-  products = getset<IProduct[]>([
-    { id: 1, name: 'Laptop' },
-    { id: 2, name: 'Camera' },
-  ]);
-
-  // Render method for displaying the list of products
-  render() {       
-    return html` 
-      <ul>
-        ${watch(['products'], () => 
-          this.products.map(product => 
-            html`<li>${product.id} - ${product.name}</li>`
-          )
-        )}
-      </ul>`;
-  }
-}
+## API Reference
 
 
+### Core Helpers
 
-```
-More
+| Helper | Purpose | Example |
+| :--- | :--- | :--- |
+| `getset(initial)` | Creates reactive property with getter/setter | `count = getset(0)` |
+| `propReflect(initial)` | Reactive property that reflects to attribute | `theme = propReflect('light')` |
+| `watch(deps, callback)` | Fine-grained control - rerenders when specified dependencies change | `${watch(['count', 'theme'], () => html`<div>...</div>`)}` |
+| `s(callback)` | Shorthand for reactive value binding | `${s(() => this.count)}` |
+| `attr(name, callback)` | Surgical attribute binding | `${attr('disabled', () => !this.editable)}` |
+| `on(event, handler)` | Event listener binding | `${on('click', () => this.save())}` |
+| `html` | Template literal tag for HTML | `html`<div>Hello</div>`` |
+
+### Style Helpers
+
+| Helper | Purpose | Example |
+| :--- | :--- | :--- |
+| `css` | Template literal tag for component-scoped styles | `styles = [css`.card { padding: 1rem; }`]` |
+| `shareStyle(styles)` | Injects global styles across all components | `shareStyle(css:host { --brand: blue; })` |
 
 
+## Lifecycle Methods
 
+* onInit() - After first render
+* onDoUpdate() - After data sync
+* onUpdated() - After every attribute change/requestUpdate
 
+## Style Management Examples
 
+### Global Design System with shareStyle
+import { RedGin, shareStyle, css, html } from 'redgin';
 
-## For VSCode Syntax Highlight template literals
+// Share Bootstrap globally (injected once, used everywhere)
+shareStyle('<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">')
 
-### Install extension [inline-html](https://marketplace.visualstudio.com/items?itemName=pushqrdx.inline-html)
-
+// Share design tokens across all components
 ```js
-    render() {
-      return html`<div>with syntax highlighted</div>`
-    }
+shareStyle(css`
+  :host {
+    --brand-primary: #007bff;
+    --brand-success: #28a745;
+    --card-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  
+  .rg-card {
+    border-radius: 8px;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.2s;
+  }
+`);
+
+class ProductCard extends RedGin {
+  // Component-specific styles (merged with shared styles)
+  styles = [css`
+    .local-price { color: var(--brand-success); font-weight: bold; }
+  `]
+
+  render() {
+    // Bootstrap classes work without local import!
+    return html`
+      <div class="rg-card p-3">
+        <div class="local-price">$120.00</div>
+        <button class="btn btn-primary">Buy Now</button>
+      </div>
+    `;
+  }
+}
+```
+
+## Reactivity Patterns: watch vs s()
+
+### RedGin offers two complementary reactivity patterns:
+
+## s() - Smart Auto-detection
+```js
+// Automatically tracks dependencies
+render() {
+  return html`
+    <div>${s(() => this.count)}</div>
+    <div>${s(() => this.theme)}</div>
+  `;
+}
+```
+
+## watch - Explicit Control
+```js
+// Fine-grained control over dependencies
+render() {
+  return html`
+    ${watch(['count', 'theme'], () => html`
+      <div class="${this.theme}">
+        Count: ${this.count}
+      </div>
+    `)}
+  `;
+}
 ```
 
 
+## Examples
+
+Check out these live examples demonstrating RedGin's capabilities:
+
+### Basic Examples
+* [Simple Counter](https://github.com/josnin/redgin/tree/Dev/samples) - Getting started with RedGin
+* [Two-way Data Binding](https://github.com/josnin/redgin/tree/Dev/samples) - Using getset and events
+* [Todo App](https://github.com/josnin/redgin/tree/Dev/samples) - Classic todo example
+
+
+### Style Examples
+
+* [Bootstrap Integration](https://github.com/josnin/redgin/tree/Dev/samples) - Using shareStyle with CSS frameworks
+* [Design Tokens](https://github.com/josnin/redgin/tree/Dev/samples) - Global theme variables
+* [Scoped Styles](https://github.com/josnin/redgin/tree/Dev/samples) - Component-specific CSS
+
+
+### Advanced Patterns
+* [Surgical List Updates (1,000+ items)](https://github.com/josnin/redgin/tree/Dev/samples) - Only updated rows re-render
+* [E-commerce Application](https://github.com/josnin/redgin/tree/Dev/samples) - Cart, checkout, and async operations
+* [CRM Dashboard](https://github.com/josnin/redgin/tree/Dev/samples) - Multi-view with modals and pipeline
+* [Parent-Child Communication](https://github.com/josnin/redgin/tree/Dev/samples) - Custom events and props
+
+### Integration Examples
+
+* [TypeScript Support](https://github.com/josnin/redgin/tree/Dev/samples) - Full type safety
+* [With Bootstrap](https://github.com/josnin/redgin/tree/Dev/samples) - Using CSS frameworks
+* [Property Reflection](https://github.com/josnin/redgin/tree/Dev/samples) - Syncing props with attributes
+
+## Performance
+
+* Surgical Updates: Only changed elements re-render
+* Bundle Size: ~5.3kb minified + gzipped
+* Memory: Zero virtual DOM overhead
+* Style Injection: Global styles shared once, not duplicated per component
+
+## Contributing
+
+We welcome contributions!
+```
+git clone https://github.com/josnin/redgin.git
+cd redgin
+npm install
+npm run dev
+```
 
 ## Reference
 https://web.dev/custom-elements-best-practices/
 
 https://web.dev/shadowdom-v1/
 
-
-## How to run development server?
-```
-git clone git@github.com:josnin/redgin.git
-cd ~/Documents/redgin/
-npm install
-npm run dev
-```
 
 ## Help
 
@@ -287,3 +228,5 @@ Need help? Open an issue in: [ISSUES](https://github.com/josnin/redgin/issues)
 
 ## Contributing
 Want to improve and add feature? Fork the repo, add your changes and send a pull request.
+
+

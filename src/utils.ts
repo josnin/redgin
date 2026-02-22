@@ -1,7 +1,9 @@
 
-export const getUniqID = () => {
-  return crypto.randomUUID().split('-')[0]
+
+export function getUniqID(): string {
+  return 'id-' + Math.random().toString(16).slice(2) + '-' + Date.now()
 }
+
 
 export const camelToKebab = (str: string) => str.replace(/[A-Z]/g, (out_str: string) => `-${out_str.toLowerCase()}`);
 

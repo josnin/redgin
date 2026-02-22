@@ -72,6 +72,16 @@ if (!customElements.get('in-watch')) {
 }
 
 /**
+ * LOCAL FLATTENER: 
+ * Prevents "Array.toString()" from injecting commas in the UI.
+ */
+const _f = (v: any): string => {
+  if (Array.isArray(v)) return v.map(_f).join(''); // Explicitly join with empty string
+  if (v === undefined) return ''; // do not include boolean or null
+  return String(v);
+};
+
+/**
  * THE PERFORMANCE ENGINE: watchFn Directive
  * This runs whenever a property is updated via requestUpdate().
  */
@@ -99,7 +109,15 @@ customDirectives.define(function watchFn(this: any, rawProp: string): boolean {
 
     if (el) {
       const value = expression ? expression.call(this) : this[prop];
-      const newVal = value ?? '';
+       /**
+       * SURGICAL CONVERSION:
+       * We no longer rely on String(value). 
+       * We use _f to ensure [ '<li>A</li>', '<li>B</li>' ] 
+       * becomes '<li>A</li><li>B</li>' (No Commas).
+       */
+      const newVal = _f(value); 
+      // console.log(prop, newVal, value, expression)
+      //const newVal = value ?? '';
       
       // DIRTY CHECK: Only touch DOM if string actually changed
       if (el.innerHTML !== String(newVal)) {

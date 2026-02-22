@@ -98,7 +98,7 @@ class SmartSortList extends RedGin {
           -->
           ${s(() => this.items.map(item => html`
               <smart-sort-row rid="${item.id}" name="${item.name}" score="${item.score}"></smart-sort-row>
-          `).join(''))}
+          `))}
         </div>
       </div>
     `

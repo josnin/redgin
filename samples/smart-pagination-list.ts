@@ -73,7 +73,7 @@ class SmartPaginationList extends RedGin {
           -->
           ${watch(['currentPage'], () => this.pagedItems.map(item => html`
               <smart-page-row rid="${item.id}" name="${item.name}"></smart-page-row>
-          `).join(''))}
+          `) )}
         </div>
       </div>
     `

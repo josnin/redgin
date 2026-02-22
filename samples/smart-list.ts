@@ -67,7 +67,7 @@ class SmartList extends RedGin {
                 rid="${e.id}" 
                 name="${e.name}">
               </smart-row>
-          `).join('') ) }
+          `) ) }
         </ul>
       </div>
     `

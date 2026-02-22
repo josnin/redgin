@@ -67,7 +67,7 @@ class SmartGrid extends RedGin {
                 val="${r.value}"
                 ${ attr('selected', () => this.globalSelect) }
               ></data-row>
-          `).join('')) }
+          `) ) }
         </div>
       </div>
     `;

@@ -54,6 +54,7 @@ customDirectives.define(function attrFn(this: any, rawProp: string): boolean {
   if (!attrWatchers) return false;
 
   let updated = false;
+  //console.log(prop, this._attrElements, this._attrRegistry)
 
   for (const [uniqId, config] of attrWatchers) {
     let el = this._attrElements.get(uniqId);
@@ -74,6 +75,7 @@ customDirectives.define(function attrFn(this: any, rawProp: string): boolean {
        * If value is strictly false, null, or undefined, remove the attribute.
        * This ensures <button disabled> becomes <button> (enabled).
        */
+      //console.log(attrName, value)
       if (value === false || value === null || value === undefined) {
         if (el.hasAttribute(attrName)) {
           el.removeAttribute(attrName);

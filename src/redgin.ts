@@ -95,35 +95,23 @@ export function shareStyle(style: string) {
  * ========================================================== */
 /**
  * THE SURGICAL FLATTENER: 
- * 1. Flattens nested arrays.
- * 2. Filters out 'dead' values (null, undefined, false).
- * 3. Joins with EMPTY STRING '' (kills the comma).
+ * 1. Recursively flattens arrays.
+ * 2. Joins with EMPTY STRING '' (kills the comma). --> Note: watcher do this
+ * 3. Filters out 'dead' values (null, undefined, false).
  */
-const _f = (v: any): string => {
-  if (Array.isArray(v)) return v.map(_f).join('');
-  
-  // CRITICAL: Return empty string for dead values so they don't stringify
-  if (v === null || v === undefined || v === false) return '';
-  
+export const _f = (v: any): string => {
+  if (Array.isArray(v)) return v.map(_f).join(''); // CRITICAL: join with ''
+  if (v === undefined) return '';
   return String(v);
 };
 
-/**
- * THE CLEAN HTML TAG:
- * No more trailing undefineds, no more commas.
- */
-// TODO it creates extra comma for map
 export const html = (raw: TemplateStringsArray, ...vals: any[]): string => {
-  return raw.reduce((acc, str, i) => {
-    // Only process a value if we haven't run out of them
-    const val = i < vals.length ? _f(vals[i]) : '';
-    return acc + str + val;
-  }, '');
+  return raw.reduce((acc, str, i) => acc + str + _f(vals[i]), '');
 };
 
 
 /**
- * safeHTML: The "Shield" helper.
+ * safe: The "Shield" helper.
  * Use this specifically when rendering content from an API or User Bio.
  */
 const ESC_MAP: Record<string, string> = { 

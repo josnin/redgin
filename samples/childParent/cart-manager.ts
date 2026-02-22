@@ -3,7 +3,7 @@ import {
   on,     // Using the 'on' alias
   emit,
   getset, 
-  watch,
+  s,
   html,
   propReflect
 } from '../../src/redgin';
@@ -67,8 +67,8 @@ class CartManager extends RedGin {
             <header class="d-flex justify-content-between mb-4">
               <h4>Marketplace Catalog</h4>
               <div class="bg-dark p-2">
-                Cart: ${ watch(['cartItems'], () => this.cartItems.length) } items | 
-                Total: $${ watch(['totalPrice'], () => this.totalPrice) }
+                Cart: ${ s(() => this.cartItems.length) } items | 
+                Total: $${ s(() => this.totalPrice) }
               </div>
             </header>
             

@@ -98,51 +98,6 @@ class CRMPro extends RedGin {
     }
   }
 
-  renderList() {
-    // requestUpdate ensures the 'leads' dependency is refreshed in this sub-render
-    this.requestUpdate('leads');
-    
-    return html`
-      <div class="crm-card">
-        <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
-          <input type="text" placeholder="Search..." class="form-control w-25" ${on('input', (e: any) => this.search = e.target.value)}>
-          <button class="btn btn-danger btn-sm" 
-            ${attr('disabled', () => !this.leads.some(l => l.selected))}
-            ${on('click', () => this.deleteSelected())}>
-            Delete (${s(() => this.leads.filter(l => l.selected).length)})
-          </button>
-        </div>
-
-        <div class="grid-header">
-          <span></span><span>Company</span><span>Value</span><span>Stage</span>
-        </div>
-
-        <div class="viewport">
-            ${s(() => this.leads
-                // 1. SURGICAL FILTER: This auto-tracks 'this.search' and 'this.leads'
-                .filter(l => 
-                    this.search === '' || 
-                    l.name.toLowerCase().includes(this.search.toLowerCase())
-                )
-                // 2. MAP: Only generates rows for matches
-                .map(l => html`
-                    <crm-lead-row 
-                        id1="${l.id1}" 
-                        name="${l.name}" 
-                        val="${l.val}" 
-                        stage="${l.stage}"
-                        ${l.selected ? 'selected' : ''}
-                        ${on('toggle', (e: CustomEvent) => this.toggleSelect(e.detail.id1, e.detail.selected))}
-                    ></crm-lead-row>
-                    `)
-            )}
-            </div>
-
-
-      </div>
-    `;
-  }
-
   render() {
     return html`
       <div class="nav">
@@ -151,8 +106,51 @@ class CRMPro extends RedGin {
       </div>
 
       <div class="container-fluid">
-        ${watch(['view'], () => this.view === 'list' ? this.renderList()
-         : html`<div class="p-5 text-center text-muted"><h4>Dashboard Metrics Placeholder</h4></div>`)}
+        ${watch(['view'], () => {
+          if (this.view !== 'list') return  html`<div class="p-5 text-center text-muted"><h4>Dashboard Metrics Placeholder</h4></div>`;
+
+          return html`
+            <div class="crm-card">
+              <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
+                <input type="text" placeholder="Search..." class="form-control w-25" ${on('input', (e: any) => this.search = e.target.value)}>
+                <button class="btn btn-danger btn-sm" 
+                  ${attr('disabled', () => !this.leads.some(l => l.selected))}
+                  ${on('click', () => this.deleteSelected())}>
+                  Delete (${s(() => this.leads.filter(l => l.selected).length)})
+                </button>
+              </div>
+
+              <div class="grid-header">
+                <span></span><span>Company</span><span>Value</span><span>Stage</span>
+              </div>
+
+              <div class="viewport">
+                  ${s(() => this.leads
+                      // 1. SURGICAL FILTER: This auto-tracks 'this.search' and 'this.leads'
+                      .filter(l => 
+                          this.search === '' || 
+                          l.name.toLowerCase().includes(this.search.toLowerCase())
+                      )
+                      // 2. MAP: Only generates rows for matches
+                      .map(l => html`
+                          <crm-lead-row 
+                              id1="${l.id1}" 
+                              name="${l.name}" 
+                              val="${l.val}" 
+                              stage="${l.stage}"
+                              ${l.selected ? 'selected' : ''}
+                              ${on('toggle', (e: CustomEvent) => this.toggleSelect(e.detail.id1, e.detail.selected))}
+                          ></crm-lead-row>
+                          `)
+                  )}
+                  </div>
+
+
+            </div>
+          `;
+
+
+        })}
       </div>
     `;
   }

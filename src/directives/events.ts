@@ -14,7 +14,7 @@ export const event = (type: string, fn: EventHandler) => {
   }
 
   // returns attribute for template
-  return `data-evt__="${uniq}"`
+  return `rg-evt__${type}="${uniq}"`
 }
 
 /**

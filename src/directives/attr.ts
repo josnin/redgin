@@ -44,7 +44,7 @@ export const attr = (attrName: string, exp: WatchExpression) => {
   }
 
   // 4. Marker: Return the attribute hook for the TreeWalker to find
-  return `data-attr_${attrName}="${uniqId}"`;
+  return `rg-attr__${attrName}="${uniqId}"`;
 };
 
 
@@ -61,7 +61,7 @@ customDirectives.define(function attrFn(this: any, rawProp: string): boolean {
     //console.log(config, uniqId, el)
     
     if (!el || !el.isConnected) {
-      el = this.shadowRoot.querySelector(`[data-attr_${config.attrName}="${uniqId}"]`);
+      el = this.shadowRoot.querySelector(`[rg-attr__${config.attrName}="${uniqId}"]`);
       if (el) this._attrElements.set(uniqId, el);
     }
 

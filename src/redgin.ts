@@ -310,7 +310,7 @@ export class RedGin extends HTMLElement {
         const { name, value } = attrs[i];
 
         // EVENT COLLECTION (Always runs)
-        if (name === 'data-evt__') {
+        if (name.startsWith('rg-evt__')) {
           this._eventElements.set(value, node);
         } 
         
@@ -318,7 +318,7 @@ export class RedGin extends HTMLElement {
         else if (type === 'all') {
           if (name === 'data-watch') {
             this._watchElements.set(value, node);
-          } else if (name.startsWith('data-attr__')) {
+          } else if (name.startsWith('rg-attr__')) {
             this._attrElements.set(value, node);
           }
         }

@@ -20,8 +20,8 @@ interface IPropReflect<T = any> {
 // Prevents RedGin from overriding standard browser behaviors or causing infinite loops 
 // with sensitive attributes like 'id' or 'class'.
 const IGNORE_PROP_REFLECTION = [
-  '^class$', '^style$', '^className$', '^classList$', '^id$', '^dataset$', '^data-', '^aria-',
-  '^hidden$', '^tabindex$', '^slot$', '^title$', '^contenteditable$', '^draggable$', '^spellcheck$'
+  '^class$', '^style$', '^className$', '^classList$', '^dataset$', '^data-', '^aria-',
+  '^hidden$', '^tabindex$', '^slot$', '^contenteditable$', '^draggable$', '^spellcheck$'
 ]
 const IGNORE_REGEX = IGNORE_PROP_REFLECTION.map(p => new RegExp(p))
 

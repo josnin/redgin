@@ -1,6 +1,6 @@
 {
   "name": "redgin",
-  "version": "0.2.1",
+  "version": "0.2.2",
    "description": "A lightweight (~5.3kb) library for building Web Components with surgical updates and fine-grained reactivity",
   "keywords": [
     "web components",
